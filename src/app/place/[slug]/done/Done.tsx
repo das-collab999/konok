@@ -9,8 +9,10 @@ import { Icon, Tunduk } from "@/components/ui";
 
 export function Done({ place }: { place: Place }) {
   const { nights, guests, date, total } = useBooking(place);
-  const name = useSearchParams().get("name") ?? "";
-  const code = bookingCode(place, nights, guests);
+  const sp = useSearchParams();
+  const name = sp.get("name") ?? "";
+  // Номер брони приходит со страницы оплаты; если зашли сюда напрямую — считаем его сами.
+  const code = sp.get("c") ?? bookingCode(place, nights, guests);
 
   // Kept on the phone, so the booking is readable without internet in the mountains.
   useEffect(() => {
