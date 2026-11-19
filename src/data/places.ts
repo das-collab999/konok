@@ -23,6 +23,8 @@ export type Place = {
   road: string;
   host: string;
   story: string;
+  /** Real photograph, once the place has been shot. Falls back to generated cover art. */
+  photo?: string;
   palette: { sky: string; mountains: string; hills: string };
 };
 

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Place } from "@/data/places";
-import { Icon, PlaceArt, type IconName } from "./ui";
+import { Cover, Icon, type IconName } from "./ui";
 
 export function placeChips(p: Place): { label: string; icon: IconName }[] {
   const chips: { label: string; icon: IconName }[] = [];
@@ -11,33 +11,48 @@ export function placeChips(p: Place): { label: string; icon: IconName }[] {
   return chips;
 }
 
-export function PlaceCard({ place }: { place: Place }) {
+export function PlaceCard({ place, query = "" }: { place: Place; query?: string }) {
+  const href = `/place/${place.slug}/${query ? `?${query}` : ""}`;
+
   return (
-    <article className="card-hover flex flex-col overflow-hidden rounded-[18px] border border-line bg-card">
-      <div className="relative h-[190px]">
-        <PlaceArt place={place} className="block h-full w-full" />
-        <span className="absolute left-3 top-3 rounded-full bg-green px-2.5 py-1.5 text-xs font-bold text-white">Проверено Конок</span>
-        <span className="absolute right-3 top-3 rounded-full bg-ink/80 px-2.5 py-1.5 text-xs font-semibold text-felt">{place.altitudeM} м</span>
-      </div>
-      <div className="flex flex-1 flex-col gap-2.5 p-[18px] pb-5">
-        <div className="text-[13px] font-bold uppercase tracking-wide text-red">{place.place}</div>
-        <h3 className="m-0 font-serif text-[22px] leading-tight">{place.title}</h3>
-        <p className="m-0 text-sm leading-relaxed text-muted">{place.short}</p>
-        <div className="flex flex-wrap gap-1.5">
+    <article className="card group flex flex-col">
+      <Link href={href} className="relative block aspect-[4/5] overflow-hidden bg-cream-2 no-underline">
+        <Cover place={place} className="zoom block h-full w-full object-cover" />
+        <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-cream/90 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink">
+          <Icon name="check" size={11} strokeWidth={2.6} />
+          Проверено
+        </span>
+        <span className="absolute bottom-4 right-4 rounded-full bg-ink/80 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.16em] text-cream">
+          {place.altitudeM} м
+        </span>
+      </Link>
+
+      <div className="flex flex-1 flex-col pt-5">
+        <span className="eyebrow">{place.place}</span>
+
+        <h3 className="serif m-0 mt-3 text-[24px]">
+          <Link href={href} className="text-fg no-underline decoration-rule-strong underline-offset-4 hover:underline">{place.title}</Link>
+        </h3>
+
+        <p className="m-0 mt-3 text-[15px] leading-relaxed text-fg-muted">{place.short}</p>
+
+        <ul className="m-0 mt-4 flex list-none flex-wrap gap-x-4 gap-y-2 p-0 text-[12px] uppercase tracking-[0.1em] text-fg-subtle">
           {placeChips(place).map((c) => (
-            <span key={c.label} className="inline-flex items-center gap-1.5 rounded-lg bg-felt px-2 py-1 text-xs font-semibold">
-              <Icon name={c.icon} size={14} className="text-red" strokeWidth={2} />
+            <li key={c.label} className="flex items-center gap-1.5">
+              <Icon name={c.icon} size={14} strokeWidth={1.4} />
               {c.label}
-            </span>
+            </li>
           ))}
-        </div>
-        <div className="mt-auto flex items-center justify-between gap-2.5 pt-2">
-          <div>
-            <span className="text-[22px] font-bold">${place.pricePerPersonUsd}</span>
-            <span className="text-[13px] text-muted"> / чел. за ночь</span>
+        </ul>
+
+        <div className="mt-auto flex items-end justify-between gap-4 border-t border-rule pt-4 mt-5">
+          <div className="leading-none">
+            <span className="serif text-[26px]">${place.pricePerPersonUsd}</span>
+            <span className="ml-2 text-[12px] uppercase tracking-[0.12em] text-fg-subtle">чел./ночь</span>
           </div>
-          <Link href={`/place/${place.slug}/`} className="inline-flex h-11 items-center rounded-[10px] bg-red px-[18px] text-[15px] font-bold text-white hover:brightness-110">
+          <Link href={href} className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-fg no-underline transition-colors hover:text-accent">
             Смотреть
+            <Icon name="arrow" size={14} strokeWidth={1.8} />
           </Link>
         </div>
       </div>

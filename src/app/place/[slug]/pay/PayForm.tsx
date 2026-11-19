@@ -4,24 +4,25 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Place } from "@/data/places";
-import { useBooking } from "@/lib/useBooking";
+import { formatDate, useBooking } from "@/lib/useBooking";
 import { Icon } from "@/components/ui";
 
-// MVP: no real payment. The payment module is connected later (README, section 7).
+// MVP: no real charge. The payment module is connected later (README, section 7).
 const METHODS = [
   { id: "card", label: "Visa / Mastercard", note: "Для туристов из любой страны" },
   { id: "elsom", label: "Элсом", note: "Электронный кошелёк Кыргызстана" },
   { id: "mbank", label: "MBank", note: "Перевод по QR-коду" },
 ];
 
-const input = "h-12 rounded-[10px] border border-line-strong bg-white px-3.5 text-base";
+const field = "h-12 w-full border-0 border-b border-rule-strong bg-transparent px-0 text-[16px] text-fg outline-none focus:border-ink";
 
 export function PayForm({ place }: { place: Place }) {
   const router = useRouter();
-  const { nights, guests, total, query } = useBooking(place);
+  const { nights, guests, date, total, query } = useBooking(place);
   const [method, setMethod] = useState("card");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
 
   const submit = (e: React.FormEvent) => {
@@ -30,48 +31,74 @@ export function PayForm({ place }: { place: Place }) {
       setError("Введите имя и телефон, чтобы хозяин мог с вами связаться.");
       return;
     }
+    setError("");
     router.push(`/place/${place.slug}/done/?${query}&name=${encodeURIComponent(name.trim())}`);
   };
 
   return (
-    <div className="mx-auto flex max-w-[760px] flex-col gap-5 px-6 pb-[72px] pt-8">
-      <Link href={`/place/${place.slug}/`} className="inline-flex h-11 items-center gap-1 self-start rounded-[10px] border border-line-strong bg-card px-4 font-semibold">
-        <Icon name="back" size={18} /> Назад
+    <div className="mx-auto max-w-[840px] px-5 pb-16 pt-8 sm:px-10">
+      <Link href={`/place/${place.slug}/`} className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-fg-muted no-underline hover:text-fg">
+        <Icon name="back" size={15} strokeWidth={1.6} /> Назад к месту
       </Link>
-      <h1 className="m-0 font-serif text-4xl">Оплата брони</h1>
 
-      <div className="flex flex-wrap justify-between gap-2.5 rounded-2xl border border-line bg-card p-[18px]">
-        <div className="flex flex-col gap-1">
-          <strong className="text-[17px]">{place.title}</strong>
-          <span className="text-sm text-muted">{place.place} · {nights} ноч. · {guests} гост.</span>
+      <h1 className="display m-0 mt-6 text-[clamp(30px,5vw,56px)]">Оформление брони</h1>
+
+      <div className="mt-8 flex flex-wrap items-end justify-between gap-4 border-y border-rule py-6">
+        <div className="min-w-0">
+          <p className="serif m-0 text-[20px]">{place.title}</p>
+          <p className="m-0 mt-2 text-[11px] uppercase tracking-[0.14em] text-fg-subtle">
+            {place.place} · {nights} ноч. · {guests} гост.{date ? ` · заезд ${formatDate(date)}` : ""}
+          </p>
         </div>
-        <strong className="text-[22px]">${total}</strong>
+        <span className="serif text-[32px]">${total}</span>
       </div>
 
-      <form onSubmit={submit} noValidate className="flex flex-col gap-4">
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="p-name" className="font-semibold">Имя и фамилия</label>
-          <input id="p-name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" placeholder="Anna Schmidt" className={input} />
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="p-phone" className="font-semibold">Телефон или WhatsApp</label>
-          <input id="p-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" placeholder="+49 …" className={input} />
+      <form onSubmit={submit} noValidate className="mt-10 flex flex-col gap-10">
+        <div className="grid gap-x-10 gap-y-7 sm:grid-cols-2">
+          <div className="flex flex-col gap-2">
+            <label htmlFor="p-name" className="eyebrow">Имя и фамилия</label>
+            <input id="p-name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" placeholder="Anna Schmidt" className={field} />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="p-phone" className="eyebrow">Телефон или WhatsApp</label>
+            <input id="p-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" placeholder="+49 …" className={field} />
+          </div>
+          <div className="flex flex-col gap-2 sm:col-span-2">
+            <label htmlFor="p-mail" className="eyebrow">Email (необязательно)</label>
+            <input id="p-mail" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" placeholder="anna@example.com" className={field} />
+          </div>
         </div>
 
-        <fieldset className="m-0 flex flex-col gap-2.5 border-0 p-0">
-          <legend className="mb-2 font-bold">Способ оплаты</legend>
-          {METHODS.map((m) => (
-            <label key={m.id} className={`flex cursor-pointer items-center gap-3 rounded-xl border-2 bg-white p-3.5 ${method === m.id ? "border-red" : "border-line"}`}>
-              <input type="radio" name="pay" checked={method === m.id} onChange={() => setMethod(m.id)} className="h-5 w-5 accent-red" />
-              <span className="flex flex-col"><strong>{m.label}</strong><span className="text-[13px] text-muted">{m.note}</span></span>
-            </label>
-          ))}
+        <fieldset className="m-0 border-0 p-0">
+          <legend className="eyebrow mb-4">Способ оплаты</legend>
+          <div className="flex flex-col">
+            {METHODS.map((m) => (
+              <label
+                key={m.id}
+                className={`flex cursor-pointer items-center gap-4 border-b py-4 transition-colors ${
+                  method === m.id ? "border-ink" : "border-rule"
+                }`}
+              >
+                <input type="radio" name="pay" checked={method === m.id} onChange={() => setMethod(m.id)} className="h-4 w-4 accent-[#7f2420]" />
+                <span className="flex flex-1 flex-wrap items-baseline justify-between gap-2">
+                  <span className="text-[16px]">{m.label}</span>
+                  <span className="text-[12px] uppercase tracking-[0.12em] text-fg-subtle">{m.note}</span>
+                </span>
+              </label>
+            ))}
+          </div>
         </fieldset>
 
-        {error && <p role="alert" className="m-0 rounded-[10px] bg-red/10 p-3 text-sm font-semibold text-red">{error}</p>}
+        {error && (
+          <p role="alert" className="m-0 border-l-2 border-accent bg-accent-soft px-4 py-3 text-[14px] text-accent">{error}</p>
+        )}
 
-        <button type="submit" className="h-14 cursor-pointer rounded-xl bg-red text-lg font-bold text-white hover:brightness-110">Оплатить ${total}</button>
-        <span className="text-center text-[13px] text-muted">Это демо: деньги не списываются.</span>
+        <div className="flex flex-wrap items-center gap-6">
+          <button type="submit" className="pill pill-solid w-full sm:w-auto">Отправить бронь · ${total}</button>
+          <p className="m-0 text-[12px] leading-relaxed text-fg-subtle">
+            Демо-режим: деньги не списываются.<br />Данные карты на сайте не хранятся.
+          </p>
+        </div>
       </form>
     </div>
   );
