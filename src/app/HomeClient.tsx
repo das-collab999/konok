@@ -75,7 +75,7 @@ export function HomeClient({ places }: { places: Place[] }) {
     <>
       <Intro>
         <div className="flex flex-col items-center gap-6">
-          <Medallion id="intro-med" size={240} color="#DDAE52" strokeWidth={7} />
+          <Medallion id="intro-med" size={240} color="#DDAE52" />
           <span className="display text-[28px] tracking-[0.2em] text-cream">Конок</span>
         </div>
       </Intro>
@@ -87,14 +87,13 @@ export function HomeClient({ places }: { places: Place[] }) {
           id="hero-watermark"
           size={760}
           color="#8E2420"
-          strokeWidth={6}
           className="spin-slow pointer-events-none absolute -left-[280px] top-[40px] opacity-[0.06]"
         />
 
         <div className="relative mx-auto grid max-w-[1280px] items-center gap-10 px-5 pb-12 pt-12 sm:px-10 lg:grid-cols-[1.02fr_0.98fr] lg:gap-16 lg:pb-16 lg:pt-16">
           <div>
             <span className="eyebrow rise flex items-center gap-2.5">
-              <DrawIn duration={1200}><Motif name="kochkor" size={26} strokeWidth={4} className="text-accent" /></DrawIn>
+              <DrawIn duration={1200}><Motif name="kochkor" size={34} className="text-accent" /></DrawIn>
               Юрты и гостевые дома · Кыргызстан
             </span>
             <h1 className="display rise rise-2 m-0 mt-5 max-w-[13ch] text-[clamp(40px,8.4vw,92px)]">{t.heroTitle}</h1>
@@ -151,7 +150,7 @@ export function HomeClient({ places }: { places: Place[] }) {
         <ZigzagBand id="zig-hero-top" height={18} />
         <div className="overflow-hidden">
           <div className="band-drift">
-            <OrnamentBand id="band-hero" height={34} color="#EDE2C8" opacity={0.95} />
+            <OrnamentBand id="band-hero" height={42} color="#EDE2C8" opacity={0.95} />
           </div>
         </div>
         <ZigzagBand id="zig-hero-bot" height={18} flip />
@@ -261,7 +260,6 @@ export function HomeClient({ places }: { places: Place[] }) {
           id="motif-watermark"
           size={520}
           color="#8E2420"
-          strokeWidth={7}
           className="spin-slow pointer-events-none absolute -right-[150px] top-[60px] opacity-[0.07]"
         />
         <div className="flex flex-wrap items-end justify-between gap-6">
@@ -279,7 +277,7 @@ export function HomeClient({ places }: { places: Place[] }) {
           {MOTIF_ORDER.map((name, i) => (
             <RevealItem key={name} delay={i * 80} className="felt border border-rule-strong bg-paper p-5 text-center">
               <DrawIn duration={1800}>
-                <Motif name={name} size={104} strokeWidth={3.4} className="mx-auto text-accent" />
+                <Motif name={name} size={132} className="mx-auto text-accent" />
               </DrawIn>
               <h3 className="serif m-0 mt-4 text-[17px]">{MOTIFS[name].label}</h3>
               <p className="m-0 mt-2 text-[13px] leading-relaxed text-fg-muted">{MOTIFS[name].meaning}</p>
@@ -293,7 +291,7 @@ export function HomeClient({ places }: { places: Place[] }) {
         <ZigzagBand id="zig-saying-top" height={18} color="#8E2420" bg="#16130F" />
         <div className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-center gap-14 px-5 py-20 sm:px-10">
           <DrawIn duration={2200}>
-            <Medallion id="saying-med" size={280} color="#DDAE52" strokeWidth={7} className="flex-none" />
+            <Medallion id="saying-med" size={280} color="#DDAE52" className="flex-none" />
           </DrawIn>
           <Reveal className="max-w-[34rem]">
             <span className="eyebrow text-gold">Кыргызская пословица</span>
@@ -345,7 +343,7 @@ export function HomeClient({ places }: { places: Place[] }) {
       <section id="hosts" className="felt scroll-mt-24 bg-ink text-on-dark">
         <div className="overflow-hidden">
           <div className="band-drift">
-            <OrnamentBand id="band-hosts" height={28} color="#6b5a3a" />
+            <OrnamentBand id="band-hosts" height={36} color="#6b5a3a" />
           </div>
         </div>
         <div className="mx-auto flex max-w-[1280px] flex-wrap gap-14 px-5 py-20 sm:px-10">

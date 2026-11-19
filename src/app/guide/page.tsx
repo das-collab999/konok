@@ -28,7 +28,7 @@ export default function GuidePage() {
           <Shyrdak id="guide-shyrdak" rows={5} className="hidden w-[92px] flex-none lg:block" />
           <div className="min-w-0">
             <span className="eyebrow flex items-center gap-2.5">
-              <DrawIn duration={1200}><Motif name="bugu" size={26} strokeWidth={4} className="text-accent" /></DrawIn>
+              <DrawIn duration={1200}><Motif name="bugu" size={34} className="text-accent" /></DrawIn>
               Путеводитель
             </span>
             <h1 className="display m-0 mt-5 max-w-[16ch] text-[clamp(34px,6vw,72px)]">Всё, что нужно знать до поездки</h1>
@@ -52,7 +52,7 @@ export default function GuidePage() {
         <ZigzagBand id="zig-guide-top" height={16} />
         <div className="overflow-hidden">
           <div className="band-drift">
-            <OrnamentBand id="band-guide" height={30} color="#EDE2C8" opacity={0.95} />
+            <OrnamentBand id="band-guide" height={40} color="#EDE2C8" opacity={0.95} />
           </div>
         </div>
         <ZigzagBand id="zig-guide-bot" height={16} flip />
@@ -231,7 +231,7 @@ export default function GuidePage() {
             </p>
             <Link href="/bookings/" className="pill pill-light mt-8">Мои брони</Link>
             <DrawIn duration={2000} className="mt-10 hidden sm:block">
-              <Medallion id="help-med" size={180} color="#DDAE52" strokeWidth={6} className="opacity-70" />
+              <Medallion id="help-med" size={180} color="#DDAE52" className="opacity-70" />
             </DrawIn>
           </div>
 

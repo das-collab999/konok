@@ -81,7 +81,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
           {/* История семьи */}
           <section className="border-t border-rule pt-8">
             <span className="eyebrow flex items-center gap-2.5">
-              <DrawIn duration={1200}><Motif name="gul" size={24} strokeWidth={4} className="text-ochre" /></DrawIn>
+              <DrawIn duration={1200}><Motif name="gul" size={30} className="text-ochre" /></DrawIn>
               История семьи
             </span>
             <h2 className="serif m-0 mt-4 text-[28px]">{place.host}</h2>
@@ -195,7 +195,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
         <ZigzagBand id={`zig-top-${place.slug}`} height={14} />
         <div className="overflow-hidden">
           <div className="band-drift">
-            <OrnamentBand id={`band-${place.slug}`} height={28} color="#EDE2C8" opacity={0.95} />
+            <OrnamentBand id={`band-${place.slug}`} height={38} color="#EDE2C8" opacity={0.95} />
           </div>
         </div>
         <ZigzagBand id={`zig-bot-${place.slug}`} height={14} flip />

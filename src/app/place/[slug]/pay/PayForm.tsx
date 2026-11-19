@@ -63,7 +63,7 @@ export function PayForm({ place }: { place: Place }) {
         <Icon name="back" size={15} strokeWidth={1.6} /> Назад к месту
       </Link>
 
-      <Motif name="kochkor" size={34} strokeWidth={3.4} className="mt-6 text-ochre" />
+      <Motif name="kochkor" size={44} className="mt-6 text-ochre" />
       <h1 className="display m-0 mt-4 text-[clamp(30px,5vw,56px)]">Оформление брони</h1>
 
       <div className="mt-8 flex flex-wrap items-end justify-between gap-4 border-y border-rule py-6">
