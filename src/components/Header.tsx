@@ -21,6 +21,7 @@ export function Header() {
         <nav aria-label="Главное меню" className="hidden items-center gap-8 lg:flex">
           <Link href="/#stays" className={nav}>{t.nav1}</Link>
           <Link href="/#exp" className={nav}>{t.nav2}</Link>
+          <Link href="/guide/" className={nav}>Путеводитель</Link>
           <Link href="/bookings/" className={nav}>Мои брони</Link>
           <Link href="/hosts/" className={nav}>{t.nav3}</Link>
         </nav>
@@ -48,6 +49,7 @@ export function Header() {
       <nav aria-label="Разделы" className="flex items-center gap-6 overflow-x-auto border-t border-rule px-5 py-2.5 lg:hidden">
         <Link href="/#stays" className={`${nav} whitespace-nowrap`}>{t.nav1}</Link>
         <Link href="/#exp" className={`${nav} whitespace-nowrap`}>{t.nav2}</Link>
+        <Link href="/guide/" className={`${nav} whitespace-nowrap`}>Путеводитель</Link>
         <Link href="/bookings/" className={`${nav} whitespace-nowrap`}>Мои брони</Link>
         <Link href="/hosts/" className={`${nav} whitespace-nowrap`}>{t.nav3}</Link>
       </nav>
@@ -77,6 +79,7 @@ export function Footer() {
               <span className="eyebrow text-on-dark-muted">Гостям</span>
               <Link href="/#stays" className={link}>Где остановиться</Link>
               <Link href="/#exp" className={link}>Впечатления</Link>
+              <Link href="/guide/" className={link}>Путеводитель</Link>
               <Link href="/bookings/" className={link}>Мои брони</Link>
             </div>
             <div className="flex flex-col gap-3">

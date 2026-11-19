@@ -5,7 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Place } from "@/data/places";
 import { formatDate, useBooking } from "@/lib/useBooking";
+import { saveBooking } from "@/lib/bookings";
 import { Icon } from "@/components/ui";
+import { Motif } from "@/components/ethno";
 
 // MVP: no real charge. The payment module is connected later (README, section 7).
 const METHODS = [
@@ -24,15 +26,35 @@ export function PayForm({ place }: { place: Place }) {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const [sending, setSending] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (name.trim().length < 2 || phone.replace(/\D/g, "").length < 7) {
       setError("Введите имя и телефон, чтобы хозяин мог с вами связаться.");
       return;
     }
     setError("");
-    router.push(`/place/${place.slug}/done/?${query}&name=${encodeURIComponent(name.trim())}`);
+    setSending(true);
+
+    // Бронь уходит в базу (если она подключена) и всегда сохраняется в телефоне.
+    const code = "KNK-" + String(Math.floor(10000 + Math.random() * 90000));
+    await saveBooking({
+      code,
+      slug: place.slug,
+      title: place.title,
+      place: place.place,
+      host: place.host,
+      nights,
+      guests,
+      date,
+      total,
+      name: name.trim(),
+      phone: phone.trim(),
+      status: "pending",
+    });
+
+    router.push(`/place/${place.slug}/done/?${query}&name=${encodeURIComponent(name.trim())}&c=${code}`);
   };
 
   return (
@@ -41,7 +63,8 @@ export function PayForm({ place }: { place: Place }) {
         <Icon name="back" size={15} strokeWidth={1.6} /> Назад к месту
       </Link>
 
-      <h1 className="display m-0 mt-6 text-[clamp(30px,5vw,56px)]">Оформление брони</h1>
+      <Motif name="kochkor" size={34} strokeWidth={3.4} className="mt-6 text-ochre" />
+      <h1 className="display m-0 mt-4 text-[clamp(30px,5vw,56px)]">Оформление брони</h1>
 
       <div className="mt-8 flex flex-wrap items-end justify-between gap-4 border-y border-rule py-6">
         <div className="min-w-0">
@@ -94,7 +117,9 @@ export function PayForm({ place }: { place: Place }) {
         )}
 
         <div className="flex flex-wrap items-center gap-6">
-          <button type="submit" className="pill pill-solid w-full sm:w-auto">Отправить бронь · ${total}</button>
+          <button type="submit" disabled={sending} className="pill pill-solid w-full disabled:opacity-60 sm:w-auto">
+            {sending ? "Отправляем…" : `Отправить бронь · $${total}`}
+          </button>
           <p className="m-0 text-[12px] leading-relaxed text-fg-subtle">
             Демо-режим: деньги не списываются.<br />Данные карты на сайте не хранятся.
           </p>
