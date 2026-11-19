@@ -66,7 +66,7 @@ export function Motif({ name, size = 56, className = "", strokeWidth = 3 }: { na
   const m = MOTIFS[name];
   return (
     <svg viewBox="0 0 120 70" width={size} height={(size * 70) / 120} fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      {m.d.map((d, i) => <path key={i} d={d} />)}
+      {m.d.map((d, i) => <path key={i} d={d} pathLength={1} />)}
     </svg>
   );
 }
@@ -117,37 +117,110 @@ export function CornerCurl({ size = 40, className = "" }: { size?: number; class
 }
 
 /**
- * Шырдак — кусок войлочного ковра: цветное поле, рамка, узор и фактура войлока.
- * Используется как декоративная колонка рядом с заголовком.
+ * Медальон ала-кийиза: одна четверть узора, отражённая четыре раза.
+ * Симметрия настоящая, как у мастериц, — поэтому и выглядит как ковёр.
+ */
+export function Medallion({
+  id,
+  size = 320,
+  color = "currentColor",
+  className = "",
+  strokeWidth = 9,
+}: { id: string; size?: number; color?: string; className?: string; strokeWidth?: number }) {
+  const q = `${id}-q`;
+  return (
+    <svg viewBox="-115 -115 230 230" width={size} height={size} className={className} aria-hidden="true">
+      <defs>
+        <g id={q} fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round">
+          <path d="M0 -14 C0 -40 14 -58 34 -62 C52 -66 64 -54 60 -40 C56 -28 42 -26 38 -36 C35 -44 44 -50 50 -44" pathLength={1} />
+          <path d="M8 -20 C22 -34 44 -36 58 -26 C70 -17 68 -2 56 2 C46 5 38 -4 44 -12" pathLength={1} />
+          <path d="M0 -14 C0 -6 6 0 14 0 C24 0 30 8 30 18 C30 30 20 36 12 32" pathLength={1} />
+          <path d="M76 -72 C90 -76 100 -68 98 -58 C96 -49 86 -46 82 -54" strokeWidth={strokeWidth - 1} pathLength={1} />
+        </g>
+      </defs>
+      <use href={`#${q}`} />
+      <use href={`#${q}`} transform="scale(-1,1)" />
+      <use href={`#${q}`} transform="scale(1,-1)" />
+      <use href={`#${q}`} transform="scale(-1,-1)" />
+      <circle r={strokeWidth} fill={color} />
+    </svg>
+  );
+}
+
+/** Полоса «зубчики» — кайма ковра. */
+export function ZigzagBand({ id, height = 22, color = "#EDE2C8", bg = "#8E2420", flip = false, className = "" }: { id: string; height?: number; color?: string; bg?: string; flip?: boolean; className?: string }) {
+  const w = height * 1.15;
+  return (
+    <svg width="100%" height={height} className={className} aria-hidden="true" style={{ display: "block", transform: flip ? "scaleY(-1)" : undefined }}>
+      <defs>
+        <pattern id={id} width={w} height={height} patternUnits="userSpaceOnUse">
+          <rect width={w} height={height} fill={bg} />
+          <path d={`M0 ${height} L${w / 2} 2 L${w} ${height} Z`} fill={color} />
+        </pattern>
+      </defs>
+      <rect width="100%" height={height} fill={`url(#${id})`} />
+    </svg>
+  );
+}
+
+/**
+ * Шырдак — войлочная дорожка: кайма-зубчики, поле, ромбы с узором.
+ * Ставится вертикально рядом с заголовком страницы.
  */
 export function Shyrdak({
   id,
   className = "",
   base = "#8E2420",
-  motif = "#E7D3AE",
+  field = "#2B4664",
+  motif = "#EDE2C8",
   frame = "#C08A2E",
-}: { id: string; className?: string; base?: string; motif?: string; frame?: string }) {
+  rows = 4,
+}: { id: string; className?: string; base?: string; field?: string; motif?: string; frame?: string; rows?: number }) {
+  const w = 300;
+  const step = 150;
+  const h = 120 + rows * step;
+  const q = `${id}-dq`;
+
   return (
-    <svg viewBox="0 0 120 600" preserveAspectRatio="xMidYMid slice" className={className} aria-hidden="true">
+    <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="xMidYMid slice" className={className} aria-hidden="true">
       <defs>
-        <pattern id={`${id}-p`} width="120" height="160" patternUnits="userSpaceOnUse">
-          <rect width="120" height="160" fill={base} />
-          <g fill="none" stroke={motif} strokeWidth="3.6" strokeLinecap="round" transform="translate(0 40)">
-            <path d="M60 70 V34" />
-            <path d="M60 34 C60 12 40 5 28 16 C17 26 26 44 38 37 C46 32 44 21 36 21" />
-            <path d="M60 34 C60 12 80 5 92 16 C103 26 94 44 82 37 C74 32 76 21 84 21" />
-          </g>
-          <circle cx="60" cy="140" r="4.5" fill={frame} />
+        <pattern id={`${id}-zig`} width="26" height="26" patternUnits="userSpaceOnUse">
+          <rect width="26" height="26" fill={base} />
+          <path d="M0 26 L13 3 L26 26 Z" fill={motif} />
         </pattern>
+        <g id={q} fill="none" stroke={motif} strokeWidth="7" strokeLinecap="round">
+          <path d="M0 -12 C0 -34 13 -48 30 -50 C43 -52 51 -41 47 -31 C44 -24 33 -23 31 -30" />
+          <path d="M0 -12 C0 -3 7 4 16 6" />
+          <path d="M34 -56 C44 -59 51 -53 49 -46 C47 -40 40 -38 37 -44" strokeWidth="5.5" />
+        </g>
         <filter id={`${id}-felt`}>
-          <feTurbulence type="fractalNoise" baseFrequency="0.92" numOctaves="4" stitchTiles="stitch" />
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch" />
           <feColorMatrix type="saturate" values="0" />
         </filter>
       </defs>
-      <rect width="120" height="600" fill={`url(#${id}-p)`} />
-      <rect x="6" y="6" width="108" height="588" fill="none" stroke={frame} strokeWidth="4" />
-      <rect x="15" y="15" width="90" height="570" fill="none" stroke={motif} strokeWidth="1.4" strokeDasharray="8 8" opacity="0.7" />
-      <rect width="120" height="600" filter={`url(#${id}-felt)`} opacity="0.16" style={{ mixBlendMode: "multiply" }} />
+
+      <rect width={w} height={h} fill={base} />
+      <rect width={w} height="26" fill={`url(#${id}-zig)`} />
+      <g transform={`translate(0 ${h}) scale(1 -1)`}><rect width={w} height="26" fill={`url(#${id}-zig)`} /></g>
+      <rect x="28" y="36" width={w - 56} height={h - 72} fill={motif} />
+      <rect x="40" y="48" width={w - 80} height={h - 96} fill={field} />
+
+      {Array.from({ length: rows }).map((_, i) => {
+        const cy = 100 + i * step;
+        return (
+          <g key={i}>
+            <path d={`M150 ${cy - 62} L222 ${cy} L150 ${cy + 62} L78 ${cy} Z`} fill="none" stroke={frame} strokeWidth="4" />
+            <g transform={`translate(150 ${cy})`}>
+              <use href={`#${q}`} />
+              <use href={`#${q}`} transform="scale(-1,1)" />
+              <use href={`#${q}`} transform="scale(1,-1)" />
+              <use href={`#${q}`} transform="scale(-1,-1)" />
+            </g>
+          </g>
+        );
+      })}
+
+      <rect width={w} height={h} filter={`url(#${id}-felt)`} opacity="0.17" style={{ mixBlendMode: "multiply" }} />
     </svg>
   );
 }

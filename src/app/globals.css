@@ -131,6 +131,62 @@ body {
 /* Узорная рамка у карточки: тонкая линия цвета охры по краю */
 .ornate { box-shadow: inset 0 0 0 1px var(--color-rule); }
 
+/* ── движение ───────────────────────────────────────────────── */
+
+/* Блок проявляется при прокрутке */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity .9s cubic-bezier(.2,.7,.3,1), transform .9s cubic-bezier(.2,.7,.3,1);
+  will-change: opacity, transform;
+}
+.reveal-in { opacity: 1; transform: none; }
+
+/* Узор рисуется линией */
+.draw svg path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.draw-in svg path { animation: knk-draw var(--draw-time, 1600ms) cubic-bezier(.4,0,.2,1) forwards; }
+.draw-in svg path:nth-child(2) { animation-delay: .12s; }
+.draw-in svg path:nth-child(3) { animation-delay: .24s; }
+.draw-in svg path:nth-child(4) { animation-delay: .36s; }
+@keyframes knk-draw { to { stroke-dashoffset: 0; } }
+
+/* Горы отстают от прокрутки */
+.parallax { transform: translate3d(0, var(--shift, 0px), 0); will-change: transform; }
+
+/* Лента орнамента: полоса едет вбок, узор бесшовный */
+.band-drift { width: 200%; animation: knk-marquee 90s linear infinite; }
+
+/* Лента орнамента */
+.marquee { overflow: hidden; }
+.marquee-track { display: flex; width: max-content; animation: knk-marquee var(--marquee-time, 60s) linear infinite; }
+.marquee-part { display: flex; flex: none; }
+@keyframes knk-marquee { to { transform: translateX(-50%); } }
+
+/* Заставка при первом открытии */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  background: var(--color-ink);
+  transition: transform 0.9s cubic-bezier(.76,0,.24,1), opacity .9s ease;
+}
+.intro-out { transform: translateY(-100%); opacity: 0; }
+.intro-mark { animation: knk-mark 2.4s ease forwards; }
+@keyframes knk-mark {
+  0% { opacity: 0; transform: scale(.94); }
+  25% { opacity: 1; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.04); }
+}
+
+/* Медленное вращение — для узора-водяного знака */
+.spin-slow { animation: knk-spin 90s linear infinite; }
+@keyframes knk-spin { to { transform: rotate(360deg); } }
+
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+  .draw svg path { stroke-dasharray: none; stroke-dashoffset: 0; }
+  .parallax { transform: none; }
 }

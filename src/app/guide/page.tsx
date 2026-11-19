@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { CONDITIONS, EMERGENCY, ETIQUETTE, MEALS, MEAL_KINDS, PACKING, PHRASES, TRANSPORT } from "@/data/guide";
 import { Icon } from "@/components/ui";
-import { Motif, OrnamentBand, Shyrdak } from "@/components/ethno";
+import { Medallion, Motif, OrnamentBand, Shyrdak, ZigzagBand } from "@/components/ethno";
+import { DrawIn, RevealItem } from "@/components/motion";
 
 export const metadata = {
   title: "Путеводитель по Кыргызстану — Конок",
@@ -24,10 +25,10 @@ export default function GuidePage() {
       {/* ------------------------------------------------------- Шапка */}
       <section className="border-b border-rule">
         <div className="mx-auto flex max-w-[1280px] gap-10 px-5 py-14 sm:px-10">
-          <Shyrdak id="guide-shyrdak" className="hidden w-[70px] flex-none lg:block" />
+          <Shyrdak id="guide-shyrdak" rows={5} className="hidden w-[92px] flex-none lg:block" />
           <div className="min-w-0">
             <span className="eyebrow flex items-center gap-2.5">
-              <Motif name="bugu" size={26} strokeWidth={4} className="text-accent" />
+              <DrawIn duration={1200}><Motif name="bugu" size={26} strokeWidth={4} className="text-accent" /></DrawIn>
               Путеводитель
             </span>
             <h1 className="display m-0 mt-5 max-w-[16ch] text-[clamp(34px,6vw,72px)]">Всё, что нужно знать до поездки</h1>
@@ -48,7 +49,13 @@ export default function GuidePage() {
       </section>
 
       <div className="bg-accent">
-        <OrnamentBand id="band-guide" height={26} color="#E7D3AE" opacity={0.9} />
+        <ZigzagBand id="zig-guide-top" height={16} />
+        <div className="overflow-hidden">
+          <div className="band-drift">
+            <OrnamentBand id="band-guide" height={30} color="#EDE2C8" opacity={0.95} />
+          </div>
+        </div>
+        <ZigzagBand id="zig-guide-bot" height={16} flip />
       </div>
 
       {/* -------------------------------------------------------- Кухня */}
@@ -223,17 +230,20 @@ export default function GuidePage() {
               он открывается без интернета.
             </p>
             <Link href="/bookings/" className="pill pill-light mt-8">Мои брони</Link>
+            <DrawIn duration={2000} className="mt-10 hidden sm:block">
+              <Medallion id="help-med" size={180} color="#DDAE52" strokeWidth={6} className="opacity-70" />
+            </DrawIn>
           </div>
 
           <ul className="m-0 flex flex-1 basis-[380px] list-none flex-col p-0">
-            {EMERGENCY.map((c) => (
-              <li key={c.phone} className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-t border-rule-dark py-4 last:border-b">
+            {EMERGENCY.map((c, i) => (
+              <RevealItem key={c.phone} delay={i * 90} className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-t border-rule-dark py-4 last:border-b">
                 <div className="min-w-0">
                   <div className="text-[15px] text-cream">{c.title}</div>
                   {c.note && <div className="mt-1 text-[13px] text-on-dark-muted">{c.note}</div>}
                 </div>
                 <a href={`tel:${c.phone}`} className="serif text-[26px] text-gold no-underline">{c.phone}</a>
-              </li>
+              </RevealItem>
             ))}
           </ul>
         </div>

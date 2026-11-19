@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import { loadPlace, loadPlaces } from "@/lib/source";
 import { EMERGENCY, MEALS, PACKING, TRANSPORT } from "@/data/guide";
 import { Cover, Icon, type IconName } from "@/components/ui";
-import { Motif, OrnamentBand } from "@/components/ethno";
+import { Motif, OrnamentBand, ZigzagBand } from "@/components/ethno";
+import { DrawIn, Reveal } from "@/components/motion";
 import { BookingCard } from "./BookingCard";
 
 export async function generateStaticParams() {
@@ -80,7 +81,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
           {/* История семьи */}
           <section className="border-t border-rule pt-8">
             <span className="eyebrow flex items-center gap-2.5">
-              <Motif name="gul" size={24} strokeWidth={4} className="text-ochre" />
+              <DrawIn duration={1200}><Motif name="gul" size={24} strokeWidth={4} className="text-ochre" /></DrawIn>
               История семьи
             </span>
             <h2 className="serif m-0 mt-4 text-[28px]">{place.host}</h2>
@@ -165,6 +166,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
           </section>
 
           {/* Безопасность */}
+          <Reveal>
           <section className="felt border border-rule bg-paper p-7">
             <span className="eyebrow">Если что-то случилось</span>
             <h2 className="serif m-0 mt-3 text-[24px]">Телефоны под рукой</h2>
@@ -181,6 +183,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
               ))}
             </ul>
           </section>
+          </Reveal>
         </div>
 
         <Suspense fallback={<div className="h-[560px] w-full bg-paper lg:w-[380px] lg:flex-none" />}>
@@ -189,7 +192,13 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
       </div>
 
       <div className="mt-16 bg-accent">
-        <OrnamentBand id={`band-${place.slug}`} height={24} color="#E7D3AE" opacity={0.9} />
+        <ZigzagBand id={`zig-top-${place.slug}`} height={14} />
+        <div className="overflow-hidden">
+          <div className="band-drift">
+            <OrnamentBand id={`band-${place.slug}`} height={28} color="#EDE2C8" opacity={0.95} />
+          </div>
+        </div>
+        <ZigzagBand id={`zig-bot-${place.slug}`} height={14} flip />
       </div>
     </div>
   );
