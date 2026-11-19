@@ -4,52 +4,91 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { bookingCode, type Place } from "@/data/places";
-import { useBooking } from "@/lib/useBooking";
-import { Icon, Tunduk } from "@/components/ui";
+import { formatDate, useBooking } from "@/lib/useBooking";
+import { Icon } from "@/components/ui";
 
 export function Done({ place }: { place: Place }) {
-  const { nights, guests, total } = useBooking(place);
+  const { nights, guests, date, total } = useBooking(place);
   const name = useSearchParams().get("name") ?? "";
   const code = bookingCode(place, nights, guests);
 
-  // Keep the booking on the phone so it works without internet in the mountains.
+  // Kept on the phone, so the booking is readable without internet in the mountains.
   useEffect(() => {
     try {
       const list = JSON.parse(localStorage.getItem("konok-bookings") ?? "[]");
       if (!list.some((b: { code: string }) => b.code === code)) {
-        list.push({ code, slug: place.slug, title: place.title, host: place.host, nights, guests, total, name });
+        list.push({ code, slug: place.slug, title: place.title, place: place.place, host: place.host, nights, guests, date, total, name, status: "pending" });
         localStorage.setItem("konok-bookings", JSON.stringify(list));
       }
     } catch {}
-  }, [code, place, nights, guests, total, name]);
+  }, [code, place, nights, guests, date, total, name]);
+
+  const rows: [string, string][] = [
+    ["Место", place.title],
+    ["Регион", place.place],
+    ["Заезд", date ? formatDate(date) : "—"],
+    ["Ночей", String(nights)],
+    ["Гостей", String(guests)],
+    ["К оплате", `$${total}`],
+  ];
 
   const notes = [
-    "Бронь, карта и контакты сохранены в телефоне — работают без интернета в горах",
+    "Бронь сохранена в телефоне и открывается без интернета",
+    "Хозяин подтверждает заявку в течение 2 часов",
     "Водитель свяжется с вами накануне выезда",
-    "Словарик: «Салам» — привет, «Рахмат» — спасибо, «Даамдуу!» — вкусно!",
   ];
 
   return (
-    <div className="mx-auto flex max-w-[720px] flex-col items-center gap-[18px] px-6 pb-20 pt-14 text-center">
-      <div className="tunduk-rise">
-        <Tunduk size={120} className="tunduk-spin" />
+    <div className="mx-auto max-w-[680px] px-4 py-10 sm:px-6">
+      <div className="flex items-center gap-2 text-success">
+        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-success-soft">
+          <Icon name="check" size={18} strokeWidth={2.4} />
+        </span>
+        <span className="text-[14px] font-medium">Заявка отправлена</span>
       </div>
-      <span className="font-serif text-[22px] italic text-red">Рахмат! Сизди күтөбүз.</span>
-      <h1 className="m-0 font-serif text-[clamp(30px,4vw,38px)] leading-tight">Бронь отправлена хозяевам</h1>
-      <p className="m-0 text-[17px] leading-relaxed text-ink-soft">
-        {name ? `${name}, ` : ""}{place.host} получили вашу заявку в мессенджере и подтвердят её в течение 2 часов. Номер брони: <strong>{code}</strong>
+
+      <h1 className="m-0 mt-4 text-[26px] font-semibold leading-tight">
+        {name ? `${name}, бронь ушла хозяевам` : "Бронь ушла хозяевам"}
+      </h1>
+      <p className="m-0 mt-3 text-[15px] leading-relaxed text-fg-muted">
+        {place.host} получили заявку в мессенджере на кыргызском и подтвердят её в течение двух часов.
+        Рахмат! Сизди күтөбүз.
       </p>
-      <div className="flex w-full flex-col gap-2.5 rounded-2xl border border-line bg-card p-[18px] text-left">
-        {notes.map((n) => (
-          <div key={n} className="flex items-center gap-2.5">
-            <Icon name="check" size={22} strokeWidth={2} className="flex-none text-green" />
-            <span>{n}</span>
-          </div>
-        ))}
+
+      <div className="mt-6 rounded-card border border-border bg-canvas">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border-muted px-4 py-3">
+          <span className="text-[13px] text-fg-subtle">Номер брони</span>
+          <span className="font-mono text-[16px] font-semibold tracking-wide">{code}</span>
+        </div>
+        <dl className="m-0 divide-y divide-border-muted">
+          {rows.map(([k, v]) => (
+            <div key={k} className="flex items-baseline justify-between gap-4 px-4 py-2.5">
+              <dt className="m-0 text-[14px] text-fg-muted">{k}</dt>
+              <dd className="m-0 text-right text-[14px] font-medium">{v}</dd>
+            </div>
+          ))}
+        </dl>
       </div>
-      <div className="flex flex-wrap justify-center gap-3">
-        <Link href="/hosts/" className="inline-flex h-12 items-center rounded-[10px] bg-ink px-5 font-bold text-felt">Что видит хозяин</Link>
-        <Link href="/" className="inline-flex h-12 items-center rounded-[10px] border border-line-strong bg-card px-5 font-semibold">На главную</Link>
+
+      <ul className="m-0 mt-5 flex list-none flex-col gap-2 p-0">
+        {notes.map((n) => (
+          <li key={n} className="flex items-start gap-2.5 text-[14px] text-fg-muted">
+            <Icon name="check" size={16} strokeWidth={2.2} className="mt-0.5 flex-none text-success" />
+            {n}
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-7 flex flex-wrap gap-3">
+        <Link href="/bookings/" className="inline-flex h-10 items-center rounded-lg bg-accent px-5 text-[15px] font-medium text-white no-underline transition-colors hover:bg-accent-hover">
+          Мои брони
+        </Link>
+        <Link href="/hosts/" className="inline-flex h-10 items-center rounded-lg border border-border px-5 text-[15px] font-medium text-fg no-underline transition-colors hover:bg-subtle">
+          Что видит хозяин
+        </Link>
+        <Link href="/" className="inline-flex h-10 items-center rounded-lg border border-border px-5 text-[15px] font-medium text-fg no-underline transition-colors hover:bg-subtle">
+          На главную
+        </Link>
       </div>
     </div>
   );

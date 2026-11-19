@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Place } from "@/data/places";
-import { Icon, PlaceArt, type IconName } from "./ui";
+import { Cover, Icon, type IconName } from "./ui";
 
 export function placeChips(p: Place): { label: string; icon: IconName }[] {
   const chips: { label: string; icon: IconName }[] = [];
@@ -11,32 +11,49 @@ export function placeChips(p: Place): { label: string; icon: IconName }[] {
   return chips;
 }
 
-export function PlaceCard({ place }: { place: Place }) {
+export function PlaceCard({ place, query = "" }: { place: Place; query?: string }) {
+  const href = `/place/${place.slug}/${query ? `?${query}` : ""}`;
+
   return (
-    <article className="card-hover flex flex-col overflow-hidden rounded-[18px] border border-line bg-card">
-      <div className="relative h-[190px]">
-        <PlaceArt place={place} className="block h-full w-full" />
-        <span className="absolute left-3 top-3 rounded-full bg-green px-2.5 py-1.5 text-xs font-bold text-white">Проверено Конок</span>
-        <span className="absolute right-3 top-3 rounded-full bg-ink/80 px-2.5 py-1.5 text-xs font-semibold text-felt">{place.altitudeM} м</span>
-      </div>
-      <div className="flex flex-1 flex-col gap-2.5 p-[18px] pb-5">
-        <div className="text-[13px] font-bold uppercase tracking-wide text-red">{place.place}</div>
-        <h3 className="m-0 font-serif text-[22px] leading-tight">{place.title}</h3>
-        <p className="m-0 text-sm leading-relaxed text-muted">{place.short}</p>
-        <div className="flex flex-wrap gap-1.5">
-          {placeChips(place).map((c) => (
-            <span key={c.label} className="inline-flex items-center gap-1.5 rounded-lg bg-felt px-2 py-1 text-xs font-semibold">
-              <Icon name={c.icon} size={14} className="text-red" strokeWidth={2} />
-              {c.label}
-            </span>
-          ))}
+    <article className="lift flex flex-col overflow-hidden rounded-card border border-border-muted bg-canvas">
+      <Link href={href} className="relative block aspect-[16/10] overflow-hidden no-underline">
+        <Cover place={place} className="block h-full w-full object-cover" />
+        <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-canvas/95 px-2.5 py-1 text-[12px] font-medium text-success">
+          <Icon name="check" size={12} strokeWidth={2.4} />
+          Проверено
+        </span>
+      </Link>
+
+      <div className="flex flex-1 flex-col gap-3 p-4">
+        <div className="flex items-center justify-between gap-3">
+          <span className="truncate text-[13px] text-fg-subtle">{place.place}</span>
+          <span className="shrink-0 rounded-full bg-inset px-2 py-0.5 text-[12px] text-fg-muted">{place.altitudeM} м</span>
         </div>
-        <div className="mt-auto flex items-center justify-between gap-2.5 pt-2">
+
+        <h3 className="m-0 text-[17px] leading-snug">
+          <Link href={href} className="text-fg no-underline hover:underline">{place.title}</Link>
+        </h3>
+
+        <p className="m-0 text-[14px] leading-relaxed text-fg-muted">{place.short}</p>
+
+        <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0">
+          {placeChips(place).map((c) => (
+            <li key={c.label} className="inline-flex items-center gap-1.5 rounded-full border border-border-muted px-2.5 py-1 text-[12px] text-fg-muted">
+              <Icon name={c.icon} size={13} />
+              {c.label}
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-auto flex items-center justify-between gap-3 border-t border-border-muted pt-3">
           <div>
-            <span className="text-[22px] font-bold">${place.pricePerPersonUsd}</span>
-            <span className="text-[13px] text-muted"> / чел. за ночь</span>
+            <span className="text-[18px] font-semibold">${place.pricePerPersonUsd}</span>
+            <span className="ml-1 text-[13px] text-fg-subtle">/ чел. за ночь</span>
           </div>
-          <Link href={`/place/${place.slug}/`} className="inline-flex h-11 items-center rounded-[10px] bg-red px-[18px] text-[15px] font-bold text-white hover:brightness-110">
+          <Link
+            href={href}
+            className="inline-flex h-9 items-center rounded-lg border border-border px-3.5 text-[14px] font-medium text-fg no-underline transition-colors hover:bg-subtle"
+          >
             Смотреть
           </Link>
         </div>

@@ -1,42 +1,81 @@
 @import "tailwindcss";
 
-/* Design tokens from design/Main.dc.html */
+/* ---------------------------------------------------------------
+   Konok UI. Sober product interface: white canvas, grey hairlines,
+   one brand accent. No decorative colour, no illustration style.
+   --------------------------------------------------------------- */
 @theme {
-  --color-red: #8b1e1e;
-  --color-red-dark: #5e1212;
-  --color-ochre: #c8962e;
-  --color-gold: #e9b949;
-  --color-sky: #1f4e79;
-  --color-felt: #f3e9d7;
-  --color-card: #fffbf3;
-  --color-line: #e4d6bd;
-  --color-line-strong: #d9c9ae;
-  --color-ink: #3b2a1e;
-  --color-ink-soft: #4f3b2c;
-  --color-muted: #6b5442;
-  --color-green: #2e5e3a;
-  --color-night: #2a1e15;
+  /* Surfaces */
+  --color-canvas: #ffffff;
+  --color-subtle: #f6f7f9;   /* section backgrounds, inputs at rest */
+  --color-inset: #eef0f3;    /* chips, skeletons */
+  --color-dark: #1c1f23;     /* dark band, footer */
+  --color-dark-2: #2a2e34;
 
-  --font-sans: "Inter", system-ui, sans-serif;
-  --font-serif: "Lora", Georgia, serif;
+  /* Lines */
+  --color-border: #d6dadf;
+  --color-border-muted: #e7eaee;
+  --color-border-dark: #3a3f46;
+
+  /* Text */
+  --color-fg: #1c1f23;
+  --color-fg-muted: #5a626c;
+  --color-fg-subtle: #858d97;
+  --color-on-dark: #f2f3f5;
+  --color-on-dark-muted: #a7aeb6;
+
+  /* Accent — the brand red, used only for primary actions and marks */
+  --color-accent: #8b1e1e;
+  --color-accent-hover: #6f1717;
+  --color-accent-soft: #fbf1f1;
+
+  /* Status */
+  --color-success: #1a7f37;
+  --color-success-soft: #eaf5ec;
+
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+
+  --radius-card: 12px;
 }
 
-html { scroll-behavior: smooth; }
+html { -webkit-text-size-adjust: 100%; }
+
 body {
-  background: var(--color-felt);
-  color: var(--color-ink);
+  background: var(--color-canvas);
+  color: var(--color-fg);
   font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
 }
 
-.card-hover { transition: transform .18s ease, box-shadow .18s ease; }
-.card-hover:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(59,42,30,.18); }
+h1, h2, h3, h4 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
 
-@keyframes knk-rise { 0% { transform: translateY(40px); opacity: 0 } 60% { transform: translateY(-6px); opacity: 1 } 100% { transform: translateY(0); opacity: 1 } }
-@keyframes knk-spin { from { transform: rotate(0) } to { transform: rotate(360deg) } }
-.tunduk-rise { animation: knk-rise 1.2s ease-out both; }
-.tunduk-spin { animation: knk-spin 14s linear infinite; transform-origin: 50% 50%; }
+/* Section label above a heading */
+.eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-fg-subtle);
+}
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Cards react, but quietly */
+.lift { transition: box-shadow .2s ease, border-color .2s ease, transform .2s ease; }
+@media (hover: hover) {
+  .lift:hover { border-color: var(--color-border); box-shadow: 0 6px 18px -10px rgba(28,31,35,.35); transform: translateY(-2px); }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .tunduk-rise, .tunduk-spin { animation: none; }
-  .card-hover:hover { transform: none; }
+  * { animation: none !important; transition: none !important; }
 }

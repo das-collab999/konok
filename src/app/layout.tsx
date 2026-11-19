@@ -1,29 +1,33 @@
 import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { LangProvider } from "@/lib/i18n";
 import { Header, Footer } from "@/components/Header";
 
+// Fonts are downloaded at build time and served from our own domain:
+// the site needs no outside request and works offline.
+const inter = Inter({ subsets: ["latin", "cyrillic"], variable: "--font-inter", display: "swap" });
+
 export const metadata: Metadata = {
   title: "Конок — юрты и гостевые дома Кыргызстана",
-  description: "Бронирование юртовых лагерей и гостевых домов в сёлах Кыргызстана. Честные фото, живые хозяева, оплата картой.",
+  description: "Бронирование юртовых лагерей и гостевых домов в сёлах Кыргызстана. Честно о быте, живые хозяева, оплата картой.",
 };
 
-export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#3B2A1E" };
+export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#ffffff" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru">
+    <html lang="ru" className={inter.variable}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
-        <link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-        <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Ccircle cx='60' cy='60' r='56' fill='%238B1E1E'/%3E%3Ccircle cx='60' cy='60' r='30' fill='none' stroke='%23E9B949' stroke-width='8'/%3E%3C/svg%3E" />
+        <link
+          rel="icon"
+          href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='10' fill='%238b1e1e'/%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='2.4'%3E%3Ccircle cx='24' cy='24' r='13'/%3E%3Ccircle cx='24' cy='24' r='6.5'/%3E%3Cpath d='M24 11v5M24 32v5M11 24h5M32 24h5'/%3E%3C/g%3E%3C/svg%3E"
+        />
       </head>
-      <body className="min-h-screen">
+      <body className="flex min-h-screen flex-col">
         <LangProvider>
           <Header />
-          <main>{children}</main>
+          <main className="flex-1">{children}</main>
           <Footer />
         </LangProvider>
       </body>

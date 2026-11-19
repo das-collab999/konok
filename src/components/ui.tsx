@@ -1,6 +1,8 @@
 import type { Place } from "@/data/places";
 
-// Line icons (24×24, stroke). Same paths as in the design mockup.
+/* ------------------------------------------------------------------ *
+ * Icons — one monoline set, 24×24, drawn in currentColor.
+ * ------------------------------------------------------------------ */
 export const ICONS = {
   fire: "M12 3c2 3 5 5 5 9a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-8z",
   bath: "M7 4c-1 2 1 3 0 5M12 4c-1 2 1 3 0 5M17 4c-1 2 1 3 0 5M3 13h18v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z",
@@ -23,11 +25,16 @@ export const ICONS = {
   bed: "M3 18V8M3 14h18v4M21 18v-6a3 3 0 0 0-3-3h-7v5",
   check: "M5 12l4 4L19 6",
   back: "M15 5l-7 7 7 7",
+  arrow: "M5 12h14M13 6l6 6-6 6",
+  pin: "M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11zM12 12.5a2.5 2.5 0 1 0 0-5a2.5 2.5 0 0 0 0 5",
+  calendar: "M4 6h16v15H4zM4 10h16M8 3v4M16 3v4",
+  user: "M12 12a4 4 0 1 0 0-8a4 4 0 0 0 0 8M4 21c1.6-4 4.4-6 8-6s6.4 2 8 6",
+  search: "M11 19a8 8 0 1 0 0-16a8 8 0 0 0 0 16M21 21l-4.3-4.3",
 } as const;
 
 export type IconName = keyof typeof ICONS;
 
-export function Icon({ name, size = 20, className = "", strokeWidth = 1.8 }: { name: IconName; size?: number; className?: string; strokeWidth?: number }) {
+export function Icon({ name, size = 20, className = "", strokeWidth = 1.5 }: { name: IconName; size?: number; className?: string; strokeWidth?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={className}>
       <path d={ICONS[name]} />
@@ -35,83 +42,224 @@ export function Icon({ name, size = 20, className = "", strokeWidth = 1.8 }: { n
   );
 }
 
-/** Logo: tunduk, the crown of the yurt (as on the flag). */
-export function Tunduk({ size = 44, className = "" }: { size?: number; className?: string }) {
+/* ------------------------------------------------------------------ *
+ * Tunduk — the crown of the yurt. Monoline mark, inherits currentColor.
+ * ------------------------------------------------------------------ */
+export function Tunduk({ size = 34, className = "", strokeWidth = 1.4 }: { size?: number; className?: string; strokeWidth?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 120 120" aria-hidden="true" className={className}>
-      <circle cx="60" cy="60" r="56" fill="#8B1E1E" />
-      <circle cx="60" cy="60" r="30" fill="none" stroke="#E9B949" strokeWidth="5" />
-      <path d="M38 46 L82 74 M38 60 L82 60 M38 74 L82 46 M44 38 L76 82 M76 38 L44 82" stroke="#E9B949" strokeWidth="5" strokeLinecap="round" />
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth={strokeWidth} className={className} aria-hidden="true">
+      <circle cx="24" cy="24" r="21.2" />
+      <circle cx="24" cy="24" r="11.6" />
+      <path d="M24 2.8v9.6M24 35.6v9.6M2.8 24h9.6M35.6 24h9.6" />
+      <path d="M12.6 12.6 19 19M29 29l6.4 6.4M35.4 12.6 29 19M19 29l-6.4 6.4" />
     </svg>
   );
 }
 
-/** Ornament band "kochkor muyuz" (ram's horns). */
-export function Ornament({ id, color = "#E9B949", bg = "#8B1E1E" }: { id: string; color?: string; bg?: string }) {
-  return (
-    <div style={{ background: bg, lineHeight: 0 }}>
-      <svg width="100%" height="30" aria-hidden="true">
-        <defs>
-          <pattern id={id} width="60" height="30" patternUnits="userSpaceOnUse">
-            <path d="M30 28 V16 M30 16 C30 5 17 3 15 11 C13 18 21 20 22 14 M30 16 C30 5 43 3 45 11 C47 18 39 20 38 14" fill="none" stroke={color} strokeWidth="2.4" strokeLinecap="round" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="30" fill={`url(#${id})`} />
-      </svg>
-    </div>
-  );
-}
+/* ------------------------------------------------------------------ *
+ * Cover art.
+ * Until real photographs are uploaded, every place gets a quiet
+ * duotone mountain study: layered ridgelines, haze between them,
+ * film grain on top. Deterministic — the same place always looks
+ * the same. Swap in a photo by adding `photo` to the place record.
+ * ------------------------------------------------------------------ */
 
-function Yurt({ x, y, s = 1 }: { x: number; y: number; s?: number }) {
-  return (
-    <g transform={`translate(${x} ${y}) scale(${s})`}>
-      <path d="M0 60 Q0 20 60 6 Q120 20 120 60Z" fill="#F3E9D7" />
-      <rect x="0" y="58" width="120" height="50" fill="#EADCC2" />
-      <path d="M0 72 H120" stroke="#8B1E1E" strokeWidth="5" />
-      <rect x="48" y="74" width="24" height="34" fill="#8B1E1E" />
-      <circle cx="60" cy="8" r="7" fill="#C8962E" />
-    </g>
-  );
-}
+type Mood = { sky: [string, string]; ridges: [string, string, string, string]; haze: string; glow: string };
 
-function House({ x, y, s = 1 }: { x: number; y: number; s?: number }) {
-  return (
-    <g transform={`translate(${x} ${y}) scale(${s})`}>
-      <path d="M0 50 L80 0 L160 50Z" fill="#8B1E1E" />
-      <rect x="12" y="48" width="136" height="70" fill="#F3E9D7" />
-      <rect x="32" y="66" width="26" height="22" fill="#1F4E79" />
-      <rect x="102" y="66" width="26" height="22" fill="#1F4E79" />
-      <rect x="68" y="76" width="24" height="42" fill="#3B2A1E" />
-    </g>
-  );
-}
+const MOODS: Record<string, Mood> = {
+  // High and cold — clear blue daylight
+  alpine: { sky: ["#8fa8bd", "#dfe7ed"], ridges: ["#c6d1da", "#a2b0bd", "#7d8c99", "#5b6874"], haze: "#dfe7ed", glow: "#ffffff" },
+  // Lake light — soft and wide
+  lake: { sky: ["#9ab3c7", "#e6ecf0"], ridges: ["#ccd6de", "#a9b7c2", "#86939f", "#63707b"], haze: "#e6ecf0", glow: "#ffffff" },
+  // Valley — faintly green
+  valley: { sky: ["#a4b7b0", "#e5eae6"], ridges: ["#c8d0c7", "#a6b0a4", "#848d81", "#616a5e"], haze: "#e5eae6", glow: "#ffffff" },
+  // South — warm, nut forest
+  south: { sky: ["#bdb097", "#ece5d9"], ridges: ["#d6cbb8", "#b7ab96", "#958a78", "#706759"], haze: "#ece5d9", glow: "#ffffff" },
+};
 
-/** Illustration used until real photos are uploaded. */
-export function PlaceArt({ place, wide = false, className = "" }: { place: Place; wide?: boolean; className?: string }) {
-  const { sky, mountains, hills } = place.palette;
-  const label = (place.type === "yurt" ? "Рисунок: юрта в горах — " : "Рисунок: гостевой дом в горах — ") + place.place;
-  if (wide) {
-    return (
-      <svg viewBox="0 0 1200 340" preserveAspectRatio="xMidYMid slice" className={className} role="img" aria-label={label}>
-        <rect width="1200" height="340" fill={sky} />
-        <circle cx="980" cy="80" r="36" fill="#F6D58E" opacity=".9" />
-        <polygon points="0,230 200,90 360,190 560,50 760,180 940,90 1200,210 1200,340 0,340" fill={mountains} />
-        <polygon points="540,70 560,50 580,70 570,66 560,74 550,66" fill="#fff" />
-        <polygon points="925,105 940,90 955,105 948,102 940,108 932,102" fill="#fff" />
-        <path d="M0 270 Q300 210 600 255 T1200 245 V340 H0Z" fill={hills} />
-        {place.type === "yurt" ? (<><Yurt x={470} y={210} /><Yurt x={640} y={240} s={0.6} /></>) : <House x={500} y={200} />}
-      </svg>
-    );
+const REGION_MOOD: Record<string, keyof typeof MOODS> = {
+  naryn: "alpine",
+  issyk: "lake",
+  chui: "valley",
+  jalal: "south",
+};
+
+/** Small deterministic PRNG so a place always draws the same ridge. */
+function seeded(seed: string) {
+  let h = 2166136261;
+  for (let i = 0; i < seed.length; i++) {
+    h ^= seed.charCodeAt(i);
+    h = Math.imul(h, 16777619);
   }
+  return () => {
+    h += 0x6d2b79f5;
+    let t = h;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/** Smooth value noise, summed over octaves — gives a natural ridge profile. */
+function noise1d(rand: () => number) {
+  const lattice = Array.from({ length: 256 }, () => rand());
+  const at = (i: number) => lattice[((i % 256) + 256) % 256];
+  const smooth = (x: number) => {
+    const i = Math.floor(x);
+    const f = x - i;
+    const u = f * f * (3 - 2 * f);
+    return at(i) * (1 - u) + at(i + 1) * u;
+  };
+  return (x: number) => {
+    let v = 0;
+    let amp = 0.62;
+    let freq = 1;
+    for (let o = 0; o < 3; o++) {
+      v += smooth(x * freq) * amp;
+      amp *= 0.42;
+      freq *= 2.3;
+    }
+    return Math.min(1, v / 0.95);
+  };
+}
+
+/**
+ * One mountain ridge: a noise profile sampled across the frame and filled
+ * to the bottom. Peaks come out uneven, the way a real skyline is.
+ */
+function ridgePath(rand: () => number, w: number, h: number, baseY: number, amp: number, roughness: number) {
+  const n = noise1d(rand);
+  const offset = rand() * 50;
+  const steps = 140;
+  const pts: string[] = [];
+  for (let i = 0; i <= steps; i++) {
+    const x = (w / steps) * i;
+    const t = (i / steps) * roughness + offset;
+    // Ridged noise: sharp summits, soft saddles.
+    const raw = n(t);
+    const ridged = Math.pow(1 - Math.abs(1 - 2 * raw), 1.5);
+    const y = baseY - amp * (0.08 + 0.92 * ridged);
+    pts.push(`${i === 0 ? "M" : "L"}${x.toFixed(1)},${y.toFixed(1)}`);
+  }
+  return `${pts.join(" ")} L${w},${h} L0,${h} Z`;
+}
+
+export function PlaceArt({ place, wide = false, className = "" }: { place: Place; wide?: boolean; className?: string }) {
+  const w = wide ? 1600 : 800;
+  const h = wide ? 700 : 600;
+  const mood = MOODS[REGION_MOOD[place.region] ?? "alpine"];
+  const rand = seeded(place.slug);
+  const uid = `art-${place.slug}${wide ? "-w" : ""}`;
+
+  const layers = [0, 1, 2, 3].map((i) => ({
+    fill: mood.ridges[i],
+    d: ridgePath(rand, w, h, h * (0.58 + i * 0.11), h * (0.52 - i * 0.085), 1.5 + i * 0.7),
+    opacity: 1,
+  }));
+
   return (
-    <svg viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" className={className} role="img" aria-label={label}>
-      <rect width="400" height="220" fill={sky} />
-      <circle cx="320" cy="58" r="22" fill="#F6D58E" opacity=".9" />
-      <polygon points="0,150 70,70 130,120 200,40 270,110 330,62 400,130 400,220 0,220" fill={mountains} />
-      <polygon points="186,56 200,40 214,56 207,52 200,59 193,52" fill="#fff" />
-      <polygon points="320,72 330,62 340,72 335,70 330,75 325,70" fill="#fff" />
-      <path d="M0 172 Q100 132 200 166 T400 160 V220 H0Z" fill={hills} />
-      {place.type === "yurt" ? <Yurt x={148} y={134} s={0.5} /> : <House x={142} y={137} s={0.45} />}
+    <svg
+      viewBox={`0 0 ${w} ${h}`}
+      preserveAspectRatio="xMidYMid slice"
+      className={className}
+      role="img"
+      aria-label={`Горный пейзаж: ${place.place}. Фотографии появятся после съёмки.`}
+    >
+      <defs>
+        <linearGradient id={`${uid}-sky`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={mood.sky[0]} />
+          <stop offset="100%" stopColor={mood.sky[1]} />
+        </linearGradient>
+        <radialGradient id={`${uid}-glow`} cx="68%" cy="52%" r="55%">
+          <stop offset="0%" stopColor={mood.glow} stopOpacity="0.5" />
+          <stop offset="100%" stopColor={mood.glow} stopOpacity="0" />
+        </radialGradient>
+        <linearGradient id={`${uid}-haze`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={mood.haze} stopOpacity="0.55" />
+          <stop offset="100%" stopColor={mood.haze} stopOpacity="0" />
+        </linearGradient>
+        <linearGradient id={`${uid}-vig`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#0d0b09" stopOpacity="0.1" />
+          <stop offset="45%" stopColor="#0d0b09" stopOpacity="0" />
+          <stop offset="100%" stopColor="#0d0b09" stopOpacity="0.16" />
+        </linearGradient>
+        <filter id={`${uid}-grain`}>
+          <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+      </defs>
+
+      <rect width={w} height={h} fill={`url(#${uid}-sky)`} />
+      <rect width={w} height={h} fill={`url(#${uid}-glow)`} />
+
+      {layers.map((l, i) => (
+        <g key={i}>
+          <path d={l.d} fill={l.fill} />
+        </g>
+      ))}
+
+      <rect width={w} height={h} fill={`url(#${uid}-vig)`} />
+      <rect width={w} height={h} filter={`url(#${uid}-grain)`} opacity="0.1" style={{ mixBlendMode: "overlay" }} />
+    </svg>
+  );
+}
+
+/** Cover: a real photograph when there is one, the study otherwise. */
+export function Cover({ place, wide = false, className = "" }: { place: Place; wide?: boolean; className?: string }) {
+  if (place.photo) {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={place.photo} alt={place.title} className={className} loading="lazy" decoding="async" />;
+  }
+  return <PlaceArt place={place} wide={wide} className={className} />;
+}
+
+/* ------------------------------------------------------------------ *
+ * Hero backdrop: the same ridge study, drawn dark and wide.
+ * ------------------------------------------------------------------ */
+export function HeroArt({ className = "" }: { className?: string }) {
+  const w = 1920;
+  const h = 900;
+  const rand = seeded("konok-hero-ridge-02");
+  const ridges = ["#b9c4cd", "#9aa6b1", "#7d8894", "#616b76", "#49525b"];
+
+  return (
+    <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="xMidYMid slice" className={className} aria-hidden="true">
+      <defs>
+        <linearGradient id="hero-sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#8fa6ba" />
+          <stop offset="55%" stopColor="#b7c5d1" />
+          <stop offset="100%" stopColor="#d8dfe5" />
+        </linearGradient>
+        <radialGradient id="hero-glow" cx="74%" cy="62%" r="50%">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.55" />
+          <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+        </radialGradient>
+        <linearGradient id="hero-haze" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#dde4ea" stopOpacity="0.72" />
+          <stop offset="100%" stopColor="#dde4ea" stopOpacity="0" />
+        </linearGradient>
+        <linearGradient id="hero-shade" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#1c1f23" stopOpacity="0.14" />
+          <stop offset="60%" stopColor="#1c1f23" stopOpacity="0.04" />
+          <stop offset="100%" stopColor="#1c1f23" stopOpacity="0.12" />
+        </linearGradient>
+        <filter id="hero-grain">
+          <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+      </defs>
+
+      <rect width={w} height={h} fill="url(#hero-sky)" />
+      <rect width={w} height={h} fill="url(#hero-glow)" />
+
+      {ridges.map((fill, i) => (
+        <g key={fill}>
+          <path d={ridgePath(rand, w, h, h * (0.58 + i * 0.1), h * (0.56 - i * 0.08), 1.3 + i * 0.6)} fill={fill} />
+        </g>
+      ))}
+
+      <rect width={w} height={h} fill="url(#hero-shade)" />
+      <rect width={w} height={h} filter="url(#hero-grain)" opacity="0.09" style={{ mixBlendMode: "overlay" }} />
     </svg>
   );
 }
