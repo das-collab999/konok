@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+/* Design tokens from design/Main.dc.html */
+@theme {
+  --color-red: #8b1e1e;
+  --color-red-dark: #5e1212;
+  --color-ochre: #c8962e;
+  --color-gold: #e9b949;
+  --color-sky: #1f4e79;
+  --color-felt: #f3e9d7;
+  --color-card: #fffbf3;
+  --color-line: #e4d6bd;
+  --color-line-strong: #d9c9ae;
+  --color-ink: #3b2a1e;
+  --color-ink-soft: #4f3b2c;
+  --color-muted: #6b5442;
+  --color-green: #2e5e3a;
+  --color-night: #2a1e15;
+
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-serif: "Lora", Georgia, serif;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--color-felt);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+.card-hover { transition: transform .18s ease, box-shadow .18s ease; }
+.card-hover:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(59,42,30,.18); }
+
+@keyframes knk-rise { 0% { transform: translateY(40px); opacity: 0 } 60% { transform: translateY(-6px); opacity: 1 } 100% { transform: translateY(0); opacity: 1 } }
+@keyframes knk-spin { from { transform: rotate(0) } to { transform: rotate(360deg) } }
+.tunduk-rise { animation: knk-rise 1.2s ease-out both; }
+.tunduk-spin { animation: knk-spin 14s linear infinite; transform-origin: 50% 50%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tunduk-rise, .tunduk-spin { animation: none; }
+  .card-hover:hover { transform: none; }
+}
