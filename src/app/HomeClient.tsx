@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { REGIONS, type Place, type Region } from "@/data/places";
 import { useLang } from "@/lib/i18n";
@@ -52,7 +52,18 @@ export function HomeClient({ places }: { places: Place[] }) {
   const { t } = useLang();
   const [region, setRegion] = useState<Region | "all">("all");
   const [feats, setFeats] = useState<Feature[]>([]);
-  const [date, setDate] = useState("2027-07-12");
+  const [date, setDate] = useState("");
+  const [today, setToday] = useState("");
+
+  // Дату считаем на устройстве гостя: по умолчанию — через месяц.
+  useEffect(() => {
+    const now = new Date();
+    const iso = (d: Date) => d.toISOString().slice(0, 10);
+    setToday(iso(now));
+    const soon = new Date(now);
+    soon.setMonth(soon.getMonth() + 1);
+    setDate(iso(soon));
+  }, []);
   const [guests, setGuests] = useState(2);
 
   const stays = useMemo(
@@ -65,7 +76,7 @@ export function HomeClient({ places }: { places: Place[] }) {
   const toggle = (k: Feature) => setFeats((cur) => (cur.includes(k) ? cur.filter((x) => x !== k) : [...cur, k]));
 
   const chip = (on: boolean) =>
-    `inline-flex h-10 cursor-pointer items-center gap-2 rounded-full border px-4 text-[11px] font-medium uppercase tracking-[0.14em] transition-colors ${
+    `inline-flex h-11 cursor-pointer items-center gap-2 rounded-full border px-4 text-[12px] font-medium uppercase tracking-[0.14em] transition-colors ${
       on ? "border-ink bg-ink text-cream" : "border-rule-strong text-fg-muted hover:border-ink hover:text-fg"
     }`;
 
@@ -112,7 +123,7 @@ export function HomeClient({ places }: { places: Place[] }) {
                 </div>
                 <div className="flex flex-col gap-2">
                   <label htmlFor="f-date" className="eyebrow">{t.when}</label>
-                  <input id="f-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} className={searchField} />
+                  <input id="f-date" type="date" min={today} value={date} onChange={(e) => setDate(e.target.value)} className={searchField} />
                 </div>
                 <div className="flex flex-col gap-2">
                   <label htmlFor="f-guests" className="eyebrow">{t.guests}</label>
@@ -139,7 +150,7 @@ export function HomeClient({ places }: { places: Place[] }) {
               </Parallax>
               <div className="absolute bottom-0 left-0 flex items-center gap-3 bg-cream px-5 py-4">
                 <Tunduk size={22} strokeWidth={1.2} className="text-accent" />
-                <span className="text-[11px] uppercase tracking-[0.18em] text-fg-muted">Кош келиңиз!</span>
+                <span className="text-[12px] uppercase tracking-[0.18em] text-fg-muted">Кош келиңиз!</span>
               </div>
             </div>
           </div>
@@ -200,7 +211,7 @@ export function HomeClient({ places }: { places: Place[] }) {
               </button>
             ))}
             {(feats.length > 0 || region !== "all") && (
-              <button type="button" onClick={() => { setFeats([]); setRegion("all"); }} className="h-10 cursor-pointer px-2 text-[11px] uppercase tracking-[0.14em] text-fg-subtle underline underline-offset-4 hover:text-fg">
+              <button type="button" onClick={() => { setFeats([]); setRegion("all"); }} className="h-11 cursor-pointer px-2 text-[12px] uppercase tracking-[0.14em] text-fg-subtle underline underline-offset-4 hover:text-fg">
                 Сбросить
               </button>
             )}
@@ -244,7 +255,7 @@ export function HomeClient({ places }: { places: Place[] }) {
                   <Icon name={g.icon} size={24} strokeWidth={1.3} className="text-accent" />
                   <h3 className="serif m-0 text-[20px]">{g.title}</h3>
                   <p className="m-0 text-[14px] leading-relaxed text-fg-muted">{g.text}</p>
-                  <span className="mt-auto inline-flex items-center gap-2 pt-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-accent">
+                  <span className="mt-auto inline-flex items-center gap-2 pt-3 text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
                     Открыть <Icon name="arrow" size={14} strokeWidth={1.8} />
                   </span>
                 </Link>

@@ -8,14 +8,14 @@ const LANGS: [Lang, string][] = [["ru", "RU"], ["en", "EN"], ["zh", "中文"]];
 
 export function Header() {
   const { lang, setLang, t } = useLang();
-  const nav = "text-[11px] font-medium uppercase tracking-[0.18em] text-fg-muted no-underline transition-colors hover:text-fg";
+  const nav = "inline-flex h-11 items-center text-[12px] font-medium uppercase tracking-[0.18em] text-fg-muted no-underline transition-colors hover:text-fg";
 
   return (
     <header className="sticky top-0 z-50 border-b border-rule bg-cream/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between gap-6 px-5 sm:h-20 sm:px-10">
         <Link href="/" className="flex items-baseline gap-2 text-fg no-underline">
           <span className="display text-[22px] leading-none sm:text-[26px]">Конок</span>
-          <span className="hidden text-[11px] uppercase tracking-[0.22em] text-fg-subtle sm:inline">/ Kyrgyzstan</span>
+          <span className="hidden text-[12px] uppercase tracking-[0.22em] text-fg-subtle sm:inline">/ Kyrgyzstan</span>
         </Link>
 
         <nav aria-label="Главное меню" className="hidden items-center gap-8 lg:flex">
@@ -34,7 +34,7 @@ export function Header() {
                 type="button"
                 onClick={() => setLang(code)}
                 aria-pressed={lang === code}
-                className={`h-10 cursor-pointer px-1.5 text-[11px] font-medium uppercase tracking-[0.16em] transition-colors ${
+                className={`h-10 cursor-pointer px-1.5 text-[12px] font-medium uppercase tracking-[0.16em] transition-colors ${
                   lang === code ? "text-fg underline decoration-accent decoration-1 underline-offset-[7px]" : "text-fg-subtle hover:text-fg"
                 }`}
               >
@@ -46,7 +46,7 @@ export function Header() {
         </div>
       </div>
 
-      <nav aria-label="Разделы" className="flex items-center gap-6 overflow-x-auto border-t border-rule px-5 py-2.5 lg:hidden">
+      <nav aria-label="Разделы" className="flex items-center gap-5 overflow-x-auto border-t border-rule px-5 lg:hidden">
         <Link href="/#stays" className={`${nav} whitespace-nowrap`}>{t.nav1}</Link>
         <Link href="/#exp" className={`${nav} whitespace-nowrap`}>{t.nav2}</Link>
         <Link href="/guide/" className={`${nav} whitespace-nowrap`}>Путеводитель</Link>
@@ -58,7 +58,7 @@ export function Header() {
 }
 
 export function Footer() {
-  const link = "text-[13px] text-on-dark-muted no-underline transition-colors hover:text-on-dark";
+  const link = "inline-flex h-10 items-center text-[14px] text-on-dark-muted no-underline transition-colors hover:text-on-dark";
 
   return (
     <footer className="mt-28 bg-ink text-on-dark-muted">

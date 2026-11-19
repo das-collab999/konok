@@ -50,7 +50,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
 
   return (
     <div className="mx-auto max-w-[1280px] px-5 pb-10 pt-8 sm:px-10">
-      <nav aria-label="Хлебные крошки" className="flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-fg-subtle">
+      <nav aria-label="Хлебные крошки" className="flex items-center gap-2 text-[12px] uppercase tracking-[0.16em] text-fg-subtle">
         <Link href="/" className="text-fg-muted no-underline hover:text-fg">Главная</Link>
         <span>·</span>
         <Link href="/#stays" className="text-fg-muted no-underline hover:text-fg">Жильё</Link>
@@ -60,7 +60,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
 
       <div className="mt-7 flex flex-wrap items-end justify-between gap-x-10 gap-y-5 border-b border-rule pb-8">
         <h1 className="display m-0 max-w-[16ch] text-[clamp(30px,5.4vw,64px)]">{place.title}</h1>
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[11px] uppercase tracking-[0.14em] text-fg-muted">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[12px] uppercase tracking-[0.14em] text-fg-muted">
           <span className="inline-flex items-center gap-2"><Icon name="pin" size={15} strokeWidth={1.4} />{place.place}</span>
           <span className="inline-flex items-center gap-2"><Icon name="mount" size={15} strokeWidth={1.4} />{place.altitudeM} м</span>
           <span className="inline-flex items-center gap-2 text-success"><Icon name="check" size={14} strokeWidth={2.4} />Проверено Конок</span>
@@ -70,7 +70,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
       <div className="relative mt-8 overflow-hidden bg-cream-2">
         <Cover place={place} wide className="block aspect-[16/10] w-full object-cover sm:aspect-[21/9]" />
         {!place.photo && (
-          <span className="absolute bottom-4 left-4 rounded-full bg-ink/75 px-4 py-2 text-[10px] uppercase tracking-[0.16em] text-cream">
+          <span className="absolute bottom-4 left-4 rounded-full bg-ink/75 px-4 py-2 text-[12px] uppercase tracking-[0.16em] text-cream">
             Фотографии появятся после съёмки
           </span>
         )}
@@ -97,7 +97,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
                 <li key={f.k} className="flex items-center gap-4 border-b border-rule py-4">
                   <Icon name={f.icon} size={20} strokeWidth={1.3} className="flex-none text-fg-subtle" />
                   <span className="min-w-0">
-                    <span className="block text-[11px] uppercase tracking-[0.14em] text-fg-subtle">{f.k}</span>
+                    <span className="block text-[12px] uppercase tracking-[0.14em] text-fg-subtle">{f.k}</span>
                     <span className="block text-[16px]">{f.v}</span>
                   </span>
                 </li>
@@ -118,7 +118,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
                   <div className="flex flex-wrap items-baseline justify-between gap-3">
                     <h3 className="serif m-0 text-[20px]">{m.title}</h3>
                     {m.vegetarian && (
-                      <span className="rounded-full border border-moss px-2.5 py-0.5 text-[10px] uppercase tracking-[0.12em] text-moss">
+                      <span className="rounded-full border border-moss px-2.5 py-0.5 text-[12px] uppercase tracking-[0.12em] text-moss">
                         {m.note ?? "Без мяса"}
                       </span>
                     )}
@@ -127,7 +127,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
                 </li>
               ))}
             </ul>
-            <Link href="/guide/#food" className="mt-6 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-accent no-underline">
+            <Link href="/guide/#food" className="mt-6 inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.16em] text-accent no-underline">
               Вся кухня в путеводителе <Icon name="arrow" size={14} strokeWidth={1.8} />
             </Link>
           </section>

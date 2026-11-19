@@ -18,11 +18,11 @@ export function PlaceCard({ place, query = "" }: { place: Place; query?: string 
     <article className="card group flex flex-col">
       <Link href={href} className="relative block aspect-[4/5] overflow-hidden bg-cream-2 no-underline">
         <Cover place={place} className="zoom block h-full w-full object-cover" />
-        <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-cream/90 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink">
+        <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-cream/90 px-3 py-1.5 text-[12px] font-semibold uppercase tracking-[0.16em] text-ink">
           <Icon name="check" size={11} strokeWidth={2.6} />
           Проверено
         </span>
-        <span className="absolute bottom-4 right-4 rounded-full bg-ink/80 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.16em] text-cream">
+        <span className="absolute bottom-4 right-4 rounded-full bg-ink/80 px-3 py-1.5 text-[12px] font-medium uppercase tracking-[0.16em] text-cream">
           {place.altitudeM} м
         </span>
       </Link>
@@ -50,7 +50,7 @@ export function PlaceCard({ place, query = "" }: { place: Place; query?: string 
             <span className="serif text-[26px]">${place.pricePerPersonUsd}</span>
             <span className="ml-2 text-[12px] uppercase tracking-[0.12em] text-fg-subtle">чел./ночь</span>
           </div>
-          <Link href={href} className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-fg no-underline transition-colors hover:text-accent">
+          <Link href={href} className="inline-flex h-11 items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-fg no-underline transition-colors hover:text-accent">
             Смотреть
             <Icon name="arrow" size={14} strokeWidth={1.8} />
           </Link>

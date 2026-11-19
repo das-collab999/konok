@@ -39,7 +39,7 @@ export default function GuidePage() {
 
             <nav aria-label="Разделы путеводителя" className="mt-8 flex flex-wrap gap-2">
               {SECTIONS.map((s) => (
-                <a key={s.id} href={`#${s.id}`} className="inline-flex h-10 items-center rounded-full border border-rule-strong px-4 text-[11px] font-medium uppercase tracking-[0.14em] text-fg-muted no-underline transition-colors hover:border-ink hover:text-fg">
+                <a key={s.id} href={`#${s.id}`} className="inline-flex h-11 items-center rounded-full border border-rule-strong px-4 text-[12px] font-medium uppercase tracking-[0.14em] text-fg-muted no-underline transition-colors hover:border-ink hover:text-fg">
                   {s.label}
                 </a>
               ))}
@@ -83,7 +83,7 @@ export default function GuidePage() {
                     <div className="flex flex-wrap items-baseline justify-between gap-3">
                       <h4 className="serif m-0 text-[21px]">{m.title}</h4>
                       {m.vegetarian && (
-                        <span className="rounded-full border border-moss px-2.5 py-0.5 text-[10px] uppercase tracking-[0.12em] text-moss">
+                        <span className="rounded-full border border-moss px-2.5 py-0.5 text-[12px] uppercase tracking-[0.12em] text-moss">
                           {m.note ?? "Без мяса"}
                         </span>
                       )}

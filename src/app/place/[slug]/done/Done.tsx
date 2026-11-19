@@ -63,7 +63,7 @@ export function Done({ place }: { place: Place }) {
         <dl className="m-0 flex flex-col">
           {rows.map(([k, v]) => (
             <div key={k} className="flex items-baseline justify-between gap-6 border-b border-rule py-3.5 last:border-b-0">
-              <dt className="m-0 text-[11px] uppercase tracking-[0.14em] text-fg-subtle">{k}</dt>
+              <dt className="m-0 text-[12px] uppercase tracking-[0.14em] text-fg-subtle">{k}</dt>
               <dd className="m-0 text-right text-[15px]">{v}</dd>
             </div>
           ))}

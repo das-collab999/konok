@@ -59,7 +59,7 @@ export function PayForm({ place }: { place: Place }) {
 
   return (
     <div className="mx-auto max-w-[840px] px-5 pb-16 pt-8 sm:px-10">
-      <Link href={`/place/${place.slug}/`} className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-fg-muted no-underline hover:text-fg">
+      <Link href={`/place/${place.slug}/`} className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.16em] text-fg-muted no-underline hover:text-fg">
         <Icon name="back" size={15} strokeWidth={1.6} /> Назад к месту
       </Link>
 
@@ -69,7 +69,7 @@ export function PayForm({ place }: { place: Place }) {
       <div className="mt-8 flex flex-wrap items-end justify-between gap-4 border-y border-rule py-6">
         <div className="min-w-0">
           <p className="serif m-0 text-[20px]">{place.title}</p>
-          <p className="m-0 mt-2 text-[11px] uppercase tracking-[0.14em] text-fg-subtle">
+          <p className="m-0 mt-2 text-[12px] uppercase tracking-[0.14em] text-fg-subtle">
             {place.place} · {nights} ноч. · {guests} гост.{date ? ` · заезд ${formatDate(date)}` : ""}
           </p>
         </div>
