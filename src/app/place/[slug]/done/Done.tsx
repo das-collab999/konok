@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { bookingCode, type Place } from "@/data/places";
 import { formatDate, useBooking } from "@/lib/useBooking";
-import { Icon } from "@/components/ui";
+import { Icon, Tunduk } from "@/components/ui";
 
 export function Done({ place }: { place: Place }) {
   const { nights, guests, date, total } = useBooking(place);
@@ -34,61 +34,53 @@ export function Done({ place }: { place: Place }) {
 
   const notes = [
     "Бронь сохранена в телефоне и открывается без интернета",
-    "Хозяин подтверждает заявку в течение 2 часов",
+    "Хозяин подтверждает заявку в течение двух часов",
     "Водитель свяжется с вами накануне выезда",
   ];
 
   return (
-    <div className="mx-auto max-w-[680px] px-4 py-10 sm:px-6">
-      <div className="flex items-center gap-2 text-success">
-        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-success-soft">
-          <Icon name="check" size={18} strokeWidth={2.4} />
-        </span>
-        <span className="text-[14px] font-medium">Заявка отправлена</span>
+    <div className="mx-auto max-w-[840px] px-5 pb-16 pt-12 sm:px-10">
+      <div className="flex items-center gap-3">
+        <Tunduk size={26} strokeWidth={1.2} className="text-accent" />
+        <span className="eyebrow">Рахмат! Сизди күтөбүз</span>
       </div>
 
-      <h1 className="m-0 mt-4 text-[26px] font-semibold leading-tight">
+      <h1 className="display m-0 mt-6 max-w-[14ch] text-[clamp(32px,5.6vw,64px)]">
         {name ? `${name}, бронь ушла хозяевам` : "Бронь ушла хозяевам"}
       </h1>
-      <p className="m-0 mt-3 text-[15px] leading-relaxed text-fg-muted">
+
+      <p className="m-0 mt-6 max-w-[56ch] text-[17px] leading-relaxed text-fg-muted">
         {place.host} получили заявку в мессенджере на кыргызском и подтвердят её в течение двух часов.
-        Рахмат! Сизди күтөбүз.
       </p>
 
-      <div className="mt-6 rounded-card border border-border bg-canvas">
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border-muted px-4 py-3">
-          <span className="text-[13px] text-fg-subtle">Номер брони</span>
-          <span className="font-mono text-[16px] font-semibold tracking-wide">{code}</span>
+      <div className="mt-10 bg-paper p-7">
+        <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-rule pb-5">
+          <span className="eyebrow">Номер брони</span>
+          <span className="serif text-[28px] tracking-wide">{code}</span>
         </div>
-        <dl className="m-0 divide-y divide-border-muted">
+        <dl className="m-0 flex flex-col">
           {rows.map(([k, v]) => (
-            <div key={k} className="flex items-baseline justify-between gap-4 px-4 py-2.5">
-              <dt className="m-0 text-[14px] text-fg-muted">{k}</dt>
-              <dd className="m-0 text-right text-[14px] font-medium">{v}</dd>
+            <div key={k} className="flex items-baseline justify-between gap-6 border-b border-rule py-3.5 last:border-b-0">
+              <dt className="m-0 text-[11px] uppercase tracking-[0.14em] text-fg-subtle">{k}</dt>
+              <dd className="m-0 text-right text-[15px]">{v}</dd>
             </div>
           ))}
         </dl>
       </div>
 
-      <ul className="m-0 mt-5 flex list-none flex-col gap-2 p-0">
+      <ul className="m-0 mt-8 flex list-none flex-col p-0">
         {notes.map((n) => (
-          <li key={n} className="flex items-start gap-2.5 text-[14px] text-fg-muted">
-            <Icon name="check" size={16} strokeWidth={2.2} className="mt-0.5 flex-none text-success" />
+          <li key={n} className="flex items-start gap-3 border-b border-rule py-3.5 text-[15px] text-fg-muted">
+            <Icon name="check" size={16} strokeWidth={2} className="mt-1 flex-none text-success" />
             {n}
           </li>
         ))}
       </ul>
 
-      <div className="mt-7 flex flex-wrap gap-3">
-        <Link href="/bookings/" className="inline-flex h-10 items-center rounded-lg bg-accent px-5 text-[15px] font-medium text-white no-underline transition-colors hover:bg-accent-hover">
-          Мои брони
-        </Link>
-        <Link href="/hosts/" className="inline-flex h-10 items-center rounded-lg border border-border px-5 text-[15px] font-medium text-fg no-underline transition-colors hover:bg-subtle">
-          Что видит хозяин
-        </Link>
-        <Link href="/" className="inline-flex h-10 items-center rounded-lg border border-border px-5 text-[15px] font-medium text-fg no-underline transition-colors hover:bg-subtle">
-          На главную
-        </Link>
+      <div className="mt-10 flex flex-wrap gap-3">
+        <Link href="/bookings/" className="pill pill-solid">Мои брони</Link>
+        <Link href="/hosts/" className="pill pill-ghost">Что видит хозяин</Link>
+        <Link href="/" className="pill pill-ghost">На главную</Link>
       </div>
     </div>
   );

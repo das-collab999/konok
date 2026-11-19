@@ -14,7 +14,7 @@ const METHODS = [
   { id: "mbank", label: "MBank", note: "Перевод по QR-коду" },
 ];
 
-const input = "h-11 w-full rounded-lg border border-border bg-canvas px-3 text-[15px] outline-none focus:border-accent";
+const field = "h-12 w-full border-0 border-b border-rule-strong bg-transparent px-0 text-[16px] text-fg outline-none focus:border-ink";
 
 export function PayForm({ place }: { place: Place }) {
   const router = useRouter();
@@ -36,70 +36,69 @@ export function PayForm({ place }: { place: Place }) {
   };
 
   return (
-    <div className="mx-auto max-w-[720px] px-4 py-8 sm:px-6">
-      <Link href={`/place/${place.slug}/`} className="inline-flex h-9 items-center gap-1.5 text-[14px] text-fg-muted no-underline hover:text-fg">
-        <Icon name="back" size={16} /> Назад к месту
+    <div className="mx-auto max-w-[840px] px-5 pb-16 pt-8 sm:px-10">
+      <Link href={`/place/${place.slug}/`} className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-fg-muted no-underline hover:text-fg">
+        <Icon name="back" size={15} strokeWidth={1.6} /> Назад к месту
       </Link>
 
-      <h1 className="m-0 mt-4 text-[26px] font-semibold">Оформление брони</h1>
+      <h1 className="display m-0 mt-6 text-[clamp(30px,5vw,56px)]">Оформление брони</h1>
 
-      <div className="mt-5 rounded-card border border-border-muted bg-subtle p-4">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="min-w-0">
-            <p className="m-0 text-[15px] font-semibold">{place.title}</p>
-            <p className="m-0 mt-1 text-[14px] text-fg-muted">
-              {place.place} · {nights} ноч. · {guests} гост.{date ? ` · заезд ${formatDate(date)}` : ""}
-            </p>
-          </div>
-          <span className="text-[20px] font-semibold">${total}</span>
+      <div className="mt-8 flex flex-wrap items-end justify-between gap-4 border-y border-rule py-6">
+        <div className="min-w-0">
+          <p className="serif m-0 text-[20px]">{place.title}</p>
+          <p className="m-0 mt-2 text-[11px] uppercase tracking-[0.14em] text-fg-subtle">
+            {place.place} · {nights} ноч. · {guests} гост.{date ? ` · заезд ${formatDate(date)}` : ""}
+          </p>
         </div>
+        <span className="serif text-[32px]">${total}</span>
       </div>
 
-      <form onSubmit={submit} noValidate className="mt-6 flex flex-col gap-5">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="p-name" className="text-[13px] font-medium text-fg-muted">Имя и фамилия</label>
-            <input id="p-name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" placeholder="Anna Schmidt" className={input} />
+      <form onSubmit={submit} noValidate className="mt-10 flex flex-col gap-10">
+        <div className="grid gap-x-10 gap-y-7 sm:grid-cols-2">
+          <div className="flex flex-col gap-2">
+            <label htmlFor="p-name" className="eyebrow">Имя и фамилия</label>
+            <input id="p-name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" placeholder="Anna Schmidt" className={field} />
           </div>
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="p-phone" className="text-[13px] font-medium text-fg-muted">Телефон или WhatsApp</label>
-            <input id="p-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" placeholder="+49 …" className={input} />
+          <div className="flex flex-col gap-2">
+            <label htmlFor="p-phone" className="eyebrow">Телефон или WhatsApp</label>
+            <input id="p-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" placeholder="+49 …" className={field} />
           </div>
-          <div className="flex flex-col gap-1.5 sm:col-span-2">
-            <label htmlFor="p-mail" className="text-[13px] font-medium text-fg-muted">Email (необязательно)</label>
-            <input id="p-mail" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" placeholder="anna@example.com" className={input} />
+          <div className="flex flex-col gap-2 sm:col-span-2">
+            <label htmlFor="p-mail" className="eyebrow">Email (необязательно)</label>
+            <input id="p-mail" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" placeholder="anna@example.com" className={field} />
           </div>
         </div>
 
-        <fieldset className="m-0 flex flex-col gap-2 border-0 p-0">
-          <legend className="mb-1 text-[13px] font-medium text-fg-muted">Способ оплаты</legend>
-          {METHODS.map((m) => (
-            <label
-              key={m.id}
-              className={`flex cursor-pointer items-center gap-3 rounded-card border px-4 py-3 transition-colors ${
-                method === m.id ? "border-accent bg-accent-soft" : "border-border-muted hover:bg-subtle"
-              }`}
-            >
-              <input type="radio" name="pay" checked={method === m.id} onChange={() => setMethod(m.id)} className="h-4 w-4 accent-[#8b1e1e]" />
-              <span className="flex flex-col">
-                <span className="text-[15px] font-medium">{m.label}</span>
-                <span className="text-[13px] text-fg-subtle">{m.note}</span>
-              </span>
-            </label>
-          ))}
+        <fieldset className="m-0 border-0 p-0">
+          <legend className="eyebrow mb-4">Способ оплаты</legend>
+          <div className="flex flex-col">
+            {METHODS.map((m) => (
+              <label
+                key={m.id}
+                className={`flex cursor-pointer items-center gap-4 border-b py-4 transition-colors ${
+                  method === m.id ? "border-ink" : "border-rule"
+                }`}
+              >
+                <input type="radio" name="pay" checked={method === m.id} onChange={() => setMethod(m.id)} className="h-4 w-4 accent-[#7f2420]" />
+                <span className="flex flex-1 flex-wrap items-baseline justify-between gap-2">
+                  <span className="text-[16px]">{m.label}</span>
+                  <span className="text-[12px] uppercase tracking-[0.12em] text-fg-subtle">{m.note}</span>
+                </span>
+              </label>
+            ))}
+          </div>
         </fieldset>
 
         {error && (
-          <p role="alert" className="m-0 rounded-lg border border-accent bg-accent-soft px-3 py-2.5 text-[14px] text-accent">{error}</p>
+          <p role="alert" className="m-0 border-l-2 border-accent bg-accent-soft px-4 py-3 text-[14px] text-accent">{error}</p>
         )}
 
-        <button type="submit" className="flex h-12 w-full cursor-pointer items-center justify-center rounded-lg bg-accent text-[16px] font-medium text-white transition-colors hover:bg-accent-hover">
-          Отправить бронь · ${total}
-        </button>
-
-        <p className="m-0 text-center text-[13px] text-fg-subtle">
-          Демо-режим: деньги не списываются. Данные карты на сайте не хранятся.
-        </p>
+        <div className="flex flex-wrap items-center gap-6">
+          <button type="submit" className="pill pill-solid w-full sm:w-auto">Отправить бронь · ${total}</button>
+          <p className="m-0 text-[12px] leading-relaxed text-fg-subtle">
+            Демо-режим: деньги не списываются.<br />Данные карты на сайте не хранятся.
+          </p>
+        </div>
       </form>
     </div>
   );

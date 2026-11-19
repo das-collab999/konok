@@ -67,14 +67,14 @@ export function Tunduk({ size = 34, className = "", strokeWidth = 1.4 }: { size?
 type Mood = { sky: [string, string]; ridges: [string, string, string, string]; haze: string; glow: string };
 
 const MOODS: Record<string, Mood> = {
-  // High and cold — clear blue daylight
-  alpine: { sky: ["#8fa8bd", "#dfe7ed"], ridges: ["#c6d1da", "#a2b0bd", "#7d8c99", "#5b6874"], haze: "#dfe7ed", glow: "#ffffff" },
-  // Lake light — soft and wide
-  lake: { sky: ["#9ab3c7", "#e6ecf0"], ridges: ["#ccd6de", "#a9b7c2", "#86939f", "#63707b"], haze: "#e6ecf0", glow: "#ffffff" },
+  // High and cold — warm grey daylight
+  alpine: { sky: ["#b9ae9c", "#efe9dd"], ridges: ["#ddd5c6", "#bdb3a1", "#938a79", "#6a6256"], haze: "#efe9dd", glow: "#fffdf8" },
+  // Lake — a shade cooler
+  lake: { sky: ["#b2b0a6", "#f0ece2"], ridges: ["#dcd8cc", "#b9b5a8", "#908d82", "#67655d"], haze: "#f0ece2", glow: "#fffdf8" },
   // Valley — faintly green
-  valley: { sky: ["#a4b7b0", "#e5eae6"], ridges: ["#c8d0c7", "#a6b0a4", "#848d81", "#616a5e"], haze: "#e5eae6", glow: "#ffffff" },
-  // South — warm, nut forest
-  south: { sky: ["#bdb097", "#ece5d9"], ridges: ["#d6cbb8", "#b7ab96", "#958a78", "#706759"], haze: "#ece5d9", glow: "#ffffff" },
+  valley: { sky: ["#b4b4a2", "#eeeade"], ridges: ["#d9d6c4", "#b4b29d", "#8b8a77", "#636253"], haze: "#eeeade", glow: "#fffdf8" },
+  // South — nut forest, warmest
+  south: { sky: ["#c3b198", "#f2ebdd"], ridges: ["#e0d3bc", "#c0b196", "#978a73", "#6d6453"], haze: "#f2ebdd", glow: "#fffdf8" },
 };
 
 const REGION_MOOD: Record<string, keyof typeof MOODS> = {
@@ -220,23 +220,23 @@ export function HeroArt({ className = "" }: { className?: string }) {
   const w = 1920;
   const h = 900;
   const rand = seeded("konok-hero-ridge-02");
-  const ridges = ["#b9c4cd", "#9aa6b1", "#7d8894", "#616b76", "#49525b"];
+  const ridges = ["#d7cfc0", "#c0b7a5", "#a2998a", "#7f776a", "#5d564c"];
 
   return (
     <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="xMidYMid slice" className={className} aria-hidden="true">
       <defs>
         <linearGradient id="hero-sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#8fa6ba" />
-          <stop offset="55%" stopColor="#b7c5d1" />
-          <stop offset="100%" stopColor="#d8dfe5" />
+          <stop offset="0%" stopColor="#a99d88" />
+          <stop offset="55%" stopColor="#cdc4b2" />
+          <stop offset="100%" stopColor="#ece6d9" />
         </linearGradient>
         <radialGradient id="hero-glow" cx="74%" cy="62%" r="50%">
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.55" />
           <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
         </radialGradient>
         <linearGradient id="hero-haze" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#dde4ea" stopOpacity="0.72" />
-          <stop offset="100%" stopColor="#dde4ea" stopOpacity="0" />
+          <stop offset="0%" stopColor="#ece6d9" stopOpacity="0.72" />
+          <stop offset="100%" stopColor="#ece6d9" stopOpacity="0" />
         </linearGradient>
         <linearGradient id="hero-shade" x1="0" y1="0" x2="1" y2="0">
           <stop offset="0%" stopColor="#1c1f23" stopOpacity="0.14" />
