@@ -14,6 +14,14 @@ export type Place = {
   short: L;
   pricePerPersonUsd: number;
   altitudeM: number;
+  /** Координаты для карты. */
+  lat: number;
+  lng: number;
+  /** Сезон: с какого по какой месяц принимают гостей. */
+  seasonFrom: number;
+  seasonTo: number;
+  /** Сколько ехать от Бишкека, часов. */
+  hoursFromBishkek: number;
   hasStove: boolean;
   hasBath: boolean;
   hasSignal: boolean;
@@ -52,7 +60,7 @@ export const PLACES: Place[] = [
       en: "Three yurts right by the lake, kumys in the mornings and a herd of horses around.",
       zh: "湖边三顶毡房，清晨有马奶酒，四周是马群。",
     },
-    pricePerPersonUsd: 25, altitudeM: 3016, hasStove: true, hasBath: true, hasSignal: false, carAccess: "4x4",
+    pricePerPersonUsd: 25, altitudeM: 3016, lat: 41.84, lng: 75.14, seasonFrom: 6, seasonTo: 9, hoursFromBishkek: 6, hasStove: true, hasBath: true, hasSignal: false, carAccess: "4x4",
     toilet: { ru: "Снаружи, 30 м", en: "Outside, 30 m away", zh: "屋外，30 米" },
     wash: { ru: "Баня по вечерам", en: "Banya in the evenings", zh: "晚上有蒸浴" },
     net: { ru: "Нет связи", en: "No signal", zh: "无信号" },
@@ -83,7 +91,7 @@ export const PLACES: Place[] = [
       en: "A night beside the stone caravanserai of the Great Silk Road.",
       zh: "夜宿丝绸之路的石砌驿站旁。",
     },
-    pricePerPersonUsd: 30, altitudeM: 3200, hasStove: true, hasBath: false, hasSignal: false, carAccess: "car",
+    pricePerPersonUsd: 30, altitudeM: 3200, lat: 40.82, lng: 75.31, seasonFrom: 5, seasonTo: 10, hoursFromBishkek: 7, hasStove: true, hasBath: false, hasSignal: false, carAccess: "car",
     toilet: { ru: "Снаружи, 20 м", en: "Outside, 20 m away", zh: "屋外，20 米" },
     wash: { ru: "Умывальник", en: "Wash basin", zh: "洗手盆" },
     net: { ru: "Нет связи", en: "No signal", zh: "无信号" },
@@ -110,7 +118,7 @@ export const PLACES: Place[] = [
       en: "The red «Seven Bulls» cliffs, spruce forest and a mountain river by the yurt.",
       zh: "「七头牛」红色岩壁、云杉林，毡房旁就是山溪。",
     },
-    pricePerPersonUsd: 22, altitudeM: 2200, hasStove: true, hasBath: true, hasSignal: true, carAccess: "car",
+    pricePerPersonUsd: 22, altitudeM: 2200, lat: 42.33, lng: 78.23, seasonFrom: 5, seasonTo: 10, hoursFromBishkek: 7, hasStove: true, hasBath: true, hasSignal: true, carAccess: "car",
     toilet: { ru: "Внутри лагеря", en: "Inside the camp", zh: "营地内" },
     wash: { ru: "Душ и баня", en: "Shower and banya", zh: "淋浴与蒸浴" },
     net: { ru: "Есть 4G", en: "4G available", zh: "有 4G" },
@@ -137,7 +145,7 @@ export const PLACES: Place[] = [
       en: "A quiet beach, a view of snowy peaks and swimming in Issyk-Kul.",
       zh: "安静的湖滩，雪山在望，可在伊塞克湖游泳。",
     },
-    pricePerPersonUsd: 28, altitudeM: 1610, hasStove: false, hasBath: true, hasSignal: true, carAccess: "car",
+    pricePerPersonUsd: 28, altitudeM: 1610, lat: 42.15, lng: 77.56, seasonFrom: 5, seasonTo: 9, hoursFromBishkek: 5, hasStove: false, hasBath: true, hasSignal: true, carAccess: "car",
     toilet: { ru: "Внутри лагеря", en: "Inside the camp", zh: "营地内" },
     wash: { ru: "Душ", en: "Shower", zh: "淋浴" },
     net: { ru: "Есть 4G", en: "4G available", zh: "有 4G" },
@@ -164,7 +172,7 @@ export const PLACES: Place[] = [
       en: "A cosy house with a garden, trekking routes nearby and a ski base in winter.",
       zh: "带花园的舒适小屋，附近有徒步路线，冬天还有滑雪场。",
     },
-    pricePerPersonUsd: 18, altitudeM: 1770, hasStove: true, hasBath: false, hasSignal: true, carAccess: "car",
+    pricePerPersonUsd: 18, altitudeM: 1770, lat: 42.49, lng: 78.39, seasonFrom: 1, seasonTo: 12, hoursFromBishkek: 7, hasStove: true, hasBath: false, hasSignal: true, carAccess: "car",
     toilet: { ru: "В доме", en: "Indoors", zh: "屋内" },
     wash: { ru: "Горячий душ", en: "Hot shower", zh: "热水淋浴" },
     net: { ru: "Wi-Fi", en: "Wi-Fi", zh: "Wi-Fi" },
@@ -191,7 +199,7 @@ export const PLACES: Place[] = [
       en: "Rafting, horse rides and a national park 2.5 hours from Bishkek.",
       zh: "漂流、骑马与国家公园，距比什凯克 2.5 小时。",
     },
-    pricePerPersonUsd: 20, altitudeM: 1500, hasStove: true, hasBath: true, hasSignal: true, carAccess: "car",
+    pricePerPersonUsd: 20, altitudeM: 1500, lat: 42.76, lng: 76.08, seasonFrom: 4, seasonTo: 11, hoursFromBishkek: 3, hasStove: true, hasBath: true, hasSignal: true, carAccess: "car",
     toilet: { ru: "В доме", en: "Indoors", zh: "屋内" },
     wash: { ru: "Душ и баня", en: "Shower and banya", zh: "淋浴与蒸浴" },
     net: { ru: "Есть 4G", en: "4G available", zh: "有 4G" },
@@ -218,7 +226,7 @@ export const PLACES: Place[] = [
       en: "The largest walnut forest in the world, waterfalls and southern hospitality.",
       zh: "世界最大的核桃林、瀑布，以及南方的热情款待。",
     },
-    pricePerPersonUsd: 15, altitudeM: 1600, hasStove: false, hasBath: false, hasSignal: true, carAccess: "car",
+    pricePerPersonUsd: 15, altitudeM: 1600, lat: 41.34, lng: 72.94, seasonFrom: 3, seasonTo: 11, hoursFromBishkek: 10, hasStove: false, hasBath: false, hasSignal: true, carAccess: "car",
     toilet: { ru: "Во дворе", en: "In the yard", zh: "院内" },
     wash: { ru: "Душ", en: "Shower", zh: "淋浴" },
     net: { ru: "Есть 3G", en: "3G available", zh: "有 3G" },
@@ -264,6 +272,11 @@ export function calcTotal(place: Place, nights: number, guests: number, extraIds
   }
   return { lines, total };
 }
+
+/** Примерный курс: цены в долларах, но платят в сомах. */
+export const KGS_PER_USD = 89;
+
+export const toSom = (usd: number) => Math.round((usd * KGS_PER_USD) / 10) * 10;
 
 /** Демонстрационный номер брони. В рабочем сайте его выдаёт сервер. */
 export function bookingCode(place: Place, nights: number, guests: number) {

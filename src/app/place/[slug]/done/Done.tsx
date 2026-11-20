@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { bookingCode, type Place } from "@/data/places";
@@ -13,6 +14,15 @@ export function Done({ place }: { place: Place }) {
   const sp = useSearchParams();
   const name = sp.get("name") ?? "";
   const code = sp.get("c") ?? bookingCode(place, nights, guests);
+  const [copied, setCopied] = useState(false);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {}
+  };
 
   const rows: [string, string][] = [
     [t.done.rows.place, pick(place.title, lang)],
@@ -41,7 +51,12 @@ export function Done({ place }: { place: Place }) {
       <div className="mt-10 bg-paper p-7">
         <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-rule pb-5">
           <span className="eyebrow">{t.done.code}</span>
-          <span className="serif text-[28px] tracking-wide">{code}</span>
+          <span className="flex items-center gap-3">
+            <span className="serif text-[28px] tracking-wide">{code}</span>
+            <button type="button" onClick={copy} className="h-11 cursor-pointer rounded-full border border-rule-strong px-4 text-[13px] transition-colors hover:border-ink">
+              {copied ? t.common.copied : t.common.copy}
+            </button>
+          </span>
         </div>
         <dl className="m-0 flex flex-col">
           {rows.map(([k, v]) => (

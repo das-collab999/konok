@@ -19,6 +19,10 @@ type PlaceRow = {
   host_story: string | null;
   road_description: string | null;
   altitude_m: number | null;
+  lat: number | null;
+  lng: number | null;
+  season_from: number | null;
+  season_to: number | null;
   price_per_person_usd: number | string;
   has_stove: boolean;
   has_bath: boolean;
@@ -50,6 +54,11 @@ function toPlace(row: PlaceRow): Place {
     short: one(row.short),
     pricePerPersonUsd: Number(row.price_per_person_usd),
     altitudeM: row.altitude_m ?? 0,
+    lat: row.lat ?? 42.5,
+    lng: row.lng ?? 74.6,
+    seasonFrom: row.season_from ?? 5,
+    seasonTo: row.season_to ?? 10,
+    hoursFromBishkek: 6,
     hasStove: row.has_stove,
     hasBath: row.has_bath,
     hasSignal: row.has_signal,
