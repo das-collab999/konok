@@ -1,93 +1,241 @@
 /**
  * Кыргызская графика сайта.
  *
- * Узоры нарисованы кодом: ничего не весят и остаются чёткими на любом экране.
- * Названия — настоящие: так эти мотивы зовут мастерицы, которые валяют шырдак.
+ * Узоры не нарисованы линией «от руки», а построены так же, как их режут
+ * из войлока: каждый завиток — заливная фигура, широкая у основания и
+ * сходящая на остриё. Из этих завитков собираются кочкор мүйүз, розетка
+ * ала-кийиза, кайма ковра и сам шырдак.
  */
+
+/* ────────────────────────────── из чего строится узор */
+
+type CurlOpts = {
+  cx?: number; cy?: number;
+  r0?: number;      // откуда начинается завиток
+  rEnd?: number;    // радиус глазка на конце
+  th0?: number;     // начальный угол, градусы
+  th1?: number;     // конечный угол: 330–340 даёт полный оборот с глазком
+  w0?: number;      // ширина у основания
+  wEnd?: number;    // доля ширины у кончика (кончик скруглён, не игла)
+  power?: number;   // как долго завиток держит толщину
+  n?: number;
+};
+
+/**
+ * Завиток: толстый почти до конца, закручивается в тугой глазок
+ * и заканчивается скруглённым кончиком — как вырезанный из войлока.
+ */
+function curl({ cx = 0, cy = 0, r0 = 56, rEnd = 7, th0 = -90, th1 = 335, w0 = 22, wEnd = 0.3, power = 2, n = 72 }: CurlOpts) {
+  const rad = (d: number) => (d * Math.PI) / 180;
+  const we = w0 * wEnd;
+  const pts: [number, number, number][] = [];
+  for (let i = 0; i <= n; i++) {
+    const t = i / n;
+    const R = r0 * Math.pow(rEnd / r0, t);
+    const th = rad(th0 + (th1 - th0) * t);
+    pts.push([cx + R * Math.cos(th), cy + R * Math.sin(th), we + (w0 - we) * (1 - Math.pow(t, power))]);
+  }
+  const left: string[] = [];
+  const right: [number, number][] = [];
+  for (let i = 0; i < pts.length; i++) {
+    const p = pts[i];
+    const q = pts[Math.min(i + 1, pts.length - 1)];
+    const o = pts[Math.max(i - 1, 0)];
+    let dx = q[0] - o[0];
+    let dy = q[1] - o[1];
+    const len = Math.hypot(dx, dy) || 1;
+    dx /= len; dy /= len;
+    const h = p[2] / 2;
+    left.push(`${(p[0] - dy * h).toFixed(1)},${(p[1] + dx * h).toFixed(1)}`);
+    right.push([p[0] + dy * h, p[1] - dx * h]);
+  }
+  const tip = (we / 2).toFixed(1);
+  const lastRight = right[right.length - 1];
+  const back = right.slice(0, -1).reverse().map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" L");
+  return `M${left.join(" L")} A${tip},${tip} 0 0 1 ${lastRight[0].toFixed(1)},${lastRight[1].toFixed(1)} L${back} Z`;
+}
+
+/** Остроконечный лист между завитками. */
+function leaf({ cx = 0, cy = 0, len = 46, w = 16, angle = -90, bend = 0.3 }: { cx?: number; cy?: number; len?: number; w?: number; angle?: number; bend?: number }) {
+  const a = (angle * Math.PI) / 180;
+  const ux = Math.cos(a);
+  const uy = Math.sin(a);
+  const nx = -uy;
+  const ny = ux;
+  const f = (v: number) => v.toFixed(1);
+  return [
+    `M${f(cx)},${f(cy)}`,
+    `C${f(cx + ux * len * 0.35 + nx * w)},${f(cy + uy * len * 0.35 + ny * w)}`,
+    `${f(cx + ux * len * 0.8 + nx * w * bend)},${f(cy + uy * len * 0.8 + ny * w * bend)}`,
+    `${f(cx + ux * len)},${f(cy + uy * len)}`,
+    `C${f(cx + ux * len * 0.8 - nx * w * bend)},${f(cy + uy * len * 0.8 - ny * w * bend)}`,
+    `${f(cx + ux * len * 0.35 - nx * w)},${f(cy + uy * len * 0.35 - ny * w)}`,
+    `${f(cx)},${f(cy)} Z`,
+  ].join(" ");
+}
+
+type Part = { d: string; x?: number; y?: number; rot?: number; flip?: boolean };
+
+function Parts({ parts }: { parts: Part[] }) {
+  return (
+    <>
+      {parts.map((p, i) => (
+        <g key={i} transform={`translate(${p.x ?? 0},${p.y ?? 0}) rotate(${p.rot ?? 0})${p.flip ? " scale(-1,1)" : ""}`}>
+          <path d={p.d} />
+        </g>
+      ))}
+    </>
+  );
+}
+
+/* ────────────────────────────── сами узоры */
 
 export type MotifName = "kochkor" | "bugu" | "itkuyruk" | "kyial" | "gul" | "tumar";
 
-export const MOTIFS: Record<MotifName, { label: string; meaning: string; d: string[] }> = {
+const curlBig = curl({ r0: 56, rEnd: 7, th0: -90, th1: 335, w0: 22 });
+const curlMid = curl({ r0: 40, rEnd: 5.5, th0: -90, th1: 330, w0: 16 });
+
+export const MOTIFS: Record<MotifName, { label: string; meaning: string; view: string; parts: Part[] }> = {
   kochkor: {
     label: "Кочкор мүйүз",
     meaning: "Рога барана — достаток и сила. Самый частый узор на шырдаке.",
-    d: [
-      "M60 66 V34",
-      "M60 34 C60 12 40 5 28 16 C17 26 26 44 38 37 C46 32 44 21 36 21",
-      "M60 34 C60 12 80 5 92 16 C103 26 94 44 82 37 C74 32 76 21 84 21",
+    view: "-120 -96 240 180",
+    parts: [
+      { d: curlBig, x: -44, y: 8, rot: -135 },
+      { d: curlBig, x: 44, y: 8, rot: -135, flip: true },
+      { d: leaf({ cx: 0, cy: 30, len: 84, w: 18 }) },
     ],
   },
   bugu: {
     label: "Бугу мүйүз",
     meaning: "Рога оленя — долгая жизнь и связь с горами.",
-    d: [
-      "M60 66 V26",
-      "M60 48 C48 48 40 40 40 30 C40 24 46 22 50 26 C53 29 51 34 47 33",
-      "M60 48 C72 48 80 40 80 30 C80 24 74 22 70 26 C67 29 69 34 73 33",
-      "M60 30 C52 30 46 24 46 16 C46 11 51 9 55 13",
-      "M60 30 C68 30 74 24 74 16 C74 11 69 9 65 13",
+    view: "-128 -140 256 230",
+    parts: [
+      { d: curlBig, x: -46, y: 22, rot: -135 },
+      { d: curlBig, x: 46, y: 22, rot: -135, flip: true },
+      { d: curlMid, x: -40, y: -54, rot: -150 },
+      { d: curlMid, x: 40, y: -54, rot: -150, flip: true },
+      { d: leaf({ cx: 0, cy: 44, len: 104, w: 18 }) },
     ],
   },
   itkuyruk: {
     label: "Ит куйрук",
     meaning: "Собачий хвост — оберег стада и дома, бежит по краю ковра.",
-    d: ["M10 50 C10 28 30 24 36 38 C40 48 28 54 24 46 M36 38 C42 22 62 18 68 34 C72 46 60 52 56 44 M68 34 C74 18 94 14 100 30 C104 42 92 48 88 40"],
+    view: "-160 -86 320 150",
+    parts: [
+      { d: "M-138 36 H138 V48 H-138 Z" },
+      { d: curlMid, x: -102, y: 36, rot: -140 },
+      { d: curlMid, x: -34, y: 36, rot: -140 },
+      { d: curlMid, x: 34, y: 36, rot: -140 },
+      { d: curlMid, x: 102, y: 36, rot: -140 },
+    ],
   },
   kyial: {
     label: "Кыял",
     meaning: "Свободный завиток — мечта мастерицы, в двух коврах не повторяется.",
-    d: [
-      "M60 64 V40",
-      "M60 40 C44 40 32 30 30 14 M60 40 C60 24 54 12 42 4 M60 40 C76 40 88 30 90 14 M60 40 C60 24 66 12 78 4",
-      "M30 14 C26 20 28 26 34 26 M90 14 C94 20 92 26 86 26 M42 4 C36 6 34 12 38 16 M78 4 C84 6 86 12 82 16",
+    view: "-118 -112 236 210",
+    parts: [
+      { d: curlBig, x: -30, y: 30, rot: -25 },
+      { d: curlMid, x: 48, y: -28, rot: 150 },
+      { d: leaf({ cx: -4, cy: 48, len: 64, w: 16, angle: -100 }) },
     ],
   },
   gul: {
     label: "Гүл",
     meaning: "Цветок джайлоо — короткое горное лето.",
-    d: [
-      "M60 14 V56",
-      "M44 56 H76",
-      "M60 24 C48 24 40 18 38 8 C44 10 50 10 54 14",
-      "M60 24 C72 24 80 18 82 8 C76 10 70 10 66 14",
-      "M60 44 C50 44 44 50 42 60 C48 58 54 56 58 52",
-      "M60 44 C70 44 76 50 78 60 C72 58 66 56 62 52",
+    view: "-116 -116 232 232",
+    parts: [
+      { d: curlMid, y: -40, rot: 0 },
+      { d: curlMid, x: 40, rot: 90 },
+      { d: curlMid, y: 40, rot: 180 },
+      { d: curlMid, x: -40, rot: 270 },
+      { d: "M0 -14 A14 14 0 1 1 0 14 A14 14 0 1 1 0 -14 Z" },
     ],
   },
   tumar: {
     label: "Тумарча",
     meaning: "Треугольный оберег — его зашивают в одежду детям.",
-    d: ["M60 8 L100 62 H20 Z", "M60 26 L82 56 H38 Z"],
+    view: "-106 -104 212 186",
+    parts: [
+      { d: "M0 -88 L76 52 H-76 Z M0 -44 L40 28 H-44 Z" },
+      { d: leaf({ cx: 0, cy: 2, len: 34, w: 11 }) },
+    ],
   },
 };
 
-/** Один узор. Цвет берётся из текста, размер — в пикселях по ширине. */
-export function Motif({ name, size = 56, className = "", strokeWidth = 3 }: { name: MotifName; size?: number; className?: string; strokeWidth?: number }) {
+/** Один узор. Цвет берётся из текста. */
+export function Motif({ name, size = 72, className = "" }: { name: MotifName; size?: number; className?: string }) {
   const m = MOTIFS[name];
+  const [, , vw, vh] = m.view.split(" ").map(Number);
   return (
-    <svg viewBox="0 0 120 70" width={size} height={(size * 70) / 120} fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      {m.d.map((d, i) => <path key={i} d={d} />)}
+    <svg viewBox={m.view} width={size} height={(size * vh) / vw} className={className} fill="currentColor" fillRule="evenodd" aria-hidden="true">
+      <Parts parts={m.parts} />
     </svg>
   );
 }
 
-/** Полоса орнамента вместо обычной линии-разделителя. */
-export function OrnamentBand({
-  id,
-  color = "currentColor",
-  height = 26,
-  className = "",
-  opacity = 1,
-}: { id: string; color?: string; height?: number; className?: string; opacity?: number }) {
-  const k = height / 70;
+/* ────────────────────────────── розетка ала-кийиза */
+
+const MED_QUADRANT: Part[] = [
+  { d: leaf({ cx: 0, cy: -6, len: 84, w: 24 }) },
+  { d: curlBig, x: 50, y: 26, rot: -120 },
+  { d: curlMid, x: 92, y: -92, rot: -135 },
+];
+
+/**
+ * Розетка ала-кийиза: четверть узора отражается четыре раза,
+ * поэтому симметрия настоящая — так и режут войлок.
+ */
+export function Medallion({ id, size = 320, color = "currentColor", className = "" }: { id: string; size?: number; color?: string; className?: string }) {
+  const q = `${id}-q`;
+  return (
+    <svg viewBox="-190 -190 380 380" width={size} height={size} className={className} fill={color} aria-hidden="true">
+      <defs>
+        <g id={q}>
+          <Parts parts={MED_QUADRANT} />
+        </g>
+      </defs>
+      <use href={`#${q}`} />
+      <use href={`#${q}`} transform="scale(-1,1)" />
+      <use href={`#${q}`} transform="scale(1,-1)" />
+      <use href={`#${q}`} transform="scale(-1,-1)" />
+    </svg>
+  );
+}
+
+/* ────────────────────────────── каймы и ковёр */
+
+/** Полоса «зубчики» — внешняя кайма ковра. */
+export function ZigzagBand({ id, height = 22, color = "#EDE2C8", bg = "#8E2420", flip = false, className = "" }: { id: string; height?: number; color?: string; bg?: string; flip?: boolean; className?: string }) {
+  const w = height * 1.15;
+  return (
+    <svg width="100%" height={height} className={className} aria-hidden="true" style={{ display: "block", transform: flip ? "scaleY(-1)" : undefined }}>
+      <defs>
+        <pattern id={id} width={w} height={height} patternUnits="userSpaceOnUse">
+          <rect width={w} height={height} fill={bg} />
+          <path d={`M0 ${height} L${w / 2} 2 L${w} ${height} Z`} fill={color} />
+        </pattern>
+      </defs>
+      <rect width="100%" height={height} fill={`url(#${id})`} />
+    </svg>
+  );
+}
+
+const BAND_CURL = curl({ r0: 40, rEnd: 5.5, th0: -90, th1: 330, w0: 16 });
+
+/** Лента кочкор мүйүз: бежит по краю раздела, как кайма ковра. */
+export function OrnamentBand({ id, color = "currentColor", height = 34, className = "", opacity = 1 }: { id: string; color?: string; height?: number; className?: string; opacity?: number }) {
+  const cellH = 150;
+  const cellW = 210;
+  const k = height / cellH;
   return (
     <svg width="100%" height={height} className={className} aria-hidden="true" style={{ display: "block" }}>
       <defs>
-        <pattern id={id} width={120 * k} height={height} patternUnits="userSpaceOnUse">
-          <g transform={`scale(${k})`} fill="none" stroke={color} strokeWidth={3.4} strokeLinecap="round" opacity={opacity}>
-            <path d="M60 70 V34" />
-            <path d="M60 34 C60 12 40 5 28 16 C17 26 26 44 38 37 C46 32 44 21 36 21" />
-            <path d="M60 34 C60 12 80 5 92 16 C103 26 94 44 82 37 C74 32 76 21 84 21" />
+        <pattern id={id} width={cellW * k} height={height} patternUnits="userSpaceOnUse">
+          <g transform={`scale(${k}) translate(105,98)`} fill={color} opacity={opacity}>
+            <g transform="translate(-34,0) rotate(-135)"><path d={BAND_CURL} /></g>
+            <g transform="translate(34,0) rotate(-135) scale(-1,1)"><path d={BAND_CURL} /></g>
+            <path d={leaf({ cx: 0, cy: 18, len: 60, w: 14 })} />
           </g>
         </pattern>
       </defs>
@@ -105,49 +253,79 @@ export function Stitch({ className = "", color = "currentColor" }: { className?:
   );
 }
 
-/** Уголок ковра — ставится в угол карточки или блока. */
-export function CornerCurl({ size = 40, className = "" }: { size?: number; className?: string }) {
+/** Уголок ковра. */
+export function CornerCurl({ size = 48, className = "" }: { size?: number; className?: string }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 60 60" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className={className} aria-hidden="true">
-      <path d="M4 34 C22 34 34 22 34 4" />
-      <path d="M4 20 C13 20 20 13 20 4" />
-      <circle cx="9" cy="9" r="2.2" />
+    <svg width={size} height={size} viewBox="-6 -6 100 100" fill="currentColor" className={className} aria-hidden="true">
+      <g transform="translate(26,26) rotate(-135)">
+        <path d={curl({ r0: 30, rEnd: 4.5, th0: -90, th1: 330, w0: 13 })} />
+      </g>
     </svg>
   );
 }
 
+const SHYRDAK_QUADRANT: Part[] = [
+  { d: leaf({ cx: 0, cy: -4, len: 50, w: 15 }) },
+  { d: curl({ r0: 30, rEnd: 4.5, th0: -90, th1: 330, w0: 13 }), x: 30, y: 16, rot: -120 },
+  { d: curl({ r0: 18, rEnd: 3, th0: -90, th1: 320, w0: 8 }), x: 56, y: -56, rot: -135 },
+];
+
 /**
- * Шырдак — кусок войлочного ковра: цветное поле, рамка, узор и фактура войлока.
- * Используется как декоративная колонка рядом с заголовком.
+ * Шырдак — войлочная дорожка: кайма-зубчики, поле, ромбы с розеткой.
+ * Ставится вертикально рядом с заголовком страницы.
  */
 export function Shyrdak({
   id,
   className = "",
   base = "#8E2420",
-  motif = "#E7D3AE",
+  field = "#2B4664",
+  motif = "#EDE2C8",
   frame = "#C08A2E",
-}: { id: string; className?: string; base?: string; motif?: string; frame?: string }) {
+  rows = 4,
+}: { id: string; className?: string; base?: string; field?: string; motif?: string; frame?: string; rows?: number }) {
+  const w = 300;
+  const step = 160;
+  const h = 120 + rows * step;
+  const q = `${id}-q`;
+
   return (
-    <svg viewBox="0 0 120 600" preserveAspectRatio="xMidYMid slice" className={className} aria-hidden="true">
+    <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="xMidYMid slice" className={className} aria-hidden="true">
       <defs>
-        <pattern id={`${id}-p`} width="120" height="160" patternUnits="userSpaceOnUse">
-          <rect width="120" height="160" fill={base} />
-          <g fill="none" stroke={motif} strokeWidth="3.6" strokeLinecap="round" transform="translate(0 40)">
-            <path d="M60 70 V34" />
-            <path d="M60 34 C60 12 40 5 28 16 C17 26 26 44 38 37 C46 32 44 21 36 21" />
-            <path d="M60 34 C60 12 80 5 92 16 C103 26 94 44 82 37 C74 32 76 21 84 21" />
-          </g>
-          <circle cx="60" cy="140" r="4.5" fill={frame} />
+        <pattern id={`${id}-zig`} width="26" height="26" patternUnits="userSpaceOnUse">
+          <rect width="26" height="26" fill={base} />
+          <path d="M0 26 L13 3 L26 26 Z" fill={motif} />
         </pattern>
+        <g id={q} fill={motif}>
+          <Parts parts={SHYRDAK_QUADRANT} />
+        </g>
         <filter id={`${id}-felt`}>
-          <feTurbulence type="fractalNoise" baseFrequency="0.92" numOctaves="4" stitchTiles="stitch" />
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch" />
           <feColorMatrix type="saturate" values="0" />
         </filter>
       </defs>
-      <rect width="120" height="600" fill={`url(#${id}-p)`} />
-      <rect x="6" y="6" width="108" height="588" fill="none" stroke={frame} strokeWidth="4" />
-      <rect x="15" y="15" width="90" height="570" fill="none" stroke={motif} strokeWidth="1.4" strokeDasharray="8 8" opacity="0.7" />
-      <rect width="120" height="600" filter={`url(#${id}-felt)`} opacity="0.16" style={{ mixBlendMode: "multiply" }} />
+
+      <rect width={w} height={h} fill={base} />
+      <rect width={w} height="26" fill={`url(#${id}-zig)`} />
+      <g transform={`translate(0 ${h}) scale(1 -1)`}><rect width={w} height="26" fill={`url(#${id}-zig)`} /></g>
+      <rect x="28" y="36" width={w - 56} height={h - 72} fill={motif} />
+      <rect x="40" y="48" width={w - 80} height={h - 96} fill={field} />
+
+      {Array.from({ length: rows }).map((_, i) => {
+        const cy = 110 + i * step;
+        return (
+          <g key={i}>
+            <path d={`M150 ${cy - 68} L224 ${cy} L150 ${cy + 68} L76 ${cy} Z`} fill="none" stroke={frame} strokeWidth="4" />
+            <g transform={`translate(150 ${cy})`}>
+              <use href={`#${q}`} />
+              <use href={`#${q}`} transform="scale(-1,1)" />
+              <use href={`#${q}`} transform="scale(1,-1)" />
+              <use href={`#${q}`} transform="scale(-1,-1)" />
+            </g>
+          </g>
+        );
+      })}
+
+      <rect width={w} height={h} filter={`url(#${id}-felt)`} opacity="0.17" style={{ mixBlendMode: "multiply" }} />
     </svg>
   );
 }

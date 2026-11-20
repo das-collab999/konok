@@ -1,12 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { REGIONS, type Place, type Region } from "@/data/places";
 import { useLang } from "@/lib/i18n";
 import { PlaceCard } from "@/components/PlaceCard";
 import { HeroArt, Icon, Tunduk, type IconName } from "@/components/ui";
-import { MOTIFS, Motif, OrnamentBand, Shyrdak, type MotifName } from "@/components/ethno";
+import { MOTIFS, Medallion, Motif, OrnamentBand, Shyrdak, ZigzagBand, type MotifName } from "@/components/ethno";
+import { DrawIn, Intro, Parallax, Reveal, RevealItem } from "@/components/motion";
 
 type Feature = "stove" | "bath" | "signal" | "car";
 
@@ -51,7 +52,18 @@ export function HomeClient({ places }: { places: Place[] }) {
   const { t } = useLang();
   const [region, setRegion] = useState<Region | "all">("all");
   const [feats, setFeats] = useState<Feature[]>([]);
-  const [date, setDate] = useState("2027-07-12");
+  const [date, setDate] = useState("");
+  const [today, setToday] = useState("");
+
+  // Дату считаем на устройстве гостя: по умолчанию — через месяц.
+  useEffect(() => {
+    const now = new Date();
+    const iso = (d: Date) => d.toISOString().slice(0, 10);
+    setToday(iso(now));
+    const soon = new Date(now);
+    soon.setMonth(soon.getMonth() + 1);
+    setDate(iso(soon));
+  }, []);
   const [guests, setGuests] = useState(2);
 
   const stays = useMemo(
@@ -64,7 +76,7 @@ export function HomeClient({ places }: { places: Place[] }) {
   const toggle = (k: Feature) => setFeats((cur) => (cur.includes(k) ? cur.filter((x) => x !== k) : [...cur, k]));
 
   const chip = (on: boolean) =>
-    `inline-flex h-10 cursor-pointer items-center gap-2 rounded-full border px-4 text-[11px] font-medium uppercase tracking-[0.14em] transition-colors ${
+    `inline-flex h-11 cursor-pointer items-center gap-2 rounded-full border px-4 text-[12px] font-medium uppercase tracking-[0.14em] transition-colors ${
       on ? "border-ink bg-ink text-cream" : "border-rule-strong text-fg-muted hover:border-ink hover:text-fg"
     }`;
 
@@ -72,12 +84,27 @@ export function HomeClient({ places }: { places: Place[] }) {
 
   return (
     <>
+      <Intro>
+        <div className="flex flex-col items-center gap-6">
+          <Medallion id="intro-med" size={240} color="#DDAE52" />
+          <span className="display text-[28px] tracking-[0.2em] text-cream">Конок</span>
+        </div>
+      </Intro>
+
       {/* ---------------------------------------------------------- Hero */}
-      <section>
-        <div className="mx-auto grid max-w-[1280px] items-center gap-10 px-5 pb-12 pt-12 sm:px-10 lg:grid-cols-[1.02fr_0.98fr] lg:gap-16 lg:pb-16 lg:pt-16">
+      <section className="relative overflow-hidden">
+        {/* Водяной знак: медальон ала-кийиза медленно поворачивается */}
+        <Medallion
+          id="hero-watermark"
+          size={760}
+          color="#8E2420"
+          className="spin-slow pointer-events-none absolute -left-[280px] top-[40px] opacity-[0.06]"
+        />
+
+        <div className="relative mx-auto grid max-w-[1280px] items-center gap-10 px-5 pb-12 pt-12 sm:px-10 lg:grid-cols-[1.02fr_0.98fr] lg:gap-16 lg:pb-16 lg:pt-16">
           <div>
             <span className="eyebrow rise flex items-center gap-2.5">
-              <Motif name="kochkor" size={26} strokeWidth={4} className="text-accent" />
+              <DrawIn duration={1200}><Motif name="kochkor" size={34} className="text-accent" /></DrawIn>
               Юрты и гостевые дома · Кыргызстан
             </span>
             <h1 className="display rise rise-2 m-0 mt-5 max-w-[13ch] text-[clamp(40px,8.4vw,92px)]">{t.heroTitle}</h1>
@@ -96,7 +123,7 @@ export function HomeClient({ places }: { places: Place[] }) {
                 </div>
                 <div className="flex flex-col gap-2">
                   <label htmlFor="f-date" className="eyebrow">{t.when}</label>
-                  <input id="f-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} className={searchField} />
+                  <input id="f-date" type="date" min={today} value={date} onChange={(e) => setDate(e.target.value)} className={searchField} />
                 </div>
                 <div className="flex flex-col gap-2">
                   <label htmlFor="f-guests" className="eyebrow">{t.guests}</label>
@@ -116,31 +143,39 @@ export function HomeClient({ places }: { places: Place[] }) {
 
           {/* Пейзаж с полосой шырдака вдоль края */}
           <div className="relative flex">
-            <Shyrdak id="hero-shyrdak" className="hidden w-[78px] flex-none sm:block" />
-            <div className="relative flex-1">
-              <HeroArt className="block aspect-[4/5] w-full object-cover" />
+            <Shyrdak id="hero-shyrdak" rows={4} className="hidden w-[92px] flex-none sm:block" />
+            <div className="relative flex-1 overflow-hidden">
+              <Parallax strength={0.06}>
+                <HeroArt className="block aspect-[4/5] w-full scale-110 object-cover" />
+              </Parallax>
               <div className="absolute bottom-0 left-0 flex items-center gap-3 bg-cream px-5 py-4">
                 <Tunduk size={22} strokeWidth={1.2} className="text-accent" />
-                <span className="text-[11px] uppercase tracking-[0.18em] text-fg-muted">Кош келиңиз!</span>
+                <span className="text-[12px] uppercase tracking-[0.18em] text-fg-muted">Кош келиңиз!</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <div className="bg-accent text-gold">
-        <OrnamentBand id="band-hero" height={30} color="#E7D3AE" opacity={0.9} />
+      <div className="bg-accent">
+        <ZigzagBand id="zig-hero-top" height={18} />
+        <div className="overflow-hidden">
+          <div className="band-drift">
+            <OrnamentBand id="band-hero" height={42} color="#EDE2C8" opacity={0.95} />
+          </div>
+        </div>
+        <ZigzagBand id="zig-hero-bot" height={18} flip />
       </div>
 
       {/* ------------------------------------------------------ Promises */}
       <section className="mx-auto max-w-[1280px] px-5 py-16 sm:px-10">
         <ul className="m-0 grid list-none grid-cols-1 gap-x-10 gap-y-10 p-0 sm:grid-cols-2 lg:grid-cols-4">
-          {PROMISES.map((p) => (
-            <li key={p.n} className="border-t border-rule pt-5">
-              <Motif name={p.motif} size={38} className="text-ochre" />
+          {PROMISES.map((p, i) => (
+            <RevealItem key={p.n} delay={i * 90} className="border-t border-rule pt-5">
+              <DrawIn><Motif name={p.motif} size={38} className="text-ochre" /></DrawIn>
               <h3 className="serif m-0 mt-4 text-[20px]">{p.title}</h3>
               <p className="m-0 mt-2.5 text-[14px] leading-relaxed text-fg-muted">{p.text}</p>
-            </li>
+            </RevealItem>
           ))}
         </ul>
       </section>
@@ -176,7 +211,7 @@ export function HomeClient({ places }: { places: Place[] }) {
               </button>
             ))}
             {(feats.length > 0 || region !== "all") && (
-              <button type="button" onClick={() => { setFeats([]); setRegion("all"); }} className="h-10 cursor-pointer px-2 text-[11px] uppercase tracking-[0.14em] text-fg-subtle underline underline-offset-4 hover:text-fg">
+              <button type="button" onClick={() => { setFeats([]); setRegion("all"); }} className="h-11 cursor-pointer px-2 text-[12px] uppercase tracking-[0.14em] text-fg-subtle underline underline-offset-4 hover:text-fg">
                 Сбросить
               </button>
             )}
@@ -191,7 +226,11 @@ export function HomeClient({ places }: { places: Place[] }) {
           </div>
         ) : (
           <div className="mt-12 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-            {stays.map((p) => <PlaceCard key={p.slug} place={p} query={query} />)}
+            {stays.map((p, i) => (
+              <Reveal key={p.slug} delay={(i % 3) * 110}>
+                <PlaceCard place={p} query={query} />
+              </Reveal>
+            ))}
           </div>
         )}
       </section>
@@ -216,7 +255,7 @@ export function HomeClient({ places }: { places: Place[] }) {
                   <Icon name={g.icon} size={24} strokeWidth={1.3} className="text-accent" />
                   <h3 className="serif m-0 text-[20px]">{g.title}</h3>
                   <p className="m-0 text-[14px] leading-relaxed text-fg-muted">{g.text}</p>
-                  <span className="mt-auto inline-flex items-center gap-2 pt-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-accent">
+                  <span className="mt-auto inline-flex items-center gap-2 pt-3 text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
                     Открыть <Icon name="arrow" size={14} strokeWidth={1.8} />
                   </span>
                 </Link>
@@ -227,7 +266,13 @@ export function HomeClient({ places }: { places: Place[] }) {
       </section>
 
       {/* ----------------------------------------------------- Орнаменты */}
-      <section className="mx-auto max-w-[1280px] px-5 py-20 sm:px-10">
+      <section className="relative mx-auto max-w-[1280px] overflow-hidden px-5 py-20 sm:px-10">
+        <Medallion
+          id="motif-watermark"
+          size={520}
+          color="#8E2420"
+          className="spin-slow pointer-events-none absolute -right-[150px] top-[60px] opacity-[0.07]"
+        />
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-[32rem]">
             <span className="eyebrow">Узоры</span>
@@ -239,15 +284,39 @@ export function HomeClient({ places }: { places: Place[] }) {
           </p>
         </div>
 
-        <ul className="m-0 mt-12 grid list-none grid-cols-2 gap-x-8 gap-y-10 p-0 sm:grid-cols-3 lg:grid-cols-6">
-          {MOTIF_ORDER.map((name) => (
-            <li key={name} className="text-center">
-              <Motif name={name} size={84} className="mx-auto text-accent" />
+        <ul className="relative m-0 mt-12 grid list-none grid-cols-2 gap-5 p-0 sm:grid-cols-3 lg:grid-cols-6">
+          {MOTIF_ORDER.map((name, i) => (
+            <RevealItem key={name} delay={i * 80} className="felt border border-rule-strong bg-paper p-5 text-center">
+              <DrawIn duration={1800}>
+                <Motif name={name} size={132} className="mx-auto text-accent" />
+              </DrawIn>
               <h3 className="serif m-0 mt-4 text-[17px]">{MOTIFS[name].label}</h3>
               <p className="m-0 mt-2 text-[13px] leading-relaxed text-fg-muted">{MOTIFS[name].meaning}</p>
-            </li>
+            </RevealItem>
           ))}
         </ul>
+      </section>
+
+      {/* ------------------------------------------------- Пословица */}
+      <section className="felt relative overflow-hidden bg-ink text-cream">
+        <ZigzagBand id="zig-saying-top" height={18} color="#8E2420" bg="#16130F" />
+        <div className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-center gap-14 px-5 py-20 sm:px-10">
+          <DrawIn duration={2200}>
+            <Medallion id="saying-med" size={280} color="#DDAE52" className="flex-none" />
+          </DrawIn>
+          <Reveal className="max-w-[34rem]">
+            <span className="eyebrow text-gold">Кыргызская пословица</span>
+            <p className="display m-0 mt-5 text-[clamp(28px,4.4vw,52px)] leading-[1.05] text-cream">
+              Конок келсе — кут келет
+            </p>
+            <p className="m-0 mt-6 text-[17px] leading-relaxed text-on-dark-muted">
+              «Придёт гость — придёт достаток». Отсюда и название: конок — это гость, которого ждут.
+              Мы делаем так, чтобы за один вечер у очага вы поняли про эту страну больше,
+              чем за неделю в отеле.
+            </p>
+          </Reveal>
+        </div>
+        <ZigzagBand id="zig-saying-bot" height={18} color="#8E2420" bg="#16130F" flip />
       </section>
 
       {/* --------------------------------------------------- Experiences */}
@@ -283,7 +352,11 @@ export function HomeClient({ places }: { places: Place[] }) {
 
       {/* --------------------------------------------------------- Hosts */}
       <section id="hosts" className="felt scroll-mt-24 bg-ink text-on-dark">
-        <OrnamentBand id="band-hosts" height={26} color="#6b5a3a" />
+        <div className="overflow-hidden">
+          <div className="band-drift">
+            <OrnamentBand id="band-hosts" height={36} color="#6b5a3a" />
+          </div>
+        </div>
         <div className="mx-auto flex max-w-[1280px] flex-wrap gap-14 px-5 py-20 sm:px-10">
           <div className="flex-1 basis-[380px]">
             <span className="eyebrow text-gold">Үй ээлерине — для хозяев</span>

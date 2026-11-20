@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import { loadPlace, loadPlaces } from "@/lib/source";
 import { EMERGENCY, MEALS, PACKING, TRANSPORT } from "@/data/guide";
 import { Cover, Icon, type IconName } from "@/components/ui";
-import { Motif, OrnamentBand } from "@/components/ethno";
+import { Motif, OrnamentBand, ZigzagBand } from "@/components/ethno";
+import { DrawIn, Reveal } from "@/components/motion";
 import { BookingCard } from "./BookingCard";
 
 export async function generateStaticParams() {
@@ -49,7 +50,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
 
   return (
     <div className="mx-auto max-w-[1280px] px-5 pb-10 pt-8 sm:px-10">
-      <nav aria-label="Хлебные крошки" className="flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-fg-subtle">
+      <nav aria-label="Хлебные крошки" className="flex items-center gap-2 text-[12px] uppercase tracking-[0.16em] text-fg-subtle">
         <Link href="/" className="text-fg-muted no-underline hover:text-fg">Главная</Link>
         <span>·</span>
         <Link href="/#stays" className="text-fg-muted no-underline hover:text-fg">Жильё</Link>
@@ -59,7 +60,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
 
       <div className="mt-7 flex flex-wrap items-end justify-between gap-x-10 gap-y-5 border-b border-rule pb-8">
         <h1 className="display m-0 max-w-[16ch] text-[clamp(30px,5.4vw,64px)]">{place.title}</h1>
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[11px] uppercase tracking-[0.14em] text-fg-muted">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[12px] uppercase tracking-[0.14em] text-fg-muted">
           <span className="inline-flex items-center gap-2"><Icon name="pin" size={15} strokeWidth={1.4} />{place.place}</span>
           <span className="inline-flex items-center gap-2"><Icon name="mount" size={15} strokeWidth={1.4} />{place.altitudeM} м</span>
           <span className="inline-flex items-center gap-2 text-success"><Icon name="check" size={14} strokeWidth={2.4} />Проверено Конок</span>
@@ -69,7 +70,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
       <div className="relative mt-8 overflow-hidden bg-cream-2">
         <Cover place={place} wide className="block aspect-[16/10] w-full object-cover sm:aspect-[21/9]" />
         {!place.photo && (
-          <span className="absolute bottom-4 left-4 rounded-full bg-ink/75 px-4 py-2 text-[10px] uppercase tracking-[0.16em] text-cream">
+          <span className="absolute bottom-4 left-4 rounded-full bg-ink/75 px-4 py-2 text-[12px] uppercase tracking-[0.16em] text-cream">
             Фотографии появятся после съёмки
           </span>
         )}
@@ -80,7 +81,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
           {/* История семьи */}
           <section className="border-t border-rule pt-8">
             <span className="eyebrow flex items-center gap-2.5">
-              <Motif name="gul" size={24} strokeWidth={4} className="text-ochre" />
+              <DrawIn duration={1200}><Motif name="gul" size={30} className="text-ochre" /></DrawIn>
               История семьи
             </span>
             <h2 className="serif m-0 mt-4 text-[28px]">{place.host}</h2>
@@ -96,7 +97,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
                 <li key={f.k} className="flex items-center gap-4 border-b border-rule py-4">
                   <Icon name={f.icon} size={20} strokeWidth={1.3} className="flex-none text-fg-subtle" />
                   <span className="min-w-0">
-                    <span className="block text-[11px] uppercase tracking-[0.14em] text-fg-subtle">{f.k}</span>
+                    <span className="block text-[12px] uppercase tracking-[0.14em] text-fg-subtle">{f.k}</span>
                     <span className="block text-[16px]">{f.v}</span>
                   </span>
                 </li>
@@ -117,7 +118,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
                   <div className="flex flex-wrap items-baseline justify-between gap-3">
                     <h3 className="serif m-0 text-[20px]">{m.title}</h3>
                     {m.vegetarian && (
-                      <span className="rounded-full border border-moss px-2.5 py-0.5 text-[10px] uppercase tracking-[0.12em] text-moss">
+                      <span className="rounded-full border border-moss px-2.5 py-0.5 text-[12px] uppercase tracking-[0.12em] text-moss">
                         {m.note ?? "Без мяса"}
                       </span>
                     )}
@@ -126,7 +127,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
                 </li>
               ))}
             </ul>
-            <Link href="/guide/#food" className="mt-6 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-accent no-underline">
+            <Link href="/guide/#food" className="mt-6 inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.16em] text-accent no-underline">
               Вся кухня в путеводителе <Icon name="arrow" size={14} strokeWidth={1.8} />
             </Link>
           </section>
@@ -165,6 +166,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
           </section>
 
           {/* Безопасность */}
+          <Reveal>
           <section className="felt border border-rule bg-paper p-7">
             <span className="eyebrow">Если что-то случилось</span>
             <h2 className="serif m-0 mt-3 text-[24px]">Телефоны под рукой</h2>
@@ -181,6 +183,7 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
               ))}
             </ul>
           </section>
+          </Reveal>
         </div>
 
         <Suspense fallback={<div className="h-[560px] w-full bg-paper lg:w-[380px] lg:flex-none" />}>
@@ -189,7 +192,13 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
       </div>
 
       <div className="mt-16 bg-accent">
-        <OrnamentBand id={`band-${place.slug}`} height={24} color="#E7D3AE" opacity={0.9} />
+        <ZigzagBand id={`zig-top-${place.slug}`} height={14} />
+        <div className="overflow-hidden">
+          <div className="band-drift">
+            <OrnamentBand id={`band-${place.slug}`} height={38} color="#EDE2C8" opacity={0.95} />
+          </div>
+        </div>
+        <ZigzagBand id={`zig-bot-${place.slug}`} height={14} flip />
       </div>
     </div>
   );

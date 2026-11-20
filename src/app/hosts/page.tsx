@@ -64,7 +64,7 @@ export default function HostsPage() {
               </span>
               <div className="min-w-0">
                 <p className="m-0 text-[15px] font-medium">Конок бот</p>
-                <p className="m-0 text-[11px] uppercase tracking-[0.12em] text-fg-subtle">Соң-Көл · Асеке-апа</p>
+                <p className="m-0 text-[12px] uppercase tracking-[0.12em] text-fg-subtle">Соң-Көл · Асеке-апа</p>
               </div>
             </div>
 
@@ -87,13 +87,13 @@ export default function HostsPage() {
                 <div className="mt-4 flex gap-2">
                   <button
                     type="button" onClick={() => setStatus("yes")}
-                    className={`h-11 flex-1 cursor-pointer rounded-full text-[10px] font-semibold uppercase tracking-[0.14em] text-cream transition-colors ${status === "yes" ? "bg-success" : "bg-ink hover:bg-accent"}`}
+                    className={`h-11 flex-1 cursor-pointer rounded-full text-[12px] font-semibold uppercase tracking-[0.14em] text-cream transition-colors ${status === "yes" ? "bg-success" : "bg-ink hover:bg-accent"}`}
                   >
                     Кабыл алам
                   </button>
                   <button
                     type="button" onClick={() => setStatus("no")}
-                    className="h-11 flex-1 cursor-pointer rounded-full border border-rule-strong text-[10px] font-semibold uppercase tracking-[0.14em] transition-colors hover:border-ink"
+                    className="h-11 flex-1 cursor-pointer rounded-full border border-rule-strong text-[12px] font-semibold uppercase tracking-[0.14em] transition-colors hover:border-ink"
                   >
                     Жок
                   </button>
@@ -120,7 +120,7 @@ export default function HostsPage() {
 
             <div className="flex flex-wrap gap-2 border-t border-rule px-4 py-4">
               {["Календарь", "Баалар", "Сүрөт кошуу", "Акчам"].map((b) => (
-                <span key={b} className="rounded-full border border-rule-strong px-3.5 py-1.5 text-[10px] uppercase tracking-[0.12em] text-fg-muted">{b}</span>
+                <span key={b} className="rounded-full border border-rule-strong px-3.5 py-1.5 text-[12px] uppercase tracking-[0.12em] text-fg-muted">{b}</span>
               ))}
             </div>
           </div>

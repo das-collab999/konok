@@ -66,11 +66,11 @@ export default function BookingsPage() {
               <div className="flex flex-wrap items-start justify-between gap-x-10 gap-y-5">
                 <div className="min-w-0 flex-1 basis-[320px]">
                   <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                    <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] text-success">
+                    <span className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.14em] text-success">
                       <Icon name="check" size={13} strokeWidth={2.2} />
                       Ждём ответа хозяина
                     </span>
-                    <span className="text-[11px] uppercase tracking-[0.16em] text-fg-subtle">{b.code}</span>
+                    <span className="text-[12px] uppercase tracking-[0.16em] text-fg-subtle">{b.code}</span>
                   </div>
 
                   <h2 className="serif m-0 mt-3 text-[24px]">
@@ -90,7 +90,7 @@ export default function BookingsPage() {
                   <button
                     type="button"
                     onClick={() => forget(b.code)}
-                    className="h-10 cursor-pointer text-[11px] uppercase tracking-[0.14em] text-fg-subtle underline underline-offset-4 transition-colors hover:text-fg"
+                    className="h-11 cursor-pointer text-[12px] uppercase tracking-[0.14em] text-fg-subtle underline underline-offset-4 transition-colors hover:text-fg"
                   >
                     Удалить
                   </button>
