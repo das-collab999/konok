@@ -141,7 +141,7 @@ body {
   transition: opacity .9s cubic-bezier(.2,.7,.3,1), transform .9s cubic-bezier(.2,.7,.3,1);
   will-change: opacity, transform;
 }
-.reveal-in { opacity: 1; transform: none; }
+.has-js .reveal-in { opacity: 1; transform: none; }
 
 /* Узор «вырезается» из войлока: появляется сверху вниз */
 .has-js .draw svg { clip-path: inset(0 0 100% 0); opacity: .2; }

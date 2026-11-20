@@ -8,6 +8,7 @@ import { PlaceCard } from "@/components/PlaceCard";
 import { HeroArt, Icon, Tunduk, type IconName } from "@/components/ui";
 import { MOTIFS, Medallion, Motif, OrnamentBand, Shyrdak, TermeBand, ZigzagBand, type MotifName } from "@/components/ethno";
 import { DrawIn, Intro, Parallax, Reveal, RevealItem } from "@/components/motion";
+import { Art, type ArtName } from "@/components/art";
 
 type Feature = "stove" | "bath" | "signal" | "car";
 
@@ -20,8 +21,8 @@ const FEATURES: { key: Feature; icon: IconName; test: (p: Place) => boolean; lab
 
 const MOTIF_ORDER: MotifName[] = ["kochkor", "bugu", "itkuyruk", "kyial", "gul", "tumar"];
 const GUIDE_HREFS = ["/guide/#food", "/guide/#road", "/guide/#conditions", "/guide/#help"];
-const GUIDE_ICONS: IconName[] = ["food", "car", "shield", "chat"];
-const EXP_ICONS: IconName[] = ["wool", "food", "horse", "ball"];
+const EXP_ART: ArtName[] = ["felt", "cooking", "horse", "games"];
+const GUIDE_ART: ArtName[] = ["beshbarmak", "transfer", "weather", "nosignal"];
 const PERK_ICONS: IconName[] = ["shield", "camera", "chat", "coin"];
 const HOW_ICONS: IconName[] = ["search", "user", "check"];
 const PROMISE_MOTIFS: MotifName[] = ["kochkor", "itkuyruk", "gul", "tumar"];
@@ -245,7 +246,7 @@ export function HomeClient({ places }: { places: Place[] }) {
             {t.home.guideLinks.map((g, i) => (
               <li key={g.t} className="bg-cream-2">
                 <Link href={GUIDE_HREFS[i]} className="flex h-full flex-col gap-3 p-6 text-fg no-underline transition-colors hover:bg-paper">
-                  <Icon name={GUIDE_ICONS[i]} size={24} strokeWidth={1.3} className="text-accent" />
+                  <Art name={GUIDE_ART[i]} label={g.t} width={120} className="h-auto w-[120px] rounded-[3px]" />
                   <h3 className="serif m-0 text-[20px]">{g.t}</h3>
                   <p className="m-0 text-[14px] leading-relaxed text-fg-muted">{g.d}</p>
                   <span className="mt-auto inline-flex items-center gap-2 pt-3 text-[12px] font-semibold uppercase tracking-[0.14em] text-accent">
@@ -312,8 +313,8 @@ export function HomeClient({ places }: { places: Place[] }) {
             {t.home.experiences.map((e, i) => (
               <RevealItem key={e.t} delay={i * 70} className="flex flex-wrap items-baseline gap-x-8 gap-y-3 border-t border-rule py-7 last:border-b">
                 <span className="serif w-10 text-[15px] text-accent">{String(i + 1).padStart(2, "0")}</span>
-                <div className="flex flex-1 basis-[260px] items-start gap-4">
-                  <Icon name={EXP_ICONS[i]} size={22} strokeWidth={1.3} className="mt-1 flex-none text-fg-subtle" />
+                <div className="flex flex-1 basis-[260px] items-start gap-5">
+                  <Art name={EXP_ART[i]} label={e.t} width={116} className="h-auto w-[116px] flex-none rounded-[3px]" />
                   <div>
                     <h3 className="serif m-0 text-[22px]">{e.t}</h3>
                     <p className="m-0 mt-2 max-w-[60ch] text-[15px] leading-relaxed text-fg-muted">{e.d}</p>
