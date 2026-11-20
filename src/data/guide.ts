@@ -2,14 +2,16 @@
 // В базе этому соответствуют таблицы meals, transport_options и contacts.
 
 import type { L } from "@/lib/i18n";
+import type { ArtName } from "@/components/art";
 
 export type MealKind = "dinner" | "breakfast" | "snack" | "drink";
 
-export type Meal = { title: L; kind: MealKind; text: L; vegetarian?: boolean; note?: L };
+export type Meal = { title: L; kind: MealKind; text: L; art: ArtName; vegetarian?: boolean; note?: L };
 
 export const MEALS: Meal[] = [
   {
     kind: "dinner", title: { ru: "Бешбармак", en: "Beshbarmak", zh: "别什巴尔马克" },
+    art: "beshbarmak",
     text: {
       ru: "Главное блюдо кочевников: тонко раскатанное тесто, варёная баранина и бульон-шорпо. Едят руками из общего блюда — это знак того, что вы за столом свои.",
       en: "The main nomad dish: thin rolled dough, boiled mutton and shorpo broth. Eaten with your hands from a shared plate — a sign that you belong at this table.",
@@ -18,6 +20,7 @@ export const MEALS: Meal[] = [
   },
   {
     kind: "dinner", title: { ru: "Лагман", en: "Lagman", zh: "拉条子" }, vegetarian: true,
+    art: "lagman",
     note: { ru: "Бывает вегетарианским", en: "Can be meat-free", zh: "可做素食" },
     text: {
       ru: "Лапшу тянут руками при вас. С мясом и овощами; вегетарианский вариант сделают, если предупредить с утра.",
@@ -27,6 +30,7 @@ export const MEALS: Meal[] = [
   },
   {
     kind: "dinner", title: { ru: "Куурдак", en: "Kuurdak", zh: "库尔达克炒肉" },
+    art: "kuurdak",
     text: {
       ru: "Мясо, лук и картошка, обжаренные в казане на костре. Готовится быстро — его подают, если вы приехали поздно.",
       en: "Meat, onion and potato fried in a cauldron over the fire. Quick to make — served if you arrive late.",
@@ -35,6 +39,7 @@ export const MEALS: Meal[] = [
   },
   {
     kind: "dinner", title: { ru: "Плов", en: "Plov", zh: "手抓饭" },
+    art: "plov",
     text: {
       ru: "Рис с морковью и мясом. На юге, в Арсланбобе, в плов добавляют грецкий орех из местного леса.",
       en: "Rice with carrot and meat. In the south, in Arslanbob, walnuts from the local forest go into it.",
@@ -43,6 +48,7 @@ export const MEALS: Meal[] = [
   },
   {
     kind: "dinner", title: { ru: "Манты", en: "Manty", zh: "蒸包" }, vegetarian: true,
+    art: "manty",
     note: { ru: "Тыквенные — без мяса", en: "Pumpkin ones are meat-free", zh: "南瓜馅为素" },
     text: {
       ru: "Паровые пельмени с мясом и луком. Тыквенные манты — полностью вегетарианские.",
@@ -52,6 +58,7 @@ export const MEALS: Meal[] = [
   },
   {
     kind: "breakfast", title: { ru: "Боорсок", en: "Boorsok", zh: "油馃" }, vegetarian: true,
+    art: "boorsok",
     text: {
       ru: "Румяные кусочки жареного теста. Подают к каждому чаю вместе с каймаком и вареньем.",
       en: "Golden pieces of fried dough. Served with every tea alongside kaymak and jam.",
@@ -60,6 +67,7 @@ export const MEALS: Meal[] = [
   },
   {
     kind: "breakfast", title: { ru: "Каймак с мёдом", en: "Kaymak with honey", zh: "奶皮配蜂蜜" }, vegetarian: true,
+    art: "kaymak",
     text: {
       ru: "Густые сливки с горным мёдом и свежим хлебом. Молоко — от коров, которые паслись в двухстах метрах от юрты.",
       en: "Thick cream with mountain honey and fresh bread. The milk comes from cows grazing two hundred metres from the yurt.",
@@ -68,6 +76,7 @@ export const MEALS: Meal[] = [
   },
   {
     kind: "breakfast", title: { ru: "Шорпо", en: "Shorpo", zh: "羊肉汤" },
+    art: "shorpo",
     text: {
       ru: "Наваристый суп на баранине с картошкой и зеленью. Утром в горах согревает лучше кофе.",
       en: "A rich mutton soup with potato and herbs. In the mountains it warms you better than coffee.",
@@ -76,6 +85,7 @@ export const MEALS: Meal[] = [
   },
   {
     kind: "snack", title: { ru: "Курут", en: "Kurut", zh: "奶疙瘩" }, vegetarian: true,
+    art: "kurut",
     text: {
       ru: "Солёные сухие шарики из кислого молока. Берут в дорогу: хранятся месяцами и утоляют жажду.",
       en: "Salty dried balls of sour milk. Taken on the road: they keep for months and quench thirst.",
@@ -84,6 +94,7 @@ export const MEALS: Meal[] = [
   },
   {
     kind: "snack", title: { ru: "Талкан", en: "Talkan", zh: "炒麦粉" }, vegetarian: true,
+    art: "talkan",
     text: {
       ru: "Молотое жареное зерно с сахаром или маслом. Дают детям и берут в долгие переходы.",
       en: "Ground roasted grain with sugar or butter. Given to children and taken on long rides.",
@@ -92,6 +103,7 @@ export const MEALS: Meal[] = [
   },
   {
     kind: "drink", title: { ru: "Кумыс", en: "Kumys", zh: "马奶酒" }, vegetarian: true,
+    art: "kumys",
     note: { ru: "Начните с половины пиалы", en: "Start with half a bowl", zh: "先喝半碗" },
     text: {
       ru: "Кобылье молоко особого брожения, слегка газированное и кисловатое. Пьют всё лето на джайлоо.",
@@ -101,6 +113,7 @@ export const MEALS: Meal[] = [
   },
   {
     kind: "drink", title: { ru: "Максым и чалап", en: "Maksym and chalap", zh: "马克西姆与恰拉普" }, vegetarian: true,
+    art: "maksym",
     text: {
       ru: "Прохладные зерновой и кисломолочный напитки. В жару их продают на каждом перекрёстке.",
       en: "Cool grain and sour-milk drinks. In the heat they are sold at every crossroads.",
@@ -109,6 +122,7 @@ export const MEALS: Meal[] = [
   },
   {
     kind: "drink", title: { ru: "Чай с горными травами", en: "Mountain herb tea", zh: "山草茶" }, vegetarian: true,
+    art: "chai",
     text: {
       ru: "Чабрец, мята, облепиха. Чай на столе весь вечер, пока идут разговоры: пиалу наливают наполовину — это вежливость, а не жадность.",
       en: "Thyme, mint, sea buckthorn. Tea stays on the table all evening: the bowl is filled halfway — that is politeness, not meanness.",
@@ -117,11 +131,12 @@ export const MEALS: Meal[] = [
   },
 ];
 
-export type Transport = { title: L; text: L; price: L; time: L; best: L };
+export type Transport = { title: L; text: L; price: L; time: L; best: L; art: ArtName };
 
 export const TRANSPORT: Transport[] = [
   {
     title: { ru: "Трансфер от Конок", en: "Konok transfer", zh: "Konok 接送" },
+    art: "transfer",
     text: {
       ru: "Водитель встречает в аэропорту или у гостиницы и везёт прямо до юрты. Говорит по-русски, часто и по-английски.",
       en: "A driver meets you at the airport or hotel and takes you straight to the yurt. Speaks Russian, often English too.",
@@ -133,6 +148,7 @@ export const TRANSPORT: Transport[] = [
   },
   {
     title: { ru: "Маршрутка", en: "Marshrutka minibus", zh: "小巴" },
+    art: "bus",
     text: {
       ru: "Самый дешёвый способ: от Западного автовокзала Бишкека до райцентра. Отправляются по мере заполнения.",
       en: "The cheapest way: from the West bus station in Bishkek to the district centre. They leave when full.",
@@ -144,6 +160,7 @@ export const TRANSPORT: Transport[] = [
   },
   {
     title: { ru: "Общее такси", en: "Shared taxi", zh: "拼车出租" },
+    art: "taxi",
     text: {
       ru: "Машина на четверых, уезжает, когда собираются все места. Договариваются на автовокзале, торг уместен.",
       en: "A car for four that leaves once all seats are taken. Arranged at the bus station; haggling is normal.",
@@ -155,6 +172,7 @@ export const TRANSPORT: Transport[] = [
   },
   {
     title: { ru: "Аренда машины", en: "Car rental", zh: "租车" },
+    art: "taxi",
     text: {
       ru: "Обычная легковая подойдёт для Иссык-Куля, Каракола и Чон-Кемина. Для Сон-Куля нужен внедорожник: грунтовка, камни, броды.",
       en: "An ordinary car is fine for Issyk-Kul, Karakol and Chon-Kemin. Son-Kul needs a 4×4: gravel, rocks and fords.",
@@ -166,6 +184,7 @@ export const TRANSPORT: Transport[] = [
   },
   {
     title: { ru: "Самолёт Бишкек — Ош", en: "Bishkek — Osh flight", zh: "比什凯克—奥什航班" },
+    art: "plane",
     text: {
       ru: "Час вместо двенадцати часов по горной трассе. Дальше до Арсланбоба — такси или маршрутка.",
       en: "One hour instead of twelve on the mountain highway. From there a taxi or minibus to Arslanbob.",
@@ -177,6 +196,7 @@ export const TRANSPORT: Transport[] = [
   },
   {
     title: { ru: "Верхом", en: "On horseback", zh: "骑马" },
+    art: "horse",
     text: {
       ru: "Последние километры до дальних юрт иногда проходят на лошади — вещи везёт вьючная лошадь.",
       en: "The last kilometres to remote yurts are sometimes ridden — a pack horse carries the luggage.",
@@ -205,11 +225,12 @@ export const EMERGENCY: Contact[] = [
   { title: { ru: "Аварийная газовая служба", en: "Gas emergency service", zh: "燃气抢修" }, phone: "104" },
 ];
 
-export type Tip = { title: L; text: L };
+export type Tip = { title: L; text: L; art?: ArtName };
 
 export const CONDITIONS: Tip[] = [
   {
     title: { ru: "Высота", en: "Altitude", zh: "海拔" },
+    art: "altitude",
     text: {
       ru: "Сон-Куль и Таш-Рабат — выше 3000 метров. В первый день не поднимайтесь бегом, пейте больше воды и откажитесь от алкоголя.",
       en: "Son-Kul and Tash-Rabat are above 3000 m. On the first day go slowly, drink more water and skip alcohol.",
@@ -218,6 +239,7 @@ export const CONDITIONS: Tip[] = [
   },
   {
     title: { ru: "Погода", en: "Weather", zh: "天气" },
+    art: "weather",
     text: {
       ru: "Летом днём +25, ночью на джайлоо может быть около нуля и выпадать снег. Тёплая куртка и шапка нужны даже в июле.",
       en: "In summer it is +25 by day; on the pastures nights can drop to zero with snow. A warm jacket and hat are needed even in July.",
@@ -226,6 +248,7 @@ export const CONDITIONS: Tip[] = [
   },
   {
     title: { ru: "Электричество", en: "Electricity", zh: "用电" },
+    art: "power",
     text: {
       ru: "В юртах чаще всего солнечная панель: хватает на свет и зарядку телефона вечером. Возьмите повербанк. Розетки европейские, 220 В.",
       en: "Yurts usually run on a solar panel: enough for light and charging a phone in the evening. Bring a power bank. Sockets are European, 220 V.",
@@ -234,6 +257,7 @@ export const CONDITIONS: Tip[] = [
   },
   {
     title: { ru: "Вода", en: "Water", zh: "饮水" },
+    art: "water",
     text: {
       ru: "Пейте бутилированную или кипячёную. Хозяева кипятят воду для чая весь день, в термос нальют с собой.",
       en: "Drink bottled or boiled water. Hosts boil water for tea all day and will fill your thermos.",
@@ -242,6 +266,7 @@ export const CONDITIONS: Tip[] = [
   },
   {
     title: { ru: "Туалет и душ", en: "Toilet and shower", zh: "厕所与淋浴" },
+    art: "toilet",
     text: {
       ru: "На джайлоо туалет — отдельная будка в стороне от юрт, душ бывает не везде, зато часто топят баню.",
       en: "On the pastures the toilet is a separate hut away from the yurts; a shower is not always there, but a banya often is.",
@@ -250,6 +275,7 @@ export const CONDITIONS: Tip[] = [
   },
   {
     title: { ru: "Связь", en: "Mobile signal", zh: "手机信号" },
+    art: "nosignal",
     text: {
       ru: "На Сон-Куле и в Таш-Рабате связи нет совсем. Предупредите близких заранее и скачайте карту офлайн.",
       en: "At Son-Kul and Tash-Rabat there is no signal at all. Warn your family in advance and download an offline map.",
@@ -258,6 +284,7 @@ export const CONDITIONS: Tip[] = [
   },
   {
     title: { ru: "Деньги", en: "Money", zh: "现金" },
+    art: "money",
     text: {
       ru: "В горах платят наличными сомами. Банкоматы есть в Кочкоре, Нарыне, Караколе и Бишкеке — снимайте заранее.",
       en: "In the mountains people pay cash in som. ATMs are in Kochkor, Naryn, Karakol and Bishkek — withdraw in advance.",
@@ -266,6 +293,7 @@ export const CONDITIONS: Tip[] = [
   },
   {
     title: { ru: "Дети и пожилые", en: "Children and older travellers", zh: "儿童与长者" },
+    art: "family",
     text: {
       ru: "Гостевые дома на Иссык-Куле и в Караколе подходят всем. Высокие джайлоо лучше брать с детьми старше шести лет.",
       en: "Guesthouses around Issyk-Kul and in Karakol suit everyone. High pastures are better with children over six.",

@@ -7,6 +7,7 @@ import { EMERGENCY, MEALS, PACKING, TRANSPORT } from "@/data/guide";
 import { pick, useLang } from "@/lib/i18n";
 import { Cover, Icon, type IconName } from "@/components/ui";
 import { Motif, OrnamentBand, ZigzagBand } from "@/components/ethno";
+import { Art } from "@/components/art";
 import { DrawIn, Reveal } from "@/components/motion";
 import { BookingCard } from "./BookingCard";
 
@@ -76,8 +77,13 @@ export function PlaceView({ place }: { place: Place }) {
           </section>
 
           <section className="border-t border-rule pt-8">
-            <span className="eyebrow">{t.place.facts}</span>
-            <h2 className="serif m-0 mt-4 text-[28px]">{t.place.factsTitle}</h2>
+            <div className="flex flex-wrap items-center gap-6">
+              <Art name={place.type === "yurt" ? "yurt" : "house"} label={pick(place.title, lang)} width={150} className="h-auto w-[150px] flex-none rounded-[3px]" />
+              <div>
+                <span className="eyebrow">{t.place.facts}</span>
+                <h2 className="serif m-0 mt-3 text-[28px]">{t.place.factsTitle}</h2>
+              </div>
+            </div>
             <ul className="m-0 mt-7 grid list-none grid-cols-1 gap-x-10 gap-y-0 p-0 sm:grid-cols-2">
               {facts.map((f) => (
                 <li key={f.k} className="flex items-center gap-4 border-b border-rule py-4">
@@ -97,7 +103,9 @@ export function PlaceView({ place }: { place: Place }) {
             <p className="m-0 mt-3 max-w-[60ch] text-[15px] leading-relaxed text-fg-muted">{t.place.tableSub}</p>
             <ul className="m-0 mt-6 grid list-none grid-cols-1 gap-x-10 gap-y-0 p-0 sm:grid-cols-2">
               {table.map((m) => (
-                <li key={m.title.ru} className="border-t border-rule py-5">
+                <li key={m.title.ru} className="flex gap-4 border-t border-rule py-5">
+                  <Art name={m.art} label={pick(m.title, lang)} width={96} className="h-auto w-[96px] flex-none rounded-[3px]" />
+                  <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-baseline justify-between gap-3">
                     <h3 className="serif m-0 text-[20px]">{pick(m.title, lang)}</h3>
                     {m.vegetarian && (
@@ -107,6 +115,7 @@ export function PlaceView({ place }: { place: Place }) {
                     )}
                   </div>
                   <p className="m-0 mt-2 text-[15px] leading-relaxed text-fg-muted">{pick(m.text, lang)}</p>
+                  </div>
                 </li>
               ))}
             </ul>
@@ -122,8 +131,9 @@ export function PlaceView({ place }: { place: Place }) {
 
             <ul className="m-0 mt-7 flex list-none flex-col p-0">
               {ways.map((w) => (
-                <li key={w.title.ru} className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-t border-rule py-4">
-                  <div className="min-w-0">
+                <li key={w.title.ru} className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-rule py-4">
+                  <Art name={w.art} label={pick(w.title, lang)} width={84} className="h-auto w-[84px] flex-none rounded-[3px]" />
+                  <div className="min-w-0 flex-1 basis-[220px]">
                     <div className="text-[16px]">{pick(w.title, lang)}</div>
                     <div className="mt-1 max-w-[52ch] text-[14px] leading-relaxed text-fg-muted">{pick(w.text, lang)}</div>
                   </div>
