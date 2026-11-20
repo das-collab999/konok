@@ -163,7 +163,7 @@ export function PlaceArt({ place, wide = false, className = "" }: { place: Place
       preserveAspectRatio="xMidYMid slice"
       className={className}
       role="img"
-      aria-label={`Горный пейзаж: ${place.place}. Фотографии появятся после съёмки.`}
+      aria-label={`${place.place.en} — mountain landscape`}
     >
       <defs>
         <linearGradient id={`${uid}-sky`} x1="0" y1="0" x2="0" y2="1">
@@ -208,7 +208,7 @@ export function PlaceArt({ place, wide = false, className = "" }: { place: Place
 export function Cover({ place, wide = false, className = "" }: { place: Place; wide?: boolean; className?: string }) {
   if (place.photo) {
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src={place.photo} alt={place.title} className={className} loading="lazy" decoding="async" />;
+    return <img src={place.photo} alt={place.title.ru} className={className} loading="lazy" decoding="async" />;
   }
   return <PlaceArt place={place} wide={wide} className={className} />;
 }

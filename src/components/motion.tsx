@@ -19,6 +19,10 @@ function useInView<T extends HTMLElement>(once = true) {
     const el = ref.current;
     if (!el) return;
     if (typeof IntersectionObserver === "undefined") { setInView(true); return; }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setInView(true); return; }
+
+    // Страховка: что бы ни случилось со скриптом, через 1,2 с блок виден.
+    const safety = setTimeout(() => setInView(true), 1200);
 
     const io = new IntersectionObserver(
       ([entry]) => {
@@ -32,7 +36,7 @@ function useInView<T extends HTMLElement>(once = true) {
       { rootMargin: "-10% 0px -10% 0px", threshold: 0.01 },
     );
     io.observe(el);
-    return () => io.disconnect();
+    return () => { clearTimeout(safety); io.disconnect(); };
   }, [once]);
 
   return { ref, inView };
