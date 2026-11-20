@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { EXTRAS, calcTotal, type Place } from "@/data/places";
+import { EXTRAS, calcTotal, toSom, type Place } from "@/data/places";
 import { formatDate } from "@/lib/useBooking";
 import { pick, useLang } from "@/lib/i18n";
 import { Icon } from "@/components/ui";
@@ -101,7 +101,10 @@ export function BookingCard({ place }: { place: Place }) {
           ))}
           <div className="mt-3 flex items-baseline justify-between border-t border-rule-strong pt-4 text-fg">
             <span className="text-[13px] uppercase tracking-[0.14em]">{t.common.total}</span>
-            <span className="serif text-[28px]">${total}</span>
+            <span className="text-right">
+              <span className="serif block text-[28px]">${total}</span>
+              <span className="block text-[12px] text-fg-subtle">≈ {toSom(total)} {t.common.som}</span>
+            </span>
           </div>
         </div>
 

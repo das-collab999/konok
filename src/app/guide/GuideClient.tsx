@@ -61,20 +61,20 @@ export function GuideClient() {
           return (
             <div key={kind} className="mt-12">
               <h3 className="eyebrow">{t.guide.kinds[kind]}</h3>
-              <ul className="m-0 mt-5 grid list-none grid-cols-1 gap-x-10 gap-y-0 p-0 sm:grid-cols-2">
+              <ul className="m-0 mt-5 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 lg:grid-cols-3">
                 {items.map((m) => (
-                  <li key={m.title.ru} className="flex gap-4 border-t border-rule py-5">
-                    <Art name={m.art} label={pick(m.title, lang)} width={104} className="h-auto w-[104px] flex-none rounded-[3px]" />
-                    <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-baseline justify-between gap-3">
-                      <h4 className="serif m-0 text-[21px]">{pick(m.title, lang)}</h4>
-                      {m.vegetarian && (
-                        <span className="rounded-full border border-moss px-2.5 py-0.5 text-[12px] text-moss">
-                          {m.note ? pick(m.note, lang) : t.guide.noMeat}
-                        </span>
-                      )}
-                    </div>
-                    <p className="m-0 mt-2 max-w-[56ch] text-[15px] leading-relaxed text-fg-muted">{pick(m.text, lang)}</p>
+                  <li key={m.title.ru} className="overflow-hidden border border-rule bg-paper">
+                    <Art name={m.art} label={pick(m.title, lang)} width={600} className="block h-auto w-full" />
+                    <div className="p-5">
+                      <div className="flex flex-wrap items-baseline justify-between gap-3">
+                        <h4 className="serif m-0 text-[22px]">{pick(m.title, lang)}</h4>
+                        {m.vegetarian && (
+                          <span className="rounded-full border border-moss px-2.5 py-0.5 text-[12px] text-moss">
+                            {m.note ? pick(m.note, lang) : t.guide.noMeat}
+                          </span>
+                        )}
+                      </div>
+                      <p className="m-0 mt-2.5 text-[15px] leading-relaxed text-fg-muted">{pick(m.text, lang)}</p>
                     </div>
                   </li>
                 ))}
@@ -98,8 +98,8 @@ export function GuideClient() {
 
           <ul className="m-0 mt-12 flex list-none flex-col p-0">
             {TRANSPORT.map((tr, i) => (
-              <RevealItem key={tr.title.ru} delay={i * 70} className="grid grid-cols-1 gap-x-8 gap-y-3 border-t border-rule py-7 last:border-b sm:grid-cols-[92px_1fr_auto]">
-                <Art name={tr.art} label={pick(tr.title, lang)} width={92} className="h-auto w-[92px] flex-none rounded-[3px]" />
+              <RevealItem key={tr.title.ru} delay={i * 70} className="grid grid-cols-1 gap-x-8 gap-y-3 border-t border-rule py-7 last:border-b sm:grid-cols-[168px_1fr_auto]">
+                <Art name={tr.art} label={pick(tr.title, lang)} width={168} className="h-auto w-[132px] flex-none sm:w-[168px]" />
                 <div>
                   <h3 className="serif m-0 text-[22px]">{pick(tr.title, lang)}</h3>
                   <p className="m-0 mt-2 max-w-[60ch] text-[15px] leading-relaxed text-fg-muted">{pick(tr.text, lang)}</p>
@@ -125,7 +125,7 @@ export function GuideClient() {
         <ul className="m-0 mt-10 grid list-none grid-cols-1 gap-x-10 gap-y-0 p-0 sm:grid-cols-2">
           {CONDITIONS.map((c) => (
             <li key={c.title.ru} className="flex gap-4 border-t border-rule py-6">
-              {c.art && <Art name={c.art} label={pick(c.title, lang)} width={92} className="h-auto w-[92px] flex-none rounded-[3px]" />}
+              {c.art && <Art name={c.art} label={pick(c.title, lang)} width={160} className="h-auto w-[124px] flex-none sm:w-[160px]" />}
               <div className="min-w-0">
                 <h3 className="serif m-0 text-[20px]">{pick(c.title, lang)}</h3>
                 <p className="m-0 mt-2 max-w-[56ch] text-[15px] leading-relaxed text-fg-muted">{pick(c.text, lang)}</p>

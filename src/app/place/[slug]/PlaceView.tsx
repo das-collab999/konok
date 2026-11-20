@@ -1,8 +1,9 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
-import type { Place } from "@/data/places";
+import { toSom, type Place } from "@/data/places";
+import { useFavourites } from "@/lib/favourites";
 import { EMERGENCY, MEALS, PACKING, TRANSPORT } from "@/data/guide";
 import { pick, useLang } from "@/lib/i18n";
 import { Cover, Icon, type IconName } from "@/components/ui";
@@ -13,6 +14,20 @@ import { BookingCard } from "./BookingCard";
 
 export function PlaceView({ place }: { place: Place }) {
   const { lang, t } = useLang();
+  const fav = useFavourites();
+  const [copied, setCopied] = useState(false);
+  const months = t.common.months.split(" ");
+
+  const share = async () => {
+    const url = window.location.href;
+    const title = pick(place.title, lang);
+    try {
+      if (navigator.share) { await navigator.share({ title, url }); return; }
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {}
+  };
 
   const facts: { k: string; v: string; icon: IconName }[] = [
     { k: t.place.fact.altitude, v: `${place.altitudeM} ${t.common.altitude}`, icon: "mount" },
@@ -54,8 +69,47 @@ export function PlaceView({ place }: { place: Place }) {
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[13px] text-fg-muted">
           <span className="inline-flex items-center gap-2"><Icon name="pin" size={15} strokeWidth={1.4} />{pick(place.place, lang)}</span>
           <span className="inline-flex items-center gap-2"><Icon name="mount" size={15} strokeWidth={1.4} />{place.altitudeM} {t.common.altitude}</span>
+          <span className="inline-flex items-center gap-2"><Icon name="coin" size={15} strokeWidth={1.4} />${place.pricePerPersonUsd} ≈ {toSom(place.pricePerPersonUsd)} {t.common.som}</span>
           <span className="inline-flex items-center gap-2 text-success"><Icon name="check" size={14} strokeWidth={2.4} />{t.common.verifiedFull}</span>
+          <span className="inline-flex items-center gap-2"><Icon name="car" size={15} strokeWidth={1.4} />{t.common.fromBishkek} {place.hoursFromBishkek} {t.common.hours}</span>
         </div>
+      </div>
+
+      <div className="mt-5 flex flex-wrap gap-3">
+        <button
+          type="button" onClick={() => fav.toggle(place.slug)} aria-pressed={fav.has(place.slug)}
+          className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-full border border-rule-strong px-5 text-[13px] text-fg transition-colors hover:border-ink"
+        >
+          <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true" fill={fav.has(place.slug) ? "#8E2420" : "none"} stroke="#8E2420" strokeWidth="1.8">
+            <path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z" />
+          </svg>
+          {t.common.favourite}
+        </button>
+        <button
+          type="button" onClick={share}
+          className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-full border border-rule-strong px-5 text-[13px] text-fg transition-colors hover:border-ink"
+        >
+          <Icon name="arrow" size={15} strokeWidth={1.8} />
+          {copied ? t.common.copied : t.common.share}
+        </button>
+      </div>
+
+      {/* сезон: когда здесь принимают */}
+      <div className="mt-6 border-t border-rule pt-5">
+        <span className="eyebrow">{t.common.season}</span>
+        <ul className="m-0 mt-3 grid list-none grid-cols-6 gap-1.5 p-0 sm:grid-cols-12">
+          {months.map((mo, i) => {
+            const n = i + 1;
+            const on = place.seasonFrom <= place.seasonTo
+              ? n >= place.seasonFrom && n <= place.seasonTo
+              : n >= place.seasonFrom || n <= place.seasonTo;
+            return (
+              <li key={mo} className={`rounded-full py-1.5 text-center text-[12px] ${on ? "bg-accent text-cream" : "bg-cream-2 text-fg-subtle"}`}>
+                {mo}
+              </li>
+            );
+          })}
+        </ul>
       </div>
 
       <div className="relative mt-8 overflow-hidden bg-cream-2">
@@ -78,7 +132,7 @@ export function PlaceView({ place }: { place: Place }) {
 
           <section className="border-t border-rule pt-8">
             <div className="flex flex-wrap items-center gap-6">
-              <Art name={place.type === "yurt" ? "yurt" : "house"} label={pick(place.title, lang)} width={150} className="h-auto w-[150px] flex-none rounded-[3px]" />
+              <Art name={place.type === "yurt" ? "yurt" : "house"} label={pick(place.title, lang)} width={280} className="h-auto w-[200px] flex-none sm:w-[280px]" />
               <div>
                 <span className="eyebrow">{t.place.facts}</span>
                 <h2 className="serif m-0 mt-3 text-[28px]">{t.place.factsTitle}</h2>
@@ -104,7 +158,7 @@ export function PlaceView({ place }: { place: Place }) {
             <ul className="m-0 mt-6 grid list-none grid-cols-1 gap-x-10 gap-y-0 p-0 sm:grid-cols-2">
               {table.map((m) => (
                 <li key={m.title.ru} className="flex gap-4 border-t border-rule py-5">
-                  <Art name={m.art} label={pick(m.title, lang)} width={96} className="h-auto w-[96px] flex-none rounded-[3px]" />
+                  <Art name={m.art} label={pick(m.title, lang)} width={168} className="h-auto w-[120px] flex-none sm:w-[168px]" />
                   <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-baseline justify-between gap-3">
                     <h3 className="serif m-0 text-[20px]">{pick(m.title, lang)}</h3>
@@ -132,7 +186,7 @@ export function PlaceView({ place }: { place: Place }) {
             <ul className="m-0 mt-7 flex list-none flex-col p-0">
               {ways.map((w) => (
                 <li key={w.title.ru} className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-rule py-4">
-                  <Art name={w.art} label={pick(w.title, lang)} width={84} className="h-auto w-[84px] flex-none rounded-[3px]" />
+                  <Art name={w.art} label={pick(w.title, lang)} width={140} className="h-auto w-[108px] flex-none sm:w-[140px]" />
                   <div className="min-w-0 flex-1 basis-[220px]">
                     <div className="text-[16px]">{pick(w.title, lang)}</div>
                     <div className="mt-1 max-w-[52ch] text-[14px] leading-relaxed text-fg-muted">{pick(w.text, lang)}</div>

@@ -4,6 +4,7 @@ import "./globals.css";
 import { LangProvider } from "@/lib/i18n";
 import { Header, Footer, TabBar } from "@/components/Header";
 import { Offline } from "@/components/Offline";
+import { ArtDefs } from "@/components/art";
 
 // Fonts are downloaded at build time and served from our own domain:
 // the site needs no outside request and works offline.
@@ -49,6 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="flex min-h-screen flex-col">
+        <ArtDefs />
         <LangProvider>
           <Offline />
           <Header />

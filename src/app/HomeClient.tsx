@@ -9,6 +9,8 @@ import { HeroArt, Icon, Tunduk, type IconName } from "@/components/ui";
 import { MOTIFS, Medallion, Motif, OrnamentBand, Shyrdak, TermeBand, ZigzagBand, type MotifName } from "@/components/ethno";
 import { DrawIn, Intro, Parallax, Reveal, RevealItem } from "@/components/motion";
 import { Art, type ArtName } from "@/components/art";
+import { KyrgyzMap } from "@/components/Map";
+import { useFavourites } from "@/lib/favourites";
 
 type Feature = "stove" | "bath" | "signal" | "car";
 
@@ -34,6 +36,8 @@ export function HomeClient({ places }: { places: Place[] }) {
   const [date, setDate] = useState("");
   const [today, setToday] = useState("");
   const [guests, setGuests] = useState(2);
+  const [onlyFav, setOnlyFav] = useState(false);
+  const fav = useFavourites();
 
   useEffect(() => {
     const now = new Date();
@@ -45,8 +49,11 @@ export function HomeClient({ places }: { places: Place[] }) {
   }, []);
 
   const stays = useMemo(
-    () => places.filter((p) => (region === "all" || p.region === region) && FEATURES.every((f) => !feats.includes(f.key) || f.test(p))),
-    [places, region, feats],
+    () => places.filter((p) =>
+      (region === "all" || p.region === region) &&
+      FEATURES.every((f) => !feats.includes(f.key) || f.test(p)) &&
+      (!onlyFav || fav.has(p.slug))),
+    [places, region, feats, onlyFav, fav],
   );
 
   const query = new URLSearchParams({ g: String(guests), d: date }).toString();
@@ -205,8 +212,14 @@ export function HomeClient({ places }: { places: Place[] }) {
                 {pick(f.label, lang)}
               </button>
             ))}
-            {(feats.length > 0 || region !== "all") && (
-              <button type="button" onClick={() => { setFeats([]); setRegion("all"); }} className="h-11 cursor-pointer px-2 text-[13px] text-fg-subtle underline underline-offset-4 hover:text-fg">
+            <button type="button" aria-pressed={onlyFav} onClick={() => setOnlyFav((v) => !v)} className={chip(onlyFav)}>
+              <svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true" fill={onlyFav ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.8">
+                <path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z" />
+              </svg>
+              {t.common.onlyFavourites}{fav.list.length > 0 ? ` · ${fav.list.length}` : ""}
+            </button>
+            {(feats.length > 0 || region !== "all" || onlyFav) && (
+              <button type="button" onClick={() => { setFeats([]); setRegion("all"); setOnlyFav(false); }} className="h-11 cursor-pointer px-2 text-[13px] text-fg-subtle underline underline-offset-4 hover:text-fg">
                 {t.common.reset}
               </button>
             )}
@@ -216,8 +229,8 @@ export function HomeClient({ places }: { places: Place[] }) {
         {stays.length === 0 ? (
           <div className="mt-12 border border-dashed border-rule-strong px-8 py-20 text-center">
             <Motif name="kyial" size={64} className="mx-auto text-rule-strong" />
-            <p className="serif m-0 mt-5 text-[24px]">{t.home.emptyTitle}</p>
-            <p className="m-0 mt-3 text-[15px] text-fg-muted">{t.home.emptySub}</p>
+            <p className="serif m-0 mt-5 text-[24px]">{onlyFav && fav.list.length === 0 ? t.common.favourites : t.home.emptyTitle}</p>
+            <p className="m-0 mt-3 text-[15px] text-fg-muted">{onlyFav && fav.list.length === 0 ? t.common.noFavourites : t.home.emptySub}</p>
           </div>
         ) : (
           <div className="mt-12 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
@@ -228,6 +241,20 @@ export function HomeClient({ places }: { places: Place[] }) {
             ))}
           </div>
         )}
+      </section>
+
+      {/* ---------------------------------------------------------- Карта */}
+      <section className="mx-auto max-w-[1280px] px-5 pb-6 pt-12 sm:px-10">
+        <div className="flex flex-wrap items-end justify-between gap-6 border-t border-rule pt-10">
+          <div className="max-w-[30rem]">
+            <span className="eyebrow">Кыргызстан</span>
+            <h2 className="display m-0 mt-4 text-[clamp(26px,4vw,42px)]">{t.common.mapTitle}</h2>
+          </div>
+          <p className="m-0 max-w-[42ch] text-[15px] leading-relaxed text-fg-muted">{t.common.mapSub}</p>
+        </div>
+        <div className="mt-8 border border-rule bg-paper p-4 sm:p-6">
+          <KyrgyzMap places={places} query={query} />
+        </div>
       </section>
 
       {/* --------------------------------------------------- Путеводитель */}
@@ -246,7 +273,7 @@ export function HomeClient({ places }: { places: Place[] }) {
             {t.home.guideLinks.map((g, i) => (
               <li key={g.t} className="bg-cream-2">
                 <Link href={GUIDE_HREFS[i]} className="flex h-full flex-col gap-3 p-6 text-fg no-underline transition-colors hover:bg-paper">
-                  <Art name={GUIDE_ART[i]} label={g.t} width={120} className="h-auto w-[120px] rounded-[3px]" />
+                  <Art name={GUIDE_ART[i]} label={g.t} width={420} className="-mx-6 -mt-6 mb-1 block h-auto w-[calc(100%+3rem)]" />
                   <h3 className="serif m-0 text-[20px]">{g.t}</h3>
                   <p className="m-0 text-[14px] leading-relaxed text-fg-muted">{g.d}</p>
                   <span className="mt-auto inline-flex items-center gap-2 pt-3 text-[12px] font-semibold uppercase tracking-[0.14em] text-accent">
@@ -314,7 +341,7 @@ export function HomeClient({ places }: { places: Place[] }) {
               <RevealItem key={e.t} delay={i * 70} className="flex flex-wrap items-baseline gap-x-8 gap-y-3 border-t border-rule py-7 last:border-b">
                 <span className="serif w-10 text-[15px] text-accent">{String(i + 1).padStart(2, "0")}</span>
                 <div className="flex flex-1 basis-[260px] items-start gap-5">
-                  <Art name={EXP_ART[i]} label={e.t} width={116} className="h-auto w-[116px] flex-none rounded-[3px]" />
+                  <Art name={EXP_ART[i]} label={e.t} width={200} className="h-auto w-[140px] flex-none sm:w-[200px]" />
                   <div>
                     <h3 className="serif m-0 text-[22px]">{e.t}</h3>
                     <p className="m-0 mt-2 max-w-[60ch] text-[15px] leading-relaxed text-fg-muted">{e.d}</p>

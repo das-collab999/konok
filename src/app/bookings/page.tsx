@@ -7,10 +7,15 @@ import { readBookings, writeBookings, type SavedBooking } from "@/lib/bookings";
 import { useLang } from "@/lib/i18n";
 import { Icon } from "@/components/ui";
 import { Motif } from "@/components/ethno";
+import { PLACES } from "@/data/places";
+import { useFavourites } from "@/lib/favourites";
+import { PlaceCard } from "@/components/PlaceCard";
 
 export default function BookingsPage() {
   const { lang, t } = useLang();
   const [list, setList] = useState<SavedBooking[] | null>(null);
+  const fav = useFavourites();
+  const saved = PLACES.filter((p) => fav.has(p.slug));
 
   useEffect(() => {
     setList([...readBookings()].reverse());
@@ -25,7 +30,7 @@ export default function BookingsPage() {
   };
 
   return (
-    <div className="mx-auto max-w-[1000px] px-5 pb-10 pt-10 sm:px-10">
+    <div className="mx-auto max-w-[1100px] px-5 pb-10 pt-10 sm:px-10">
       <span className="eyebrow">{t.bookings.eyebrow}</span>
       <h1 className="display m-0 mt-4 text-[clamp(30px,5.6vw,60px)]">{t.bookings.title}</h1>
       <p className="m-0 mt-6 max-w-[58ch] text-[16px] leading-relaxed text-fg-muted">{t.bookings.text}</p>
@@ -80,6 +85,19 @@ export default function BookingsPage() {
           ))}
         </ul>
       )}
+
+      {/* Избранное */}
+      <section className="mt-20 border-t border-rule pt-10">
+        <span className="eyebrow">{t.common.favourites}</span>
+        <h2 className="display m-0 mt-4 text-[clamp(24px,4vw,40px)]">{t.common.favourites}</h2>
+        {saved.length === 0 ? (
+          <p className="m-0 mt-5 max-w-[52ch] text-[15px] text-fg-muted">{t.common.noFavourites}</p>
+        ) : (
+          <div className="mt-8 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+            {saved.map((p) => <PlaceCard key={p.slug} place={p} />)}
+          </div>
+        )}
+      </section>
     </div>
   );
 }
