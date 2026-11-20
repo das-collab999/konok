@@ -2,10 +2,11 @@
 
 import { useSearchParams } from "next/navigation";
 import { EXTRAS, calcTotal, type Place } from "@/data/places";
+import type { Lang } from "@/lib/i18n";
 
 const clamp = (v: number, lo: number, hi: number, d: number) => (Number.isFinite(v) ? Math.min(hi, Math.max(lo, v)) : d);
 
-/** Reads nights / guests / date / extras from the URL (?n=2&g=2&d=2027-07-12&x=transfer,horse). */
+/** Читает параметры брони из адреса страницы (?n=2&g=2&d=2027-07-12&x=transfer,horse). */
 export function useBooking(place: Place) {
   const sp = useSearchParams();
   const nights = clamp(parseInt(sp.get("n") ?? "", 10), 1, 14, 2);
@@ -17,19 +18,12 @@ export function useBooking(place: Place) {
   return { nights, guests, date, extras, lines, total, query };
 }
 
-/** 12 июля 2027 */
-export function formatDate(iso: string) {
-  if (!iso) return "";
-  const d = new Date(`${iso}T00:00:00`);
-  if (Number.isNaN(d.getTime())) return "";
-  return d.toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" }).replace(/\s*г\.$/, "");
-}
+const LOCALES: Record<Lang, string> = { ru: "ru-RU", en: "en-GB", zh: "zh-CN" };
 
-/** Check-in + nights, as "12–14 июля" style range end. */
-export function checkOut(iso: string, nights: number) {
+/** Дата словами на языке гостя. */
+export function formatDate(iso: string, lang: Lang = "ru") {
   if (!iso) return "";
   const d = new Date(`${iso}T00:00:00`);
   if (Number.isNaN(d.getTime())) return "";
-  d.setDate(d.getDate() + nights);
-  return d.toISOString().slice(0, 10);
+  return d.toLocaleDateString(LOCALES[lang], { day: "numeric", month: "long", year: "numeric" }).replace(/\s*г\.$/, "");
 }

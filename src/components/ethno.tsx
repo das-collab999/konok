@@ -1,3 +1,5 @@
+import type { L } from "@/lib/i18n";
+
 /**
  * Кыргызская графика сайта.
  *
@@ -95,10 +97,10 @@ export type MotifName = "kochkor" | "bugu" | "itkuyruk" | "kyial" | "gul" | "tum
 const curlBig = curl({ r0: 56, rEnd: 7, th0: -90, th1: 335, w0: 22 });
 const curlMid = curl({ r0: 40, rEnd: 5.5, th0: -90, th1: 330, w0: 16 });
 
-export const MOTIFS: Record<MotifName, { label: string; meaning: string; view: string; parts: Part[] }> = {
+export const MOTIFS: Record<MotifName, { label: string; meaning: L; view: string; parts: Part[] }> = {
   kochkor: {
     label: "Кочкор мүйүз",
-    meaning: "Рога барана — достаток и сила. Самый частый узор на шырдаке.",
+    meaning: { ru: "Рога барана — достаток и сила. Самый частый узор на шырдаке.", en: "Ram's horns — plenty and strength. The commonest pattern on a shyrdak.", zh: "公羊角——富足与力量，什尔达克上最常见的纹样。" },
     view: "-120 -96 240 180",
     parts: [
       { d: curlBig, x: -44, y: 8, rot: -135 },
@@ -108,7 +110,7 @@ export const MOTIFS: Record<MotifName, { label: string; meaning: string; view: s
   },
   bugu: {
     label: "Бугу мүйүз",
-    meaning: "Рога оленя — долгая жизнь и связь с горами.",
+    meaning: { ru: "Рога оленя — долгая жизнь и связь с горами.", en: "Deer antlers — long life and a bond with the mountains.", zh: "鹿角——长寿，与群山的联结。" },
     view: "-128 -140 256 230",
     parts: [
       { d: curlBig, x: -46, y: 22, rot: -135 },
@@ -120,7 +122,7 @@ export const MOTIFS: Record<MotifName, { label: string; meaning: string; view: s
   },
   itkuyruk: {
     label: "Ит куйрук",
-    meaning: "Собачий хвост — оберег стада и дома, бежит по краю ковра.",
+    meaning: { ru: "Собачий хвост — оберег стада и дома, бежит по краю ковра.", en: "Dog's tail — a guard for the herd and the home, it runs along the rug's edge.", zh: "狗尾——守护畜群与家宅，沿毡毯边缘延展。" },
     view: "-160 -86 320 150",
     parts: [
       { d: "M-138 36 H138 V48 H-138 Z" },
@@ -132,7 +134,7 @@ export const MOTIFS: Record<MotifName, { label: string; meaning: string; view: s
   },
   kyial: {
     label: "Кыял",
-    meaning: "Свободный завиток — мечта мастерицы, в двух коврах не повторяется.",
+    meaning: { ru: "Свободный завиток — мечта мастерицы, в двух коврах не повторяется.", en: "A free curl — the craftswoman's imagination; it never repeats in two rugs.", zh: "自由卷纹——工匠的想象，两张毯子绝不重样。" },
     view: "-118 -112 236 210",
     parts: [
       { d: curlBig, x: -30, y: 30, rot: -25 },
@@ -142,7 +144,7 @@ export const MOTIFS: Record<MotifName, { label: string; meaning: string; view: s
   },
   gul: {
     label: "Гүл",
-    meaning: "Цветок джайлоо — короткое горное лето.",
+    meaning: { ru: "Цветок джайлоо — короткое горное лето.", en: "A pasture flower — the short mountain summer.", zh: "牧场之花——短暂的高山夏天。" },
     view: "-116 -116 232 232",
     parts: [
       { d: curlMid, y: -40, rot: 0 },
@@ -154,7 +156,7 @@ export const MOTIFS: Record<MotifName, { label: string; meaning: string; view: s
   },
   tumar: {
     label: "Тумарча",
-    meaning: "Треугольный оберег — его зашивают в одежду детям.",
+    meaning: { ru: "Треугольный оберег — его зашивают в одежду детям.", en: "A triangular amulet — sewn into children's clothes.", zh: "三角护符——缝在孩子的衣服里。" },
     view: "-106 -104 212 186",
     parts: [
       { d: "M0 -88 L76 52 H-76 Z M0 -44 L40 28 H-44 Z" },
@@ -326,6 +328,86 @@ export function Shyrdak({
       })}
 
       <rect width={w} height={h} filter={`url(#${id}-felt)`} opacity="0.17" style={{ mixBlendMode: "multiply" }} />
+    </svg>
+  );
+}
+
+/* ────────────────────────────── терме боо: тканая лента */
+
+/**
+ * Терме боо — узкая тканая лента, которой перевязывают остов юрты.
+ * Геометрия строгая: ромбы, треугольники и ступеньки рядами.
+ */
+export function TermeBand({
+  id,
+  height = 30,
+  bg = "#8E2420",
+  a = "#EDE2C8",
+  b = "#C08A2E",
+  className = "",
+}: { id: string; height?: number; bg?: string; a?: string; b?: string; className?: string }) {
+  const cell = 60;
+  const k = height / 60;
+  return (
+    <svg width="100%" height={height} className={className} aria-hidden="true" style={{ display: "block" }}>
+      <defs>
+        <pattern id={id} width={cell * k} height={height} patternUnits="userSpaceOnUse">
+          <g transform={`scale(${k})`}>
+            <rect width={cell} height="60" fill={bg} />
+            {/* верхняя и нижняя кромка — ступеньки */}
+            <path d="M0 0 h60 v6 h-60 z M0 54 h60 v6 h-60 z" fill={b} opacity="0.85" />
+            {/* ряд ромбов */}
+            <path d="M30 10 L50 30 L30 50 L10 30 Z" fill={a} />
+            <path d="M30 18 L42 30 L30 42 L18 30 Z" fill={bg} />
+            <path d="M30 24 L36 30 L30 36 L24 30 Z" fill={b} />
+            {/* треугольники по краям ячейки */}
+            <path d="M0 30 L10 20 L10 40 Z M60 30 L50 20 L50 40 Z" fill={a} />
+          </g>
+        </pattern>
+      </defs>
+      <rect width="100%" height={height} fill={`url(#${id})`} />
+    </svg>
+  );
+}
+
+/**
+ * Ала-кийиз — вваленный войлочный ковёр: поле из треугольников,
+ * в каждом свой завиток. Служит фоном крупных блоков.
+ */
+export function AlaKiyiz({
+  id,
+  className = "",
+  bg = "#8E2420",
+  cream = "#EDE2C8",
+  dark = "#2B4664",
+}: { id: string; className?: string; bg?: string; cream?: string; dark?: string }) {
+  const curlSmall = curl({ r0: 26, rEnd: 4, th0: -90, th1: 320, w0: 11 });
+  return (
+    <svg viewBox="0 0 240 240" preserveAspectRatio="xMidYMid slice" className={className} aria-hidden="true">
+      <defs>
+        <pattern id={`${id}-p`} width="240" height="240" patternUnits="userSpaceOnUse">
+          <rect width="240" height="240" fill={bg} />
+          {/* сетка треугольников */}
+          <path d="M0 0 L120 0 L60 120 Z" fill={cream} />
+          <path d="M120 0 L240 0 L180 120 Z" fill={dark} />
+          <path d="M60 120 L180 120 L120 240 Z" fill={cream} />
+          <path d="M0 120 L60 120 L0 240 Z M180 120 L240 120 L240 240 Z" fill={dark} />
+          {/* завитки внутри */}
+          <g fill={bg}>
+            <g transform="translate(60,36) rotate(-135) scale(0.8)"><path d={curlSmall} /></g>
+            <g transform="translate(120,156) rotate(-135) scale(0.8)"><path d={curlSmall} /></g>
+          </g>
+          <g fill={cream}>
+            <g transform="translate(180,36) rotate(-135) scale(0.8)"><path d={curlSmall} /></g>
+          </g>
+        </pattern>
+        <filter id={`${id}-felt`}>
+          <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch" />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+      </defs>
+      <rect width="240" height="240" fill={`url(#${id}-p)`} />
+      <rect width="240" height="240" filter={`url(#${id}-felt)`} opacity="0.2" style={{ mixBlendMode: "multiply" }} />
     </svg>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLang } from "@/lib/i18n";
 
 const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -11,6 +12,7 @@ const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
  * это нужно в горах, где связи нет совсем.
  */
 export function Offline() {
+  const { t } = useLang();
   const [offline, setOffline] = useState(false);
 
   useEffect(() => {
@@ -31,7 +33,7 @@ export function Offline() {
 
   return (
     <div role="status" className="sticky top-0 z-[60] bg-ink px-4 py-2 text-center text-[13px] text-cream">
-      Нет интернета. Открываются страницы, которые вы уже смотрели, и ваши брони.
+      {t.offline}
     </div>
   );
 }

@@ -6,22 +6,17 @@ import { useRouter } from "next/navigation";
 import type { Place } from "@/data/places";
 import { formatDate, useBooking } from "@/lib/useBooking";
 import { saveBooking } from "@/lib/bookings";
+import { pick, useLang } from "@/lib/i18n";
 import { Icon } from "@/components/ui";
 import { Motif } from "@/components/ethno";
-
-// MVP: no real charge. The payment module is connected later (README, section 7).
-const METHODS = [
-  { id: "card", label: "Visa / Mastercard", note: "Для туристов из любой страны" },
-  { id: "elsom", label: "Элсом", note: "Электронный кошелёк Кыргызстана" },
-  { id: "mbank", label: "MBank", note: "Перевод по QR-коду" },
-];
 
 const field = "h-12 w-full border-0 border-b border-rule-strong bg-transparent px-0 text-[16px] text-fg outline-none focus:border-ink";
 
 export function PayForm({ place }: { place: Place }) {
   const router = useRouter();
+  const { lang, t } = useLang();
   const { nights, guests, date, total, query } = useBooking(place);
-  const [method, setMethod] = useState("card");
+  const [method, setMethod] = useState(0);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -31,24 +26,20 @@ export function PayForm({ place }: { place: Place }) {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (name.trim().length < 2 || phone.replace(/\D/g, "").length < 7) {
-      setError("Введите имя и телефон, чтобы хозяин мог с вами связаться.");
+      setError(t.pay.error);
       return;
     }
     setError("");
     setSending(true);
 
-    // Бронь уходит в базу (если она подключена) и всегда сохраняется в телефоне.
     const code = "KNK-" + String(Math.floor(10000 + Math.random() * 90000));
     await saveBooking({
       code,
       slug: place.slug,
-      title: place.title,
-      place: place.place,
-      host: place.host,
-      nights,
-      guests,
-      date,
-      total,
+      title: pick(place.title, lang),
+      place: pick(place.place, lang),
+      host: pick(place.host, lang),
+      nights, guests, date, total,
       name: name.trim(),
       phone: phone.trim(),
       status: "pending",
@@ -59,18 +50,19 @@ export function PayForm({ place }: { place: Place }) {
 
   return (
     <div className="mx-auto max-w-[840px] px-5 pb-16 pt-8 sm:px-10">
-      <Link href={`/place/${place.slug}/`} className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.16em] text-fg-muted no-underline hover:text-fg">
-        <Icon name="back" size={15} strokeWidth={1.6} /> Назад к месту
+      <Link href={`/place/${place.slug}/`} className="inline-flex h-11 items-center gap-2 text-[13px] text-fg-muted no-underline hover:text-fg">
+        <Icon name="back" size={15} strokeWidth={1.6} /> {t.pay.back}
       </Link>
 
       <Motif name="kochkor" size={44} className="mt-6 text-ochre" />
-      <h1 className="display m-0 mt-4 text-[clamp(30px,5vw,56px)]">Оформление брони</h1>
+      <h1 className="display m-0 mt-4 text-[clamp(28px,5vw,56px)]">{t.pay.title}</h1>
 
       <div className="mt-8 flex flex-wrap items-end justify-between gap-4 border-y border-rule py-6">
         <div className="min-w-0">
-          <p className="serif m-0 text-[20px]">{place.title}</p>
-          <p className="m-0 mt-2 text-[12px] uppercase tracking-[0.14em] text-fg-subtle">
-            {place.place} · {nights} ноч. · {guests} гост.{date ? ` · заезд ${formatDate(date)}` : ""}
+          <p className="serif m-0 text-[20px]">{pick(place.title, lang)}</p>
+          <p className="m-0 mt-2 text-[13px] text-fg-subtle">
+            {pick(place.place, lang)} · {nights} {t.common.nights} · {guests} {t.common.guests}
+            {date ? ` · ${t.place.arrival}: ${formatDate(date, lang)}` : ""}
           </p>
         </div>
         <span className="serif text-[32px]">${total}</span>
@@ -79,50 +71,41 @@ export function PayForm({ place }: { place: Place }) {
       <form onSubmit={submit} noValidate className="mt-10 flex flex-col gap-10">
         <div className="grid gap-x-10 gap-y-7 sm:grid-cols-2">
           <div className="flex flex-col gap-2">
-            <label htmlFor="p-name" className="eyebrow">Имя и фамилия</label>
+            <label htmlFor="p-name" className="eyebrow">{t.pay.name}</label>
             <input id="p-name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" placeholder="Anna Schmidt" className={field} />
           </div>
           <div className="flex flex-col gap-2">
-            <label htmlFor="p-phone" className="eyebrow">Телефон или WhatsApp</label>
+            <label htmlFor="p-phone" className="eyebrow">{t.pay.phone}</label>
             <input id="p-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" placeholder="+49 …" className={field} />
           </div>
           <div className="flex flex-col gap-2 sm:col-span-2">
-            <label htmlFor="p-mail" className="eyebrow">Email (необязательно)</label>
+            <label htmlFor="p-mail" className="eyebrow">{t.pay.email}</label>
             <input id="p-mail" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" placeholder="anna@example.com" className={field} />
           </div>
         </div>
 
         <fieldset className="m-0 border-0 p-0">
-          <legend className="eyebrow mb-4">Способ оплаты</legend>
+          <legend className="eyebrow mb-4">{t.pay.method}</legend>
           <div className="flex flex-col">
-            {METHODS.map((m) => (
-              <label
-                key={m.id}
-                className={`flex cursor-pointer items-center gap-4 border-b py-4 transition-colors ${
-                  method === m.id ? "border-ink" : "border-rule"
-                }`}
-              >
-                <input type="radio" name="pay" checked={method === m.id} onChange={() => setMethod(m.id)} className="h-4 w-4 accent-[#7f2420]" />
+            {t.pay.methods.map((m, i) => (
+              <label key={m.t} className={`flex cursor-pointer items-center gap-4 border-b py-4 transition-colors ${method === i ? "border-ink" : "border-rule"}`}>
+                <input type="radio" name="pay" checked={method === i} onChange={() => setMethod(i)} className="h-5 w-5 accent-[#8e2420]" />
                 <span className="flex flex-1 flex-wrap items-baseline justify-between gap-2">
-                  <span className="text-[16px]">{m.label}</span>
-                  <span className="text-[12px] uppercase tracking-[0.12em] text-fg-subtle">{m.note}</span>
+                  <span className="text-[16px]">{m.t}</span>
+                  <span className="text-[13px] text-fg-subtle">{m.d}</span>
                 </span>
               </label>
             ))}
           </div>
         </fieldset>
 
-        {error && (
-          <p role="alert" className="m-0 border-l-2 border-accent bg-accent-soft px-4 py-3 text-[14px] text-accent">{error}</p>
-        )}
+        {error && <p role="alert" className="m-0 border-l-2 border-accent bg-accent-soft px-4 py-3 text-[14px] text-accent">{error}</p>}
 
         <div className="flex flex-wrap items-center gap-6">
           <button type="submit" disabled={sending} className="pill pill-solid w-full disabled:opacity-60 sm:w-auto">
-            {sending ? "Отправляем…" : `Отправить бронь · $${total}`}
+            {sending ? t.pay.sending : `${t.pay.submit} · $${total}`}
           </button>
-          <p className="m-0 text-[12px] leading-relaxed text-fg-subtle">
-            Демо-режим: деньги не списываются.<br />Данные карты на сайте не хранятся.
-          </p>
+          <p className="m-0 text-[13px] leading-relaxed text-fg-subtle">{t.pay.note}</p>
         </div>
       </form>
     </div>

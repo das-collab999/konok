@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { LangProvider } from "@/lib/i18n";
-import { Header, Footer } from "@/components/Header";
+import { Header, Footer, TabBar } from "@/components/Header";
 import { Offline } from "@/components/Offline";
 
 // Fonts are downloaded at build time and served from our own domain:
@@ -40,6 +40,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ru" className={`${inter.variable} ${playfair.variable}`}>
       <head>
+        {/* Анимации включаются только когда скрипт работает: без него текст виден сразу. */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('has-js')" }} />
         <link rel="apple-touch-icon" href={`${base}/icon-180.png`} />
         <link
           rel="icon"
@@ -52,6 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
+          <TabBar />
         </LangProvider>
       </body>
     </html>
