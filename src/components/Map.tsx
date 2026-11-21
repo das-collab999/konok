@@ -70,7 +70,14 @@ export function KyrgyzMap({
   }, [places, lang, t]);
 
   const visibleItems = items.filter((i) => (i.type === "place" ? true : !hidden.includes(i.poi.kind)));
-  const listItems = visibleItems.filter((i) => !q || i.name.toLowerCase().includes(q.toLowerCase()));
+  const ORDER = ["stays", "capital", "city", "sight", "museum", "nature"];
+  const listItems = visibleItems
+    .filter((i) => !q || i.name.toLowerCase().includes(q.toLowerCase()))
+    .sort((a, b) => {
+      const ka = a.type === "place" ? "stays" : a.poi.kind;
+      const kb = b.type === "place" ? "stays" : b.poi.kind;
+      return ORDER.indexOf(ka) - ORDER.indexOf(kb) || a.name.localeCompare(b.name);
+    });
   const sel = items.find((i) => i.id === selId) ?? null;
 
   // видимая часть
@@ -116,6 +123,13 @@ export function KyrgyzMap({
     setOff({ x: clamp(drag.current.ox - dx, -lim, lim), y: clamp(drag.current.oy - dy, -lim, lim) });
   };
   const onPointerUp = () => { drag.current = null; };
+
+  /** Заголовок группы: «Жильё», «Города», «Природа» — чтобы длинный список читался. */
+  const kindOf = (i: Item) => (i.type === "place" ? "stays" : i.poi.kind);
+  const kindName = (k: string) =>
+    k === "stays" ? t.nav.stays : pick(POI_KINDS.find((x) => x.kind === k)!.label, lang);
+  const groupLabel = (i: Item, prev?: Item) =>
+    !prev || kindOf(prev) !== kindOf(i) ? kindName(kindOf(i)) : null;
 
   const toggleKind = (k: PoiKind) => setHidden((cur) => (cur.includes(k) ? cur.filter((x) => x !== k) : [...cur, k]));
 
@@ -278,14 +292,21 @@ export function KyrgyzMap({
       {/* список точек */}
       {showList && (
       <aside className="min-w-0">
-        <label htmlFor="map-q" className="eyebrow">{t.common.mapList}</label>
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <label htmlFor="map-q" className="eyebrow">{t.common.mapList}</label>
+          <span className="text-[12px] text-fg-subtle">{listItems.length}</span>
+        </div>
+        <p className="m-0 mt-1.5 text-[13px] leading-snug text-fg-muted">{t.common.mapListHint}</p>
         <input
           id="map-q" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t.common.mapSearch}
-          className="mt-3 h-11 w-full border-0 border-b border-rule-strong bg-transparent px-0 text-[15px] outline-none focus:border-ink"
+          className="mt-3 h-11 w-full rounded-full border border-rule-strong bg-paper px-4 text-[15px] outline-none focus:border-ink"
         />
-        <ul className="m-0 mt-3 flex max-h-[520px] list-none flex-col overflow-y-auto p-0">
-          {listItems.map((i) => (
+        <ul className="m-0 mt-3 flex max-h-[520px] list-none flex-col overflow-y-auto p-0 lg:max-h-[640px]">
+          {listItems.map((i, n) => (
             <li key={i.id}>
+              {groupLabel(i, listItems[n - 1]) && (
+                <p className="eyebrow m-0 mt-4 border-t border-rule pt-3 first:mt-0">{groupLabel(i, listItems[n - 1])}</p>
+              )}
               <button
                 type="button"
                 onClick={() => focus(i)}
