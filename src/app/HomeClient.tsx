@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { REGIONS, type Place, type Region } from "@/data/places";
 import { pick, useLang } from "@/lib/i18n";
@@ -8,37 +8,35 @@ import { PlaceCard } from "@/components/PlaceCard";
 import { HeroArt, Icon, Tunduk, type IconName } from "@/components/ui";
 import { MOTIFS, Medallion, Motif, OrnamentBand, Shyrdak, TermeBand, ZigzagBand, type MotifName } from "@/components/ethno";
 import { DrawIn, Intro, Parallax, Reveal, RevealItem } from "@/components/motion";
-import { Art, type ArtName } from "@/components/art";
+import { Art } from "@/components/art";
 import { KyrgyzMap } from "@/components/Map";
 import { STORIES } from "@/data/stories";
-import { useFavourites } from "@/lib/favourites";
-
-type Feature = "stove" | "bath" | "signal" | "car";
-
-const FEATURES: { key: Feature; icon: IconName; test: (p: Place) => boolean; label: { ru: string; en: string; zh: string } }[] = [
-  { key: "stove", icon: "fire", test: (p) => p.hasStove, label: { ru: "Печка", en: "Stove", zh: "有炉子" } },
-  { key: "bath", icon: "bath", test: (p) => p.hasBath, label: { ru: "Баня или душ", en: "Banya or shower", zh: "有浴" } },
-  { key: "signal", icon: "signal", test: (p) => p.hasSignal, label: { ru: "Есть связь", en: "Mobile signal", zh: "有信号" } },
-  { key: "car", icon: "car", test: (p) => p.carAccess === "car", label: { ru: "Обычная машина", en: "Ordinary car", zh: "轿车可达" } },
-];
 
 const MOTIF_ORDER: MotifName[] = ["kochkor", "bugu", "itkuyruk", "kyial", "gul", "tumar"];
 const GUIDE_HREFS = ["/guide/#food", "/guide/#road", "/guide/#conditions", "/guide/#help"];
-const EXP_ART: ArtName[] = ["felt", "cooking", "horse", "games"];
-const GUIDE_ART: ArtName[] = ["beshbarmak", "transfer", "weather", "nosignal"];
+const GUIDE_ART = ["beshbarmak", "transfer", "weather", "nosignal"] as const;
 const PERK_ICONS: IconName[] = ["shield", "camera", "chat", "coin"];
 const HOW_ICONS: IconName[] = ["search", "user", "check"];
 const PROMISE_MOTIFS: MotifName[] = ["kochkor", "itkuyruk", "gul", "tumar"];
 
+/** Вкладки сайта: порядок совпадает с t.home.hub. */
+const HUB: { href: string; icon: IconName }[] = [
+  { href: "/stays/", icon: "bed" },
+  { href: "/map/", icon: "pin" },
+  { href: "/guide/", icon: "book" },
+  { href: "/history/", icon: "mount" },
+  { href: "/stories/", icon: "chat" },
+  { href: "/experiences/", icon: "horse" },
+  { href: "/bookings/", icon: "check" },
+  { href: "/hosts/", icon: "user" },
+];
+
 export function HomeClient({ places }: { places: Place[] }) {
   const { lang, t } = useLang();
   const [region, setRegion] = useState<Region | "all">("all");
-  const [feats, setFeats] = useState<Feature[]>([]);
   const [date, setDate] = useState("");
   const [today, setToday] = useState("");
   const [guests, setGuests] = useState(2);
-  const [onlyFav, setOnlyFav] = useState(false);
-  const fav = useFavourites();
 
   useEffect(() => {
     const now = new Date();
@@ -49,22 +47,8 @@ export function HomeClient({ places }: { places: Place[] }) {
     setDate(iso(soon));
   }, []);
 
-  const stays = useMemo(
-    () => places.filter((p) =>
-      (region === "all" || p.region === region) &&
-      FEATURES.every((f) => !feats.includes(f.key) || f.test(p)) &&
-      (!onlyFav || fav.has(p.slug))),
-    [places, region, feats, onlyFav, fav],
-  );
-
   const query = new URLSearchParams({ g: String(guests), d: date }).toString();
-  const toggle = (k: Feature) => setFeats((cur) => (cur.includes(k) ? cur.filter((x) => x !== k) : [...cur, k]));
-
-  const chip = (on: boolean) =>
-    `inline-flex h-11 cursor-pointer items-center gap-2 rounded-full border px-4 text-[13px] transition-colors ${
-      on ? "border-ink bg-ink text-cream" : "border-rule-strong text-fg-muted hover:border-ink hover:text-fg"
-    }`;
-
+  const staysHref = `/stays/?${new URLSearchParams({ r: region, d: date, g: String(guests) }).toString()}`;
   const field = "h-11 w-full border-0 border-b border-rule-strong bg-transparent px-0 text-[16px] text-fg outline-none focus:border-ink";
 
   return (
@@ -94,10 +78,7 @@ export function HomeClient({ places }: { places: Place[] }) {
             <h1 className="display m-0 mt-5 max-w-[13ch] text-[clamp(38px,8vw,92px)]">{t.home.heroTitle}</h1>
             <p className="m-0 mt-6 max-w-[46ch] text-[17px] leading-relaxed text-fg-muted">{t.home.heroSub}</p>
 
-            <form
-              onSubmit={(e) => { e.preventDefault(); document.getElementById("stays")?.scrollIntoView({ behavior: "smooth" }); }}
-              className="mt-10 border-t border-rule pt-7"
-            >
+            <div className="mt-10 border-t border-rule pt-7">
               <div className="grid gap-6 sm:grid-cols-3">
                 <div className="flex flex-col gap-2">
                   <label htmlFor="f-region" className="eyebrow">{t.home.where}</label>
@@ -118,11 +99,11 @@ export function HomeClient({ places }: { places: Place[] }) {
                   />
                 </div>
               </div>
-              <button type="submit" className="pill pill-solid mt-8 w-full sm:w-auto">
+              <Link href={staysHref} className="pill pill-solid mt-8 w-full justify-center sm:w-auto">
                 <Icon name="search" size={15} strokeWidth={1.8} />
                 {t.home.find}
-              </button>
-            </form>
+              </Link>
+            </div>
           </div>
 
           <div className="relative flex">
@@ -146,116 +127,97 @@ export function HomeClient({ places }: { places: Place[] }) {
         <ZigzagBand id="zig-hero-bot" height={16} flip />
       </div>
 
-      {/* ------------------------------------------------- Как это работает */}
+      {/* ------------------------------------------------- Вкладки сайта */}
       <section className="mx-auto max-w-[1280px] px-5 py-16 sm:px-10">
-        <div className="max-w-[30rem]">
-          <span className="eyebrow">01 — 02 — 03</span>
-          <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,44px)]">{t.home.howTitle}</h2>
-          <p className="m-0 mt-4 text-[16px] leading-relaxed text-fg-muted">{t.home.howSub}</p>
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div className="max-w-[30rem]">
+            <span className="eyebrow">{t.common.sections}</span>
+            <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,48px)]">{t.home.hubTitle}</h2>
+          </div>
+          <p className="m-0 max-w-[42ch] text-[15px] leading-relaxed text-fg-muted">{t.home.hubSub}</p>
         </div>
 
-        <ol className="m-0 mt-10 grid list-none grid-cols-1 gap-x-10 gap-y-8 p-0 md:grid-cols-3">
-          {t.home.how.map((s, i) => (
-            <RevealItem key={s.t} delay={i * 110} className="border-t border-rule pt-5">
-              <div className="flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-[15px] font-semibold text-cream">{i + 1}</span>
-                <Icon name={HOW_ICONS[i]} size={20} strokeWidth={1.4} className="text-fg-subtle" />
-              </div>
-              <h3 className="serif m-0 mt-4 text-[21px]">{s.t}</h3>
-              <p className="m-0 mt-2 text-[15px] leading-relaxed text-fg-muted">{s.d}</p>
-            </RevealItem>
+        <ul className="m-0 mt-10 grid list-none grid-cols-1 gap-px bg-rule p-0 sm:grid-cols-2 lg:grid-cols-4">
+          {t.home.hub.map((s, i) => (
+            <li key={s.t} className="bg-cream">
+              <Link href={HUB[i].href} className="flex h-full flex-col gap-2.5 p-5 text-fg no-underline transition-colors hover:bg-paper sm:p-6">
+                <span className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full border border-rule-strong text-accent">
+                    <Icon name={HUB[i].icon} size={19} strokeWidth={1.4} />
+                  </span>
+                  <h3 className="serif m-0 text-[20px]">{s.t}</h3>
+                </span>
+                <p className="m-0 text-[14px] leading-relaxed text-fg-muted">{s.d}</p>
+                <span className="mt-auto inline-flex items-center gap-2 pt-2 text-[12px] font-semibold uppercase tracking-[0.14em] text-accent">
+                  {t.common.open} <Icon name="arrow" size={14} strokeWidth={1.8} />
+                </span>
+              </Link>
+            </li>
           ))}
-        </ol>
+        </ul>
       </section>
 
-      {/* -------------------------------------------------------- Обещания */}
+      {/* ------------------------------------------------- Как это работает */}
       <section className="border-y border-rule bg-cream-2">
-        <div className="mx-auto max-w-[1280px] px-5 py-14 sm:px-10">
-          <span className="eyebrow">{t.home.promisesTitle}</span>
-          <ul className="m-0 mt-8 grid list-none grid-cols-1 gap-x-10 gap-y-10 p-0 sm:grid-cols-2 lg:grid-cols-4">
-            {t.home.promises.map((p, i) => (
-              <RevealItem key={p.t} delay={i * 90} className="border-t border-rule-strong pt-5">
-                <DrawIn><Motif name={PROMISE_MOTIFS[i]} size={44} className="text-ochre" /></DrawIn>
-                <h3 className="serif m-0 mt-4 text-[20px]">{p.t}</h3>
-                <p className="m-0 mt-2.5 text-[14px] leading-relaxed text-fg-muted">{p.d}</p>
+        <div className="mx-auto max-w-[1280px] px-5 py-16 sm:px-10">
+          <div className="max-w-[30rem]">
+            <span className="eyebrow">01 — 02 — 03</span>
+            <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,44px)]">{t.home.howTitle}</h2>
+            <p className="m-0 mt-4 text-[16px] leading-relaxed text-fg-muted">{t.home.howSub}</p>
+          </div>
+
+          <ol className="m-0 mt-10 grid list-none grid-cols-1 gap-x-10 gap-y-8 p-0 md:grid-cols-3">
+            {t.home.how.map((s, i) => (
+              <RevealItem key={s.t} delay={i * 110} className="border-t border-rule-strong pt-5">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-[15px] font-semibold text-cream">{i + 1}</span>
+                  <Icon name={HOW_ICONS[i]} size={20} strokeWidth={1.4} className="text-fg-subtle" />
+                </div>
+                <h3 className="serif m-0 mt-4 text-[21px]">{s.t}</h3>
+                <p className="m-0 mt-2 text-[15px] leading-relaxed text-fg-muted">{s.d}</p>
               </RevealItem>
             ))}
-          </ul>
+          </ol>
         </div>
       </section>
 
-      {/* --------------------------------------------------------- Жильё */}
-      <section id="stays" className="mx-auto max-w-[1280px] scroll-mt-24 px-5 pt-16 pb-10 sm:px-10">
+      {/* --------------------------------------------------- Жильё: витрина */}
+      <section className="mx-auto max-w-[1280px] px-5 pt-16 pb-6 sm:px-10">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-[30rem]">
             <span className="eyebrow">{t.nav.stays}</span>
             <h2 className="display m-0 mt-4 text-[clamp(30px,5vw,56px)]">{t.home.staysTitle}</h2>
           </div>
-          <p className="m-0 max-w-[44ch] text-[15px] leading-relaxed text-fg-muted">
-            {t.home.staysSub}
-            <span className="mt-2 block text-[13px] text-fg-subtle" aria-live="polite">{t.common.found}: {stays.length}</span>
-          </p>
+          <p className="m-0 max-w-[44ch] text-[15px] leading-relaxed text-fg-muted">{t.home.staysSub}</p>
         </div>
 
-        <div className="mt-8 flex flex-col gap-3">
-          <div role="group" aria-label={t.home.where} className="flex flex-wrap gap-2">
-            {REGIONS.map((r) => (
-              <button key={r.key} type="button" aria-pressed={region === r.key} onClick={() => setRegion(r.key)} className={chip(region === r.key)}>
-                {pick(r.label, lang)}
-              </button>
-            ))}
-          </div>
-          <div role="group" aria-label={t.home.importantForMe} className="flex flex-wrap items-center gap-2">
-            <span className="mr-1 text-[13px] text-fg-subtle">{t.home.importantForMe}:</span>
-            {FEATURES.map((f) => (
-              <button key={f.key} type="button" aria-pressed={feats.includes(f.key)} onClick={() => toggle(f.key)} className={chip(feats.includes(f.key))}>
-                <Icon name={f.icon} size={15} strokeWidth={1.5} />
-                {pick(f.label, lang)}
-              </button>
-            ))}
-            <button type="button" aria-pressed={onlyFav} onClick={() => setOnlyFav((v) => !v)} className={chip(onlyFav)}>
-              <svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true" fill={onlyFav ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.8">
-                <path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z" />
-              </svg>
-              {t.common.onlyFavourites}{fav.list.length > 0 ? ` · ${fav.list.length}` : ""}
-            </button>
-            {(feats.length > 0 || region !== "all" || onlyFav) && (
-              <button type="button" onClick={() => { setFeats([]); setRegion("all"); setOnlyFav(false); }} className="h-11 cursor-pointer px-2 text-[13px] text-fg-subtle underline underline-offset-4 hover:text-fg">
-                {t.common.reset}
-              </button>
-            )}
-          </div>
+        <div className="mt-12 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+          {places.slice(0, 3).map((p, i) => (
+            <Reveal key={p.slug} delay={(i % 3) * 110}>
+              <PlaceCard place={p} query={query} />
+            </Reveal>
+          ))}
         </div>
 
-        {stays.length === 0 ? (
-          <div className="mt-12 border border-dashed border-rule-strong px-8 py-20 text-center">
-            <Motif name="kyial" size={64} className="mx-auto text-rule-strong" />
-            <p className="serif m-0 mt-5 text-[24px]">{onlyFav && fav.list.length === 0 ? t.common.favourites : t.home.emptyTitle}</p>
-            <p className="m-0 mt-3 text-[15px] text-fg-muted">{onlyFav && fav.list.length === 0 ? t.common.noFavourites : t.home.emptySub}</p>
-          </div>
-        ) : (
-          <div className="mt-12 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-            {stays.map((p, i) => (
-              <Reveal key={p.slug} delay={(i % 3) * 110}>
-                <PlaceCard place={p} query={query} />
-              </Reveal>
-            ))}
-          </div>
-        )}
+        <div className="mt-12 flex flex-wrap gap-3">
+          <Link href="/stays/" className="pill pill-solid">{t.common.allStays} · {places.length}</Link>
+          <Link href="/map/" className="pill pill-ghost">{t.common.showOnMap}</Link>
+        </div>
       </section>
 
       {/* ---------------------------------------------------------- Карта */}
       <section className="mx-auto max-w-[1280px] px-5 pb-6 pt-12 sm:px-10">
         <div className="flex flex-wrap items-end justify-between gap-6 border-t border-rule pt-10">
           <div className="max-w-[30rem]">
-            <span className="eyebrow">Кыргызстан</span>
+            <span className="eyebrow">{t.common.mapPage}</span>
             <h2 className="display m-0 mt-4 text-[clamp(26px,4vw,42px)]">{t.common.mapTitle}</h2>
           </div>
           <p className="m-0 max-w-[42ch] text-[15px] leading-relaxed text-fg-muted">{t.common.mapSub}</p>
         </div>
         <div className="mt-8 border border-rule bg-paper p-4 sm:p-6">
-          <KyrgyzMap places={places} query={query} />
+          <KyrgyzMap places={places} query={query} height="short" showList={false} />
         </div>
+        <Link href="/map/" className="pill pill-solid mt-8">{t.common.mapPage} · {t.common.mapList}</Link>
       </section>
 
       {/* --------------------------------------------------- Путеводитель */}
@@ -288,8 +250,26 @@ export function HomeClient({ places }: { places: Place[] }) {
         <TermeBand id="terme-guide-b" height={26} />
       </section>
 
-      {/* --------------------------------------------------------- Рассказы */}
+      {/* ---------------------------------------- История и живая культура */}
       <section className="mx-auto max-w-[1280px] px-5 py-16 sm:px-10">
+        <div className="grid items-center gap-10 border-t border-rule pt-10 lg:grid-cols-[1fr_0.8fr]">
+          <div>
+            <span className="eyebrow">{t.common.history}</span>
+            <h2 className="display m-0 mt-4 max-w-[18ch] text-[clamp(26px,4vw,44px)]">{t.common.historyTitle}</h2>
+            <p className="m-0 mt-5 max-w-[56ch] text-[16px] leading-relaxed text-fg-muted">{t.common.historySub}</p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/history/" className="pill pill-solid">{t.common.history}</Link>
+              <Link href="/history/#culture" className="pill pill-ghost">{t.common.culture}</Link>
+            </div>
+          </div>
+          <DrawIn duration={2000} className="hidden justify-self-center lg:block">
+            <Medallion id="home-history-med" size={280} color="#8E2420" className="opacity-80" />
+          </DrawIn>
+        </div>
+      </section>
+
+      {/* --------------------------------------------------------- Рассказы */}
+      <section className="mx-auto max-w-[1280px] px-5 pb-16 sm:px-10">
         <div className="flex flex-wrap items-end justify-between gap-6 border-t border-rule pt-10">
           <div className="max-w-[30rem]">
             <span className="eyebrow">{t.common.stories}</span>
@@ -318,10 +298,54 @@ export function HomeClient({ places }: { places: Place[] }) {
         <Link href="/stories/" className="pill pill-ghost mt-8">{t.common.allStories}</Link>
       </section>
 
-      {/* ----------------------------------------------------- Орнаменты */}
-      <section className="relative mx-auto max-w-[1280px] overflow-hidden px-5 py-20 sm:px-10">
-        <Medallion id="motif-watermark" size={520} color="#8E2420" className="spin-slow pointer-events-none absolute -right-[160px] top-[60px] opacity-[0.06]" />
+      {/* -------------------------------------------------- Пословица */}
+      <section className="felt relative overflow-hidden bg-ink text-cream">
+        <ZigzagBand id="zig-saying-top" height={18} color="#8E2420" bg="#16130F" />
+        <div className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-center gap-14 px-5 py-20 sm:px-10">
+          <DrawIn duration={2000}>
+            <Medallion id="saying-med" size={280} color="#DDAE52" className="flex-none" />
+          </DrawIn>
+          <Reveal className="max-w-[34rem]">
+            <span className="eyebrow text-gold">{t.home.sayingEyebrow}</span>
+            <p className="display m-0 mt-5 text-[clamp(28px,4.4vw,52px)] leading-[1.05] text-cream">{t.home.saying}</p>
+            <p className="m-0 mt-6 text-[17px] leading-relaxed text-on-dark-muted">{t.home.sayingText}</p>
+          </Reveal>
+        </div>
+        <ZigzagBand id="zig-saying-bot" height={18} color="#8E2420" bg="#16130F" flip />
+      </section>
+
+      {/* ------------------------------------------------- Впечатления */}
+      <section className="mx-auto max-w-[1280px] px-5 py-16 sm:px-10">
         <div className="flex flex-wrap items-end justify-between gap-6">
+          <div className="max-w-[26rem]">
+            <span className="eyebrow">{t.nav.experiences}</span>
+            <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,48px)]">{t.home.expTitle}</h2>
+          </div>
+          <p className="m-0 max-w-[40ch] text-[15px] leading-relaxed text-fg-muted">{t.home.expSub}</p>
+        </div>
+
+        <ul className="m-0 mt-10 flex list-none flex-col p-0">
+          {t.home.experiences.map((e, i) => (
+            <RevealItem key={e.t} delay={i * 70} className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2 border-t border-rule py-6 last:border-b">
+              <div className="flex flex-1 basis-[260px] items-baseline gap-5">
+                <span className="serif w-8 flex-none text-[15px] text-accent">{String(i + 1).padStart(2, "0")}</span>
+                <div>
+                  <h3 className="serif m-0 text-[22px]">{e.t}</h3>
+                  <p className="m-0 mt-2 max-w-[60ch] text-[15px] leading-relaxed text-fg-muted">{e.d}</p>
+                </div>
+              </div>
+              <span className="serif text-[18px]">{e.p}</span>
+            </RevealItem>
+          ))}
+        </ul>
+
+        <Link href="/experiences/" className="pill pill-ghost mt-8">{t.common.experiencesPage}</Link>
+      </section>
+
+      {/* ----------------------------------------------------- Орнаменты */}
+      <section className="relative mx-auto max-w-[1280px] overflow-hidden px-5 pb-20 sm:px-10">
+        <Medallion id="motif-watermark" size={520} color="#8E2420" className="spin-slow pointer-events-none absolute -right-[160px] top-[60px] opacity-[0.06]" />
+        <div className="flex flex-wrap items-end justify-between gap-6 border-t border-rule pt-10">
           <div className="max-w-[32rem]">
             <span className="eyebrow">{t.home.motifsEyebrow}</span>
             <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,48px)]">{t.home.motifsTitle}</h2>
@@ -340,45 +364,16 @@ export function HomeClient({ places }: { places: Place[] }) {
         </ul>
       </section>
 
-      {/* -------------------------------------------------- Пословица */}
-      <section className="felt relative overflow-hidden bg-ink text-cream">
-        <ZigzagBand id="zig-saying-top" height={18} color="#8E2420" bg="#16130F" />
-        <div className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-center gap-14 px-5 py-20 sm:px-10">
-          <DrawIn duration={2000}>
-            <Medallion id="saying-med" size={280} color="#DDAE52" className="flex-none" />
-          </DrawIn>
-          <Reveal className="max-w-[34rem]">
-            <span className="eyebrow text-gold">{t.home.sayingEyebrow}</span>
-            <p className="display m-0 mt-5 text-[clamp(28px,4.4vw,52px)] leading-[1.05] text-cream">{t.home.saying}</p>
-            <p className="m-0 mt-6 text-[17px] leading-relaxed text-on-dark-muted">{t.home.sayingText}</p>
-          </Reveal>
-        </div>
-        <ZigzagBand id="zig-saying-bot" height={18} color="#8E2420" bg="#16130F" flip />
-      </section>
-
-      {/* --------------------------------------------------- Впечатления */}
-      <section id="exp" className="scroll-mt-24">
-        <div className="mx-auto max-w-[1280px] px-5 py-20 sm:px-10">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div className="max-w-[26rem]">
-              <span className="eyebrow">{t.nav.experiences}</span>
-              <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,48px)]">{t.home.expTitle}</h2>
-            </div>
-            <p className="m-0 max-w-[40ch] text-[15px] leading-relaxed text-fg-muted">{t.home.expSub}</p>
-          </div>
-
-          <ul className="m-0 mt-12 flex list-none flex-col p-0">
-            {t.home.experiences.map((e, i) => (
-              <RevealItem key={e.t} delay={i * 70} className="flex flex-wrap items-baseline gap-x-8 gap-y-3 border-t border-rule py-7 last:border-b">
-                <span className="serif w-10 text-[15px] text-accent">{String(i + 1).padStart(2, "0")}</span>
-                <div className="flex flex-1 basis-[260px] items-start gap-5">
-                  <Art name={EXP_ART[i]} label={e.t} width={200} className="h-auto w-[140px] flex-none sm:w-[200px]" />
-                  <div>
-                    <h3 className="serif m-0 text-[22px]">{e.t}</h3>
-                    <p className="m-0 mt-2 max-w-[60ch] text-[15px] leading-relaxed text-fg-muted">{e.d}</p>
-                  </div>
-                </div>
-                <span className="serif text-[18px]">{e.p}</span>
+      {/* -------------------------------------------------------- Обещания */}
+      <section className="border-y border-rule bg-cream-2">
+        <div className="mx-auto max-w-[1280px] px-5 py-14 sm:px-10">
+          <span className="eyebrow">{t.home.promisesTitle}</span>
+          <ul className="m-0 mt-8 grid list-none grid-cols-1 gap-x-10 gap-y-10 p-0 sm:grid-cols-2 lg:grid-cols-4">
+            {t.home.promises.map((p, i) => (
+              <RevealItem key={p.t} delay={i * 90} className="border-t border-rule-strong pt-5">
+                <DrawIn><Motif name={PROMISE_MOTIFS[i]} size={44} className="text-ochre" /></DrawIn>
+                <h3 className="serif m-0 mt-4 text-[20px]">{p.t}</h3>
+                <p className="m-0 mt-2.5 text-[14px] leading-relaxed text-fg-muted">{p.d}</p>
               </RevealItem>
             ))}
           </ul>
@@ -386,23 +381,21 @@ export function HomeClient({ places }: { places: Place[] }) {
       </section>
 
       {/* ---------------------------------------------------------- Вопросы */}
-      <section className="border-y border-rule bg-cream-2">
-        <div className="mx-auto max-w-[1280px] px-5 py-16 sm:px-10">
-          <div className="max-w-[30rem]">
-            <span className="eyebrow">FAQ</span>
-            <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,44px)]">{t.home.faqTitle}</h2>
-          </div>
-          <div className="mt-8">
-            {t.home.faq.map((f) => (
-              <details key={f.q} className="group border-t border-rule last:border-b">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-[17px] font-medium">
-                  {f.q}
-                  <span className="flex h-8 w-8 flex-none items-center justify-center rounded-full border border-rule-strong text-[18px] leading-none transition-transform group-open:rotate-45">+</span>
-                </summary>
-                <p className="m-0 max-w-[70ch] pb-6 text-[15px] leading-relaxed text-fg-muted">{f.a}</p>
-              </details>
-            ))}
-          </div>
+      <section className="mx-auto max-w-[1280px] px-5 py-16 sm:px-10">
+        <div className="max-w-[30rem]">
+          <span className="eyebrow">FAQ</span>
+          <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,44px)]">{t.home.faqTitle}</h2>
+        </div>
+        <div className="mt-8">
+          {t.home.faq.map((f) => (
+            <details key={f.q} className="group border-t border-rule last:border-b">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-[17px] font-medium">
+                {f.q}
+                <span className="flex h-8 w-8 flex-none items-center justify-center rounded-full border border-rule-strong text-[18px] leading-none transition-transform group-open:rotate-45">+</span>
+              </summary>
+              <p className="m-0 max-w-[70ch] pb-6 text-[15px] leading-relaxed text-fg-muted">{f.a}</p>
+            </details>
+          ))}
         </div>
       </section>
 
