@@ -37,10 +37,10 @@ export function PhotoCredits() {
                   <Photo name={name} alt={name} sizes="96px" className="h-[64px] w-[96px] flex-none object-cover" />
                   <div className="min-w-0 text-[13px] leading-relaxed text-fg-muted">
                     <p className="m-0 text-fg">{p.author || "Wikimedia Commons"}</p>
-                    <p className="m-0 mt-1">{p.license}</p>
+                    <p className="m-0 mt-1">{p.license} · {p.source}</p>
                     <a href={p.page} target="_blank" rel="noreferrer noopener"
                       className="mt-1 inline-flex h-11 items-center text-accent no-underline hover:underline">
-                      Wikimedia Commons →
+                      {p.source} →
                     </a>
                   </div>
                 </li>

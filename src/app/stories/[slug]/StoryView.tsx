@@ -81,7 +81,7 @@ export function StoryView({ story }: { story: Story }) {
                   <PhotoSlot name={STORY_PHOTO[s.slug]} alt={pick(s.title, lang)} sizes="84px" className="h-[56px] w-[84px] flex-none" />
                   <span className="min-w-0">
                     <span className="serif block text-[18px]">{pick(s.title, lang)}</span>
-                    <span className="mt-1 flex items-center gap-1.5 text-[12px] uppercase tracking-[0.12em] text-accent">
+                    <span className="mt-1 flex flex-wrap items-center gap-1.5 text-[12px] font-semibold text-accent">
                       {t.common.readMore} <Icon name="arrow" size={13} strokeWidth={1.8} />
                     </span>
                   </span>

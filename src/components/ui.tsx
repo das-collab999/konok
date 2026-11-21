@@ -232,7 +232,7 @@ export function Cover({ place, wide = false, className = "", priority = false }:
   // рисунка — так честнее и не выглядит дешёвой картинкой.
   return (
     <span className={`felt flex items-center justify-center bg-cream-2 ${className.replace("object-cover", "")}`} aria-hidden="true">
-      <Medallion id={`cover-${place.slug}${wide ? "-w" : ""}`} size={wide ? 260 : 180} color="#8E2420" className="opacity-[0.14]" />
+      <Medallion id={`cover-${place.slug}${wide ? "-w" : ""}`} size={wide ? 260 : 180} color="#8E2420" className="h-auto w-[46%] max-w-[260px] opacity-[0.14]" />
     </span>
   );
 }

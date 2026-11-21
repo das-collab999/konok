@@ -25,7 +25,10 @@ export function PhotoSlot({
   priority?: boolean;
   className?: string;
 }) {
-  const box = `block w-full object-cover ${className}`;
+  // если ширину задал вызывающий (например, маленькое превью в колонке),
+  // не навязываем w-full — иначе картинка распирает колонку
+  const hasWidth = /(^|\s)(w-|max-w-)/.test(className);
+  const box = `block object-cover ${hasWidth ? "" : "w-full"} ${className}`;
 
   if (hasPhoto(name)) {
     return (
@@ -46,7 +49,7 @@ export function PhotoSlot({
       style={{ aspectRatio: ratio }}
       aria-hidden="true"
     >
-      <Medallion id={`slot-${name ?? alt}`} size={220} color="#8E2420" className="opacity-[0.13]" />
+      <Medallion id={`slot-${name ?? alt}`} size={220} color="#8E2420" className="h-auto max-h-[68%] w-[62%] max-w-[180px] opacity-[0.13]" />
     </div>
   );
 }

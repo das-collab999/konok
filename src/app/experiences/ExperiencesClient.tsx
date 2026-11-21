@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { useLang } from "@/lib/i18n";
-import { Art, type ArtName } from "@/components/art";
+import { PhotoSlot } from "@/components/PhotoSlot";
+import { EXPERIENCE_PHOTO } from "@/data/photos";
 import { Motif, TermeBand } from "@/components/ethno";
 import { RevealItem } from "@/components/motion";
-
-const ART: ArtName[] = ["felt", "cooking", "horse", "games"];
 
 export function ExperiencesClient() {
   const { t } = useLang();
@@ -30,7 +29,7 @@ export function ExperiencesClient() {
         <ul className="m-0 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2">
           {t.home.experiences.map((e, i) => (
             <RevealItem key={e.t} delay={i * 80} className="overflow-hidden border border-rule bg-paper">
-              <Art name={ART[i]} label={e.t} width={620} className="block h-auto w-full" />
+              <PhotoSlot name={EXPERIENCE_PHOTO[i]} alt={e.t} sizes="(max-width: 640px) 92vw, 560px" className="aspect-[3/2]" />
               <div className="p-6">
                 <div className="flex flex-wrap items-baseline justify-between gap-3">
                   <h2 className="serif m-0 text-[24px]">{e.t}</h2>
