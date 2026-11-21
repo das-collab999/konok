@@ -13,7 +13,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-rule bg-cream/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between gap-5 px-5 sm:h-20 sm:px-10">
-        <Link href="/" className="flex items-center gap-2.5 text-fg no-underline">
+        <Link href="/" className="flex h-11 items-center gap-2.5 text-fg no-underline">
           <span className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-accent text-cream sm:h-9 sm:w-9">
             <Tunduk size={20} strokeWidth={1.6} />
           </span>
@@ -82,7 +82,7 @@ export function TabBar() {
   return (
     <nav
       aria-label={t.common.sections}
-      className="sticky bottom-0 z-50 grid grid-cols-5 border-t border-rule bg-cream/97 backdrop-blur lg:hidden"
+      className="sticky bottom-0 z-50 grid grid-cols-5 border-t border-rule bg-cream/97 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden"
     >
       {items.map((i) => (
         <Link
@@ -106,7 +106,7 @@ export function Footer() {
 
   return (
     <footer className="mt-24 bg-ink text-on-dark-muted">
-      <div className="mx-auto max-w-[1280px] px-5 py-14 sm:px-10">
+      <div className="mx-auto max-w-[1280px] px-5 py-9 sm:py-14 sm:px-10">
         <div className="flex flex-wrap items-start justify-between gap-12">
           <div className="max-w-[340px]">
             <div className="flex items-center gap-3 text-on-dark">

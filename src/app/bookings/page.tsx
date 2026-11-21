@@ -38,11 +38,11 @@ export default function BookingsPage() {
       {list === null && <p className="mt-12 text-[15px] text-fg-subtle">{t.common.loading}</p>}
 
       {list !== null && list.length === 0 && (
-        <div className="mt-12 border border-dashed border-rule-strong px-8 py-20 text-center">
+        <div className="mt-12 border border-dashed border-rule-strong px-8 py-8 sm:py-12 sm:py-20 text-center">
           <Motif name="gul" size={72} className="mx-auto text-rule-strong" />
           <p className="serif m-0 mt-5 text-[24px]">{t.bookings.emptyTitle}</p>
           <p className="m-0 mt-3 text-[15px] text-fg-muted">{t.bookings.emptySub}</p>
-          <Link href="/#stays" className="pill pill-solid mt-8">{t.bookings.emptyBtn}</Link>
+          <Link href="/stays/" className="pill pill-solid mt-8">{t.bookings.emptyBtn}</Link>
         </div>
       )}
 

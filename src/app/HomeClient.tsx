@@ -69,7 +69,7 @@ export function HomeClient({ places }: { places: Place[] }) {
           className="spin-slow pointer-events-none absolute -left-[300px] top-[40px] opacity-[0.05]"
         />
 
-        <div className="relative mx-auto grid max-w-[1280px] items-center gap-10 px-5 pb-12 pt-10 sm:px-10 lg:grid-cols-[1.02fr_0.98fr] lg:gap-16 lg:pb-16 lg:pt-16">
+        <div className="relative mx-auto grid max-w-[1280px] items-center gap-10 px-5 pb-12 pt-10 sm:px-10 lg:grid-cols-[1.02fr_0.98fr] lg:gap-16 lg:pb-10 sm:pb-16 lg:pt-10 sm:pt-16">
           <div>
             <span className="eyebrow flex items-center gap-2.5">
               <DrawIn duration={1200}><Motif name="kochkor" size={34} className="text-accent" /></DrawIn>
@@ -79,8 +79,8 @@ export function HomeClient({ places }: { places: Place[] }) {
             <p className="m-0 mt-6 max-w-[46ch] text-[17px] leading-relaxed text-fg-muted">{t.home.heroSub}</p>
 
             <div className="mt-10 border-t border-rule pt-7">
-              <div className="grid gap-6 sm:grid-cols-3">
-                <div className="flex flex-col gap-2">
+              <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-3 sm:gap-6">
+                <div className="col-span-2 flex flex-col gap-2 sm:col-span-1">
                   <label htmlFor="f-region" className="eyebrow">{t.home.where}</label>
                   <select id="f-region" value={region} onChange={(e) => setRegion(e.target.value as Region | "all")} className={`${field} cursor-pointer`}>
                     {REGIONS.map((r) => <option key={r.key} value={r.key}>{pick(r.label, lang)}</option>)}
@@ -99,7 +99,7 @@ export function HomeClient({ places }: { places: Place[] }) {
                   />
                 </div>
               </div>
-              <Link href={staysHref} className="pill pill-solid mt-8 w-full justify-center sm:w-auto">
+              <Link href={staysHref} className="pill pill-solid mt-7 w-full justify-center sm:w-auto">
                 <Icon name="search" size={15} strokeWidth={1.8} />
                 {t.home.find}
               </Link>
@@ -110,9 +110,9 @@ export function HomeClient({ places }: { places: Place[] }) {
             <Shyrdak id="hero-shyrdak" rows={4} className="hidden w-[92px] flex-none sm:block" />
             <div className="relative flex-1 overflow-hidden">
               <Parallax strength={0.06}>
-                <HeroArt className="block aspect-[4/5] w-full scale-110 object-cover" />
+                <HeroArt className="block aspect-[7/5] w-full scale-110 object-cover sm:aspect-[4/5]" />
               </Parallax>
-              <div className="absolute bottom-0 left-0 flex items-center gap-3 bg-cream px-5 py-4">
+              <div className="absolute bottom-0 left-0 flex items-center gap-3 bg-cream px-4 py-3 sm:px-5 sm:py-4">
                 <Tunduk size={22} strokeWidth={1.2} className="text-accent" />
                 <span className="text-[12px] uppercase tracking-[0.18em] text-fg-muted">Кош келиңиз!</span>
               </div>
@@ -128,7 +128,7 @@ export function HomeClient({ places }: { places: Place[] }) {
       </div>
 
       {/* ------------------------------------------------- Вкладки сайта */}
-      <section className="mx-auto max-w-[1280px] px-5 py-16 sm:px-10">
+      <section className="mx-auto max-w-[1280px] px-5 py-10 sm:py-16 sm:px-10">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-[30rem]">
             <span className="eyebrow">{t.common.sections}</span>
@@ -137,18 +137,22 @@ export function HomeClient({ places }: { places: Place[] }) {
           <p className="m-0 max-w-[42ch] text-[15px] leading-relaxed text-fg-muted">{t.home.hubSub}</p>
         </div>
 
-        <ul className="m-0 mt-10 grid list-none grid-cols-1 gap-px bg-rule p-0 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="m-0 mt-8 grid list-none grid-cols-1 gap-px bg-rule p-0 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4">
           {t.home.hub.map((s, i) => (
             <li key={s.t} className="bg-cream">
-              <Link href={HUB[i].href} className="flex h-full flex-col gap-2.5 p-5 text-fg no-underline transition-colors hover:bg-paper sm:p-6">
-                <span className="flex items-center gap-3">
-                  <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full border border-rule-strong text-accent">
-                    <Icon name={HUB[i].icon} size={19} strokeWidth={1.4} />
-                  </span>
-                  <h3 className="serif m-0 text-[20px]">{s.t}</h3>
+              <Link
+                href={HUB[i].href}
+                className="flex h-full items-start gap-3.5 px-1 py-4 text-fg no-underline transition-colors hover:bg-paper sm:flex-col sm:gap-2.5 sm:p-6"
+              >
+                <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full border border-rule-strong text-accent">
+                  <Icon name={HUB[i].icon} size={19} strokeWidth={1.4} />
                 </span>
-                <p className="m-0 text-[14px] leading-relaxed text-fg-muted">{s.d}</p>
-                <span className="mt-auto inline-flex items-center gap-2 pt-2 text-[12px] font-semibold uppercase tracking-[0.14em] text-accent">
+                <span className="min-w-0 flex-1 sm:flex-none">
+                  <h3 className="serif m-0 text-[19px] sm:text-[20px]">{s.t}</h3>
+                  <p className="m-0 mt-1 line-clamp-2 text-[13.5px] leading-snug text-fg-muted sm:mt-2 sm:line-clamp-none sm:text-[14px] sm:leading-relaxed">{s.d}</p>
+                </span>
+                <Icon name="arrow" size={16} strokeWidth={1.8} className="mt-3 flex-none text-accent sm:hidden" />
+                <span className="mt-auto hidden items-center gap-2 pt-2 text-[12px] font-semibold uppercase tracking-[0.14em] text-accent sm:inline-flex">
                   {t.common.open} <Icon name="arrow" size={14} strokeWidth={1.8} />
                 </span>
               </Link>
@@ -159,7 +163,7 @@ export function HomeClient({ places }: { places: Place[] }) {
 
       {/* ------------------------------------------------- Как это работает */}
       <section className="border-y border-rule bg-cream-2">
-        <div className="mx-auto max-w-[1280px] px-5 py-16 sm:px-10">
+        <div className="mx-auto max-w-[1280px] px-5 py-10 sm:py-16 sm:px-10">
           <div className="max-w-[30rem]">
             <span className="eyebrow">01 — 02 — 03</span>
             <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,44px)]">{t.home.howTitle}</h2>
@@ -169,12 +173,16 @@ export function HomeClient({ places }: { places: Place[] }) {
           <ol className="m-0 mt-10 grid list-none grid-cols-1 gap-x-10 gap-y-8 p-0 md:grid-cols-3">
             {t.home.how.map((s, i) => (
               <RevealItem key={s.t} delay={i * 110} className="border-t border-rule-strong pt-5">
-                <div className="flex items-center gap-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-[15px] font-semibold text-cream">{i + 1}</span>
-                  <Icon name={HOW_ICONS[i]} size={20} strokeWidth={1.4} className="text-fg-subtle" />
+                <div className="flex gap-4 md:block">
+                  <div className="flex flex-none items-center gap-3 md:mb-4">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-[15px] font-semibold text-cream">{i + 1}</span>
+                    <Icon name={HOW_ICONS[i]} size={20} strokeWidth={1.4} className="hidden text-fg-subtle md:block" />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="serif m-0 text-[21px]">{s.t}</h3>
+                    <p className="m-0 mt-1.5 text-[15px] leading-relaxed text-fg-muted md:mt-2">{s.d}</p>
+                  </div>
                 </div>
-                <h3 className="serif m-0 mt-4 text-[21px]">{s.t}</h3>
-                <p className="m-0 mt-2 text-[15px] leading-relaxed text-fg-muted">{s.d}</p>
               </RevealItem>
             ))}
           </ol>
@@ -182,7 +190,7 @@ export function HomeClient({ places }: { places: Place[] }) {
       </section>
 
       {/* --------------------------------------------------- Жильё: витрина */}
-      <section className="mx-auto max-w-[1280px] px-5 pt-16 pb-6 sm:px-10">
+      <section className="mx-auto max-w-[1280px] px-5 pt-10 sm:pt-16 pb-6 sm:px-10">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-[30rem]">
             <span className="eyebrow">{t.nav.stays}</span>
@@ -191,9 +199,9 @@ export function HomeClient({ places }: { places: Place[] }) {
           <p className="m-0 max-w-[44ch] text-[15px] leading-relaxed text-fg-muted">{t.home.staysSub}</p>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="-mx-5 mt-8 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-2 [scrollbar-width:none] sm:mx-0 sm:mt-12 sm:grid sm:grid-cols-2 sm:gap-x-8 sm:gap-y-14 sm:overflow-visible sm:px-0 lg:grid-cols-3">
           {places.slice(0, 3).map((p, i) => (
-            <Reveal key={p.slug} delay={(i % 3) * 110}>
+            <Reveal key={p.slug} delay={(i % 3) * 110} className="w-[78vw] flex-none snap-start sm:w-auto">
               <PlaceCard place={p} query={query} />
             </Reveal>
           ))}
@@ -223,7 +231,7 @@ export function HomeClient({ places }: { places: Place[] }) {
       {/* --------------------------------------------------- Путеводитель */}
       <section className="mt-16 bg-cream-2">
         <TermeBand id="terme-guide" height={26} />
-        <div className="mx-auto max-w-[1280px] px-5 py-16 sm:px-10">
+        <div className="mx-auto max-w-[1280px] px-5 py-10 sm:py-16 sm:px-10">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-[30rem]">
               <span className="eyebrow">{t.nav.guide}</span>
@@ -232,9 +240,9 @@ export function HomeClient({ places }: { places: Place[] }) {
             <p className="m-0 max-w-[42ch] text-[15px] leading-relaxed text-fg-muted">{t.home.guideSub}</p>
           </div>
 
-          <ul className="m-0 mt-10 grid list-none grid-cols-1 gap-px bg-rule p-0 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="-mx-5 m-0 mt-8 flex list-none snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 [scrollbar-width:none] sm:mx-0 sm:mt-10 sm:grid sm:grid-cols-2 sm:gap-px sm:overflow-visible sm:bg-rule sm:px-0 lg:grid-cols-4">
             {t.home.guideLinks.map((g, i) => (
-              <li key={g.t} className="bg-cream-2">
+              <li key={g.t} className="w-[76vw] flex-none snap-start border border-rule bg-cream-2 sm:w-auto sm:border-0">
                 <Link href={GUIDE_HREFS[i]} className="flex h-full flex-col gap-3 p-6 text-fg no-underline transition-colors hover:bg-paper">
                   <Art name={GUIDE_ART[i]} label={g.t} width={420} className="-mx-6 -mt-6 mb-1 block h-auto w-[calc(100%+3rem)]" />
                   <h3 className="serif m-0 text-[20px]">{g.t}</h3>
@@ -251,7 +259,7 @@ export function HomeClient({ places }: { places: Place[] }) {
       </section>
 
       {/* ---------------------------------------- История и живая культура */}
-      <section className="mx-auto max-w-[1280px] px-5 py-16 sm:px-10">
+      <section className="mx-auto max-w-[1280px] px-5 py-10 sm:py-16 sm:px-10">
         <div className="grid items-center gap-10 border-t border-rule pt-10 lg:grid-cols-[1fr_0.8fr]">
           <div>
             <span className="eyebrow">{t.common.history}</span>
@@ -269,7 +277,7 @@ export function HomeClient({ places }: { places: Place[] }) {
       </section>
 
       {/* --------------------------------------------------------- Рассказы */}
-      <section className="mx-auto max-w-[1280px] px-5 pb-16 sm:px-10">
+      <section className="mx-auto max-w-[1280px] px-5 pb-10 sm:pb-16 sm:px-10">
         <div className="flex flex-wrap items-end justify-between gap-6 border-t border-rule pt-10">
           <div className="max-w-[30rem]">
             <span className="eyebrow">{t.common.stories}</span>
@@ -278,9 +286,9 @@ export function HomeClient({ places }: { places: Place[] }) {
           <p className="m-0 max-w-[42ch] text-[15px] leading-relaxed text-fg-muted">{t.common.storiesSub}</p>
         </div>
 
-        <ul className="m-0 mt-8 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="-mx-5 m-0 mt-8 flex list-none snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 lg:grid-cols-4">
           {STORIES.slice(0, 4).map((st, i) => (
-            <RevealItem key={st.slug} delay={i * 80} className="overflow-hidden border border-rule bg-paper">
+            <RevealItem key={st.slug} delay={i * 80} className="w-[76vw] flex-none snap-start overflow-hidden border border-rule bg-paper sm:w-auto">
               <Link href={`/stories/${st.slug}/`} className="block text-fg no-underline">
                 <Art name={st.art} label={pick(st.title, lang)} width={520} className="block h-auto w-full" />
                 <div className="p-5">
@@ -301,7 +309,7 @@ export function HomeClient({ places }: { places: Place[] }) {
       {/* -------------------------------------------------- Пословица */}
       <section className="felt relative overflow-hidden bg-ink text-cream">
         <ZigzagBand id="zig-saying-top" height={18} color="#8E2420" bg="#16130F" />
-        <div className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-center gap-14 px-5 py-20 sm:px-10">
+        <div className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-center gap-14 px-5 py-8 sm:py-12 sm:py-20 sm:px-10">
           <DrawIn duration={2000}>
             <Medallion id="saying-med" size={280} color="#DDAE52" className="flex-none" />
           </DrawIn>
@@ -315,7 +323,7 @@ export function HomeClient({ places }: { places: Place[] }) {
       </section>
 
       {/* ------------------------------------------------- Впечатления */}
-      <section className="mx-auto max-w-[1280px] px-5 py-16 sm:px-10">
+      <section className="mx-auto max-w-[1280px] px-5 py-10 sm:py-16 sm:px-10">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-[26rem]">
             <span className="eyebrow">{t.nav.experiences}</span>
@@ -343,7 +351,7 @@ export function HomeClient({ places }: { places: Place[] }) {
       </section>
 
       {/* ----------------------------------------------------- Орнаменты */}
-      <section className="relative mx-auto max-w-[1280px] overflow-hidden px-5 pb-20 sm:px-10">
+      <section className="relative mx-auto max-w-[1280px] overflow-hidden px-5 pb-12 sm:pb-20 sm:px-10">
         <Medallion id="motif-watermark" size={520} color="#8E2420" className="spin-slow pointer-events-none absolute -right-[160px] top-[60px] opacity-[0.06]" />
         <div className="flex flex-wrap items-end justify-between gap-6 border-t border-rule pt-10">
           <div className="max-w-[32rem]">
@@ -356,7 +364,7 @@ export function HomeClient({ places }: { places: Place[] }) {
         <ul className="relative m-0 mt-12 grid list-none grid-cols-2 gap-5 p-0 sm:grid-cols-3 lg:grid-cols-6">
           {MOTIF_ORDER.map((name, i) => (
             <RevealItem key={name} delay={i * 80} className="felt border border-rule-strong bg-paper p-5 text-center">
-              <DrawIn duration={1600}><Motif name={name} size={132} className="mx-auto text-accent" /></DrawIn>
+              <DrawIn duration={1600}><Motif name={name} size={132} className="mx-auto h-auto w-[86px] text-accent sm:w-[132px]" /></DrawIn>
               <h3 className="serif m-0 mt-4 text-[17px]">{MOTIFS[name].label}</h3>
               <p className="m-0 mt-2 text-[13px] leading-relaxed text-fg-muted">{pick(MOTIFS[name].meaning, lang)}</p>
             </RevealItem>
@@ -366,7 +374,7 @@ export function HomeClient({ places }: { places: Place[] }) {
 
       {/* -------------------------------------------------------- Обещания */}
       <section className="border-y border-rule bg-cream-2">
-        <div className="mx-auto max-w-[1280px] px-5 py-14 sm:px-10">
+        <div className="mx-auto max-w-[1280px] px-5 py-9 sm:py-14 sm:px-10">
           <span className="eyebrow">{t.home.promisesTitle}</span>
           <ul className="m-0 mt-8 grid list-none grid-cols-1 gap-x-10 gap-y-10 p-0 sm:grid-cols-2 lg:grid-cols-4">
             {t.home.promises.map((p, i) => (
@@ -381,7 +389,7 @@ export function HomeClient({ places }: { places: Place[] }) {
       </section>
 
       {/* ---------------------------------------------------------- Вопросы */}
-      <section className="mx-auto max-w-[1280px] px-5 py-16 sm:px-10">
+      <section className="mx-auto max-w-[1280px] px-5 py-10 sm:py-16 sm:px-10">
         <div className="max-w-[30rem]">
           <span className="eyebrow">FAQ</span>
           <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,44px)]">{t.home.faqTitle}</h2>
@@ -402,7 +410,7 @@ export function HomeClient({ places }: { places: Place[] }) {
       {/* --------------------------------------------------------- Хозяева */}
       <section id="hosts" className="felt scroll-mt-24 bg-ink text-on-dark">
         <div className="overflow-hidden"><div className="band-drift"><OrnamentBand id="band-hosts" height={36} color="#6b5a3a" /></div></div>
-        <div className="mx-auto flex max-w-[1280px] flex-wrap gap-14 px-5 py-20 sm:px-10">
+        <div className="mx-auto flex max-w-[1280px] flex-wrap gap-14 px-5 py-8 sm:py-12 sm:py-20 sm:px-10">
           <div className="flex-1 basis-[380px]">
             <span className="eyebrow text-gold">{t.home.hostsEyebrow}</span>
             <h2 className="display m-0 mt-4 max-w-[14ch] text-[clamp(28px,4.4vw,52px)] text-cream">{t.home.hostsTitle}</h2>

@@ -30,7 +30,7 @@ export function StoriesIndex() {
   return (
     <>
       <section className="border-b border-rule">
-        <div className="mx-auto max-w-[1280px] px-5 py-12 sm:px-10">
+        <div className="mx-auto max-w-[1280px] px-5 py-8 sm:py-12 sm:px-10">
           <span className="eyebrow flex items-center gap-2.5">
             <DrawIn duration={1200}><Motif name="kyial" size={34} className="text-accent" /></DrawIn>
             {t.common.stories}
@@ -42,7 +42,7 @@ export function StoriesIndex() {
 
       <TermeBand id="terme-stories" height={26} />
 
-      <section className="mx-auto max-w-[1280px] px-5 py-16 sm:px-10">
+      <section className="mx-auto max-w-[1280px] px-5 py-10 sm:py-16 sm:px-10">
         <span className="eyebrow">{t.guide.sections.food}</span>
         <h2 className="display m-0 mt-4 text-[clamp(26px,4vw,42px)]">{t.guide.foodTitle}</h2>
         <ul className="m-0 mt-8 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 lg:grid-cols-3">
@@ -51,7 +51,7 @@ export function StoriesIndex() {
       </section>
 
       <section className="border-t border-rule bg-cream-2">
-        <div className="mx-auto max-w-[1280px] px-5 py-16 sm:px-10">
+        <div className="mx-auto max-w-[1280px] px-5 py-10 sm:py-16 sm:px-10">
           <span className="eyebrow">{t.common.aboutPlace}</span>
           <h2 className="display m-0 mt-4 text-[clamp(26px,4vw,42px)]">{t.common.mapTitle}</h2>
           <ul className="m-0 mt-8 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 lg:grid-cols-3">

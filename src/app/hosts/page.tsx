@@ -18,7 +18,7 @@ export default function HostsPage() {
   return (
     <>
       <section className="border-b border-rule">
-        <div className="mx-auto grid max-w-[1280px] items-start gap-14 px-5 py-12 sm:px-10 lg:grid-cols-[1fr_minmax(320px,400px)]">
+        <div className="mx-auto grid max-w-[1280px] items-start gap-14 px-5 py-8 sm:py-12 sm:px-10 lg:grid-cols-[1fr_minmax(320px,400px)]">
           <div>
             <div className="flex items-center gap-3">
               <Motif name="kochkor" size={34} className="text-accent" />
@@ -118,7 +118,7 @@ export default function HostsPage() {
 
       <TermeBand id="terme-hosts" height={26} />
 
-      <section id="join" className="mx-auto max-w-[840px] scroll-mt-24 px-5 py-16 sm:px-10">
+      <section id="join" className="mx-auto max-w-[840px] scroll-mt-24 px-5 py-10 sm:py-16 sm:px-10">
         <span className="eyebrow">{t.hosts.joinEyebrow}</span>
         <h2 className="display m-0 mt-4 max-w-[16ch] text-[clamp(26px,4.6vw,48px)]">{t.hosts.joinTitle}</h2>
         <p className="m-0 mt-6 max-w-[54ch] text-[16px] leading-relaxed text-fg-muted">{t.hosts.joinText}</p>
