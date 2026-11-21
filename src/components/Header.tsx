@@ -7,6 +7,7 @@ import { Icon, Tunduk, type IconName } from "./ui";
 
 export function Header() {
   const { lang, setLang, t } = useLang();
+  const path = usePathname() ?? "/";
   const nav = "inline-flex h-11 items-center text-[13px] font-medium tracking-[0.04em] text-fg-muted no-underline transition-colors hover:text-fg";
 
   return (
@@ -19,13 +20,24 @@ export function Header() {
           <span className="display text-[20px] leading-none sm:text-[26px]">Конок</span>
         </Link>
 
-        <nav aria-label={t.nav.home} className="hidden items-center gap-7 lg:flex">
-          <Link href="/#stays" className={nav}>{t.nav.stays}</Link>
-          <Link href="/guide/" className={nav}>{t.nav.guide}</Link>
-          <Link href="/stories/" className={nav}>{t.common.stories}</Link>
-          <Link href="/#exp" className={nav}>{t.nav.experiences}</Link>
-          <Link href="/bookings/" className={nav}>{t.nav.bookings}</Link>
-          <Link href="/hosts/" className={nav}>{t.nav.hosts}</Link>
+        <nav aria-label={t.common.sections} className="hidden items-center gap-5 lg:flex xl:gap-6">
+          {[
+            { href: "/stays/", label: t.nav.stays },
+            { href: "/map/", label: t.common.mapPage },
+            { href: "/guide/", label: t.nav.guide },
+            { href: "/history/", label: t.common.history },
+            { href: "/stories/", label: t.common.stories },
+            { href: "/experiences/", label: t.nav.experiences },
+            { href: "/bookings/", label: t.nav.bookings },
+            { href: "/hosts/", label: t.nav.hosts },
+          ].map((i) => {
+            const on = path === i.href || (i.href !== "/" && path.startsWith(i.href));
+            return (
+              <Link key={i.href} href={i.href} className={`${nav} ${on ? "text-accent" : ""}`} aria-current={on ? "page" : undefined}>
+                {i.label}
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-3">
@@ -45,8 +57,8 @@ export function Header() {
               </button>
             ))}
           </div>
-          <span className="hidden sm:block">
-            <Link href="/#stays" className="pill pill-solid h-11 px-6">{t.nav.search}</Link>
+          <span className="hidden sm:block lg:hidden xl:block">
+            <Link href="/stays/" className="pill pill-solid h-11 px-6">{t.nav.search}</Link>
           </span>
         </div>
       </div>
@@ -54,28 +66,29 @@ export function Header() {
   );
 }
 
-/** Нижняя панель на телефоне: четыре понятные вкладки, всегда под рукой. */
+/** Нижняя панель на телефоне: пять понятных вкладок, всегда под рукой. */
 export function TabBar() {
   const { t } = useLang();
   const path = usePathname() ?? "/";
 
   const items: { href: string; label: string; icon: IconName; active: boolean }[] = [
-    { href: "/#stays", label: t.nav.stays, icon: "mount", active: path === "/" },
+    { href: "/stays/", label: t.nav.stays, icon: "bed", active: path.startsWith("/stays") || path.startsWith("/place") },
+    { href: "/map/", label: t.common.mapPage, icon: "pin", active: path.startsWith("/map") },
     { href: "/guide/", label: t.nav.guide, icon: "book", active: path.startsWith("/guide") },
+    { href: "/stories/", label: t.common.stories, icon: "chat", active: path.startsWith("/stories") || path.startsWith("/history") },
     { href: "/bookings/", label: t.nav.bookings, icon: "check", active: path.startsWith("/bookings") },
-    { href: "/hosts/", label: t.nav.hosts, icon: "chat", active: path.startsWith("/hosts") },
   ];
 
   return (
     <nav
-      aria-label={t.nav.home}
-      className="sticky bottom-0 z-50 grid grid-cols-4 border-t border-rule bg-cream/97 backdrop-blur lg:hidden"
+      aria-label={t.common.sections}
+      className="sticky bottom-0 z-50 grid grid-cols-5 border-t border-rule bg-cream/97 backdrop-blur lg:hidden"
     >
       {items.map((i) => (
         <Link
           key={i.href}
           href={i.href}
-          className={`flex h-16 flex-col items-center justify-center gap-1 text-[12px] no-underline transition-colors ${
+          className={`flex h-16 flex-col items-center justify-center gap-1 px-1 text-center text-[11px] no-underline transition-colors sm:text-[12px] ${
             i.active ? "text-accent" : "text-fg-muted"
           }`}
         >
@@ -103,14 +116,20 @@ export function Footer() {
             <p className="mt-4 text-[14px] leading-relaxed">{t.common.footerNote}</p>
           </div>
 
-          <div className="flex flex-wrap gap-14">
+          <div className="flex flex-wrap gap-x-14 gap-y-10">
+            <div className="flex flex-col gap-2">
+              <span className="eyebrow text-on-dark-muted">{t.common.sections}</span>
+              <Link href="/stays/" className={link}>{t.nav.stays}</Link>
+              <Link href="/map/" className={link}>{t.common.mapPage}</Link>
+              <Link href="/guide/" className={link}>{t.nav.guide}</Link>
+              <Link href="/history/" className={link}>{t.common.history}</Link>
+            </div>
             <div className="flex flex-col gap-2">
               <span className="eyebrow text-on-dark-muted">{t.common.forGuests}</span>
-              <Link href="/#stays" className={link}>{t.nav.stays}</Link>
-              <Link href="/guide/" className={link}>{t.nav.guide}</Link>
               <Link href="/stories/" className={link}>{t.common.stories}</Link>
-              <Link href="/#exp" className={link}>{t.nav.experiences}</Link>
+              <Link href="/experiences/" className={link}>{t.common.experiencesPage}</Link>
               <Link href="/bookings/" className={link}>{t.nav.bookings}</Link>
+              <Link href="/guide/#help" className={link}>{t.guide.sections.help}</Link>
             </div>
             <div className="flex flex-col gap-2">
               <span className="eyebrow text-on-dark-muted">{t.common.forHosts}</span>
