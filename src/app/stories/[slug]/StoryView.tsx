@@ -4,6 +4,8 @@ import Link from "next/link";
 import { STORIES, type Story } from "@/data/stories";
 import { pick, useLang } from "@/lib/i18n";
 import { Art } from "@/components/art";
+import { Photo, hasPhoto } from "@/components/Photo";
+import { STORY_PHOTO } from "@/data/photos";
 import { Icon } from "@/components/ui";
 import { Motif, OrnamentBand, ZigzagBand } from "@/components/ethno";
 import { Reveal } from "@/components/motion";
@@ -38,7 +40,15 @@ export function StoryView({ story }: { story: Story }) {
           </ul>
         </div>
 
-        <Art name={story.art} label={pick(story.title, lang)} width={760} className="block h-auto w-full border border-rule" />
+        {hasPhoto(STORY_PHOTO[story.slug]) ? (
+          <Photo
+            name={STORY_PHOTO[story.slug]} alt={pick(story.title, lang)} priority
+            sizes="(max-width: 1024px) 100vw, 760px"
+            className="block aspect-[3/2] w-full border border-rule object-cover"
+          />
+        ) : (
+          <Art name={story.art} label={pick(story.title, lang)} width={760} className="block h-auto w-full border border-rule" />
+        )}
       </header>
 
       <div className="mt-12 grid gap-12 lg:grid-cols-[1fr_300px]">
@@ -73,7 +83,11 @@ export function StoryView({ story }: { story: Story }) {
             {others.map((s) => (
               <li key={s.slug} className="border-t border-rule last:border-b">
                 <Link href={`/stories/${s.slug}/`} className="flex items-center gap-4 py-4 text-fg no-underline">
-                  <Art name={s.art} label={pick(s.title, lang)} width={96} className="h-auto w-[84px] flex-none" />
+                  {hasPhoto(STORY_PHOTO[s.slug]) ? (
+                    <Photo name={STORY_PHOTO[s.slug]} alt={pick(s.title, lang)} sizes="84px" className="h-[56px] w-[84px] flex-none object-cover" />
+                  ) : (
+                    <Art name={s.art} label={pick(s.title, lang)} width={96} className="h-auto w-[84px] flex-none" />
+                  )}
                   <span className="min-w-0">
                     <span className="serif block text-[18px]">{pick(s.title, lang)}</span>
                     <span className="mt-1 flex items-center gap-1.5 text-[12px] uppercase tracking-[0.12em] text-accent">

@@ -10,7 +10,9 @@ import { MOTIFS, Medallion, Motif, OrnamentBand, Shyrdak, TermeBand, ZigzagBand,
 import { DrawIn, Intro, Parallax, Reveal, RevealItem } from "@/components/motion";
 import { Art } from "@/components/art";
 import { KyrgyzMap } from "@/components/Map";
+import { Photo, hasPhoto } from "@/components/Photo";
 import { STORIES } from "@/data/stories";
+import { STORY_PHOTO } from "@/data/photos";
 
 const MOTIF_ORDER: MotifName[] = ["kochkor", "bugu", "itkuyruk", "kyial", "gul", "tumar"];
 const GUIDE_HREFS = ["/guide/#food", "/guide/#road", "/guide/#conditions", "/guide/#help"];
@@ -110,7 +112,16 @@ export function HomeClient({ places }: { places: Place[] }) {
             <Shyrdak id="hero-shyrdak" rows={4} className="hidden w-[92px] flex-none sm:block" />
             <div className="relative flex-1 overflow-hidden">
               <Parallax strength={0.06}>
-                <HeroArt className="block aspect-[7/5] w-full scale-110 object-cover sm:aspect-[4/5]" />
+                {hasPhoto("hero") ? (
+                  <Photo
+                    name="hero" priority
+                    alt="Юрты на берегу Сон-Куля"
+                    sizes="(max-width: 1024px) 100vw, 620px"
+                    className="block aspect-[7/5] w-full scale-105 object-cover sm:aspect-[4/5]"
+                  />
+                ) : (
+                  <HeroArt className="block aspect-[7/5] w-full scale-110 object-cover sm:aspect-[4/5]" />
+                )}
               </Parallax>
               <div className="absolute bottom-0 left-0 flex items-center gap-3 bg-cream px-4 py-3 sm:px-5 sm:py-4">
                 <Tunduk size={22} strokeWidth={1.2} className="text-accent" />
@@ -290,7 +301,11 @@ export function HomeClient({ places }: { places: Place[] }) {
           {STORIES.slice(0, 4).map((st, i) => (
             <RevealItem key={st.slug} delay={i * 80} className="w-[76vw] flex-none snap-start overflow-hidden border border-rule bg-paper sm:w-auto">
               <Link href={`/stories/${st.slug}/`} className="block text-fg no-underline">
-                <Art name={st.art} label={pick(st.title, lang)} width={520} className="block h-auto w-full" />
+                {hasPhoto(STORY_PHOTO[st.slug]) ? (
+                  <Photo name={STORY_PHOTO[st.slug]} alt={pick(st.title, lang)} sizes="(max-width: 640px) 76vw, 300px" className="block aspect-[3/2] w-full object-cover" />
+                ) : (
+                  <Art name={st.art} label={pick(st.title, lang)} width={520} className="block h-auto w-full" />
+                )}
                 <div className="p-5">
                   <h3 className="serif m-0 text-[20px]">{pick(st.title, lang)}</h3>
                   <p className="m-0 mt-2 line-clamp-3 text-[14px] leading-relaxed text-fg-muted">{pick(st.lead, lang)}</p>

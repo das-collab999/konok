@@ -81,6 +81,9 @@ const ru = {
     sections: "Разделы",
     allStays: "Все места",
     experiencesPage: "Впечатления",
+    photos: "Фотографии",
+    photosTitle: "Фотографии и их авторы",
+    photosSub: "Снимки на сайте — с Викисклада, под свободными лицензиями. Ниже автор и лицензия каждого; нажмите, чтобы открыть исходную страницу.",
   },
   home: {
     eyebrow: "Юрты и гостевые дома · Кыргызстан",
@@ -337,6 +340,9 @@ const en: Dict = {
     sections: "Sections",
     allStays: "All places",
     experiencesPage: "Experiences",
+    photos: "Photographs",
+    photosTitle: "Photographs and their authors",
+    photosSub: "The photographs on this site come from Wikimedia Commons under free licences. Below is the author and licence of each; tap to open the original page.",
   },
   home: {
     eyebrow: "Yurts and guesthouses · Kyrgyzstan",
@@ -555,6 +561,9 @@ const zh: Dict = {
     sections: "栏目",
     allStays: "全部住处",
     experiencesPage: "体验",
+    photos: "照片",
+    photosTitle: "照片与作者",
+    photosSub: "本站照片来自维基共享资源，采用自由许可协议。下面列出每张照片的作者与许可；点击可打开原始页面。",
   },
   home: {
     eyebrow: "毡房与民宿 · 吉尔吉斯斯坦",

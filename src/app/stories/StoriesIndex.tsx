@@ -6,6 +6,8 @@ import { pick, useLang } from "@/lib/i18n";
 import { Art } from "@/components/art";
 import { Motif, TermeBand } from "@/components/ethno";
 import { DrawIn } from "@/components/motion";
+import { Photo, hasPhoto } from "@/components/Photo";
+import { STORY_PHOTO } from "@/data/photos";
 
 export function StoriesIndex() {
   const { lang, t } = useLang();
@@ -15,7 +17,11 @@ export function StoriesIndex() {
   const card = (slug: string, art: Parameters<typeof Art>[0]["name"], title: string, lead: string) => (
     <li key={slug} className="overflow-hidden border border-rule bg-paper">
       <Link href={`/stories/${slug}/`} className="block text-fg no-underline">
-        <Art name={art} label={title} width={600} className="block h-auto w-full" />
+        {hasPhoto(STORY_PHOTO[slug]) ? (
+          <Photo name={STORY_PHOTO[slug]} alt={title} sizes="(max-width: 640px) 90vw, 380px" className="block aspect-[3/2] w-full object-cover" />
+        ) : (
+          <Art name={art} label={title} width={600} className="block h-auto w-full" />
+        )}
         <div className="p-5">
           <h3 className="serif m-0 text-[22px]">{title}</h3>
           <p className="m-0 mt-2.5 text-[15px] leading-relaxed text-fg-muted">{lead}</p>

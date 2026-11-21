@@ -1,4 +1,6 @@
 import type { Place } from "@/data/places";
+import { PLACE_PHOTO } from "@/data/photos";
+import { Photo, hasPhoto } from "./Photo";
 
 /* ------------------------------------------------------------------ *
  * Icons — one monoline set, 24×24, drawn in currentColor.
@@ -205,12 +207,33 @@ export function PlaceArt({ place, wide = false, className = "" }: { place: Place
 }
 
 /** Cover: a real photograph when there is one, the study otherwise. */
-export function Cover({ place, wide = false, className = "" }: { place: Place; wide?: boolean; className?: string }) {
+export function Cover({ place, wide = false, className = "", priority = false }:
+  { place: Place; wide?: boolean; className?: string; priority?: boolean }) {
+  // Настоящая фотография, если она есть; иначе — рисунок.
+  const name = PLACE_PHOTO[place.slug];
+  const photo = wide && name ? `${name}-w` : name;
+  if (hasPhoto(photo)) {
+    return (
+      <Photo
+        name={photo}
+        alt={place.title.ru}
+        className={className}
+        priority={priority}
+        sizes={wide ? "(max-width: 640px) 100vw, 1200px" : "(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 400px"}
+      />
+    );
+  }
   if (place.photo) {
     // eslint-disable-next-line @next/next/no-img-element
     return <img src={place.photo} alt={place.title.ru} className={className} loading="lazy" decoding="async" />;
   }
   return <PlaceArt place={place} wide={wide} className={className} />;
+}
+
+/** Есть ли у места фотография (нужно, чтобы убрать плашку «фото скоро»). */
+export function hasPlacePhoto(place: Place, wide = false): boolean {
+  const name = PLACE_PHOTO[place.slug];
+  return hasPhoto(wide && name ? `${name}-w` : name) || !!place.photo;
 }
 
 /* ------------------------------------------------------------------ *

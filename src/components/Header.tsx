@@ -130,6 +130,7 @@ export function Footer() {
               <Link href="/experiences/" className={link}>{t.common.experiencesPage}</Link>
               <Link href="/bookings/" className={link}>{t.nav.bookings}</Link>
               <Link href="/guide/#help" className={link}>{t.guide.sections.help}</Link>
+              <Link href="/photos/" className={link}>{t.common.photos}</Link>
             </div>
             <div className="flex flex-col gap-2">
               <span className="eyebrow text-on-dark-muted">{t.common.forHosts}</span>

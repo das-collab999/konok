@@ -6,7 +6,7 @@ import { toSom, type Place } from "@/data/places";
 import { useFavourites } from "@/lib/favourites";
 import { EMERGENCY, MEALS, PACKING, TRANSPORT } from "@/data/guide";
 import { pick, useLang } from "@/lib/i18n";
-import { Cover, Icon, type IconName } from "@/components/ui";
+import { Cover, hasPlacePhoto, Icon, type IconName } from "@/components/ui";
 import { Motif, OrnamentBand, ZigzagBand } from "@/components/ethno";
 import { Art } from "@/components/art";
 import { getStory } from "@/data/stories";
@@ -126,8 +126,8 @@ export function PlaceView({ place }: { place: Place }) {
       </div>
 
       <div className="relative mt-8 overflow-hidden bg-cream-2">
-        <Cover place={place} wide className="block aspect-[16/10] w-full object-cover sm:aspect-[21/9]" />
-        {!place.photo && (
+        <Cover place={place} wide priority className="block aspect-[16/10] w-full object-cover sm:aspect-[21/9]" />
+        {!hasPlacePhoto(place, true) && (
           <span className="absolute bottom-4 left-4 rounded-full bg-ink/75 px-4 py-2 text-[12px] text-cream">{t.place.photoSoon}</span>
         )}
       </div>

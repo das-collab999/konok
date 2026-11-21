@@ -6,6 +6,8 @@ import { pick, useLang } from "@/lib/i18n";
 import { Icon } from "@/components/ui";
 import Link from "next/link";
 import { Art } from "@/components/art";
+import { Photo, hasPhoto } from "@/components/Photo";
+import { MEAL_PHOTO } from "@/data/photos";
 import { storyForMeal } from "@/data/stories";
 import { Medallion, Motif, OrnamentBand, Shyrdak, TermeBand, ZigzagBand } from "@/components/ethno";
 import { DrawIn, RevealItem } from "@/components/motion";
@@ -87,7 +89,11 @@ export function GuideClient() {
                 <ul className="m-0 mt-5 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 lg:grid-cols-3">
                   {items.map((m) => (
                     <li key={m.title.ru} className="overflow-hidden border border-rule bg-paper">
-                      <Art name={m.art} label={pick(m.title, lang)} width={600} className="block h-auto w-full" />
+                      {hasPhoto(MEAL_PHOTO[m.title.ru]) ? (
+                        <Photo name={MEAL_PHOTO[m.title.ru]} alt={pick(m.title, lang)} sizes="(max-width: 640px) 76vw, 380px" className="block aspect-[3/2] w-full object-cover" />
+                      ) : (
+                        <Art name={m.art} label={pick(m.title, lang)} width={600} className="block h-auto w-full" />
+                      )}
                       <div className="p-5">
                         <div className="flex flex-wrap items-baseline justify-between gap-3">
                           <h4 className="serif m-0 text-[22px]">{pick(m.title, lang)}</h4>

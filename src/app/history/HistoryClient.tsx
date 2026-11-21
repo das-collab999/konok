@@ -4,6 +4,8 @@ import Link from "next/link";
 import { CUSTOMS, ERAS } from "@/data/history";
 import { pick, useLang } from "@/lib/i18n";
 import { Art } from "@/components/art";
+import { Photo, hasPhoto } from "@/components/Photo";
+import { CUSTOM_PHOTO, ERA_PHOTO } from "@/data/photos";
 import { Medallion, Motif, OrnamentBand, TermeBand, ZigzagBand } from "@/components/ethno";
 import { DrawIn, Reveal, RevealItem } from "@/components/motion";
 
@@ -45,6 +47,13 @@ export function HistoryClient() {
                 <span className="mt-1 block text-[12px] uppercase tracking-[0.14em] text-fg-subtle">{String(i + 1).padStart(2, "0")}</span>
               </div>
               <div className="min-w-0">
+                {hasPhoto(ERA_PHOTO[e.id]) && (
+                  <Photo
+                    name={ERA_PHOTO[e.id]} alt={pick(e.title, lang)}
+                    sizes="(max-width: 640px) 90vw, 560px"
+                    className="mb-5 block aspect-[3/2] w-full max-w-[560px] object-cover"
+                  />
+                )}
                 <h2 className="serif m-0 text-[26px]">{pick(e.title, lang)}</h2>
                 <p className="m-0 mt-3 max-w-[70ch] text-[16px] leading-relaxed text-fg-muted">{pick(e.text, lang)}</p>
                 {e.see && (
@@ -79,7 +88,11 @@ export function HistoryClient() {
           <ul className="m-0 mt-10 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 lg:grid-cols-3">
             {CUSTOMS.map((c, i) => (
               <RevealItem key={c.id} delay={i * 70} className="overflow-hidden border border-rule bg-paper">
-                <Art name={c.art} label={pick(c.title, lang)} width={560} className="block h-auto w-full" />
+                {hasPhoto(CUSTOM_PHOTO[c.id]) ? (
+                  <Photo name={CUSTOM_PHOTO[c.id]} alt={pick(c.title, lang)} sizes="(max-width: 640px) 90vw, 380px" className="block aspect-[3/2] w-full object-cover" />
+                ) : (
+                  <Art name={c.art} label={pick(c.title, lang)} width={560} className="block h-auto w-full" />
+                )}
                 <div className="p-5">
                   <h3 className="serif m-0 text-[21px]">{pick(c.title, lang)}</h3>
                   <p className="m-0 mt-2.5 text-[15px] leading-relaxed text-fg-muted">{pick(c.text, lang)}</p>
