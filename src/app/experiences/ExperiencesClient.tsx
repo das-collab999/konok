@@ -26,7 +26,7 @@ export function ExperiencesClient() {
 
       <TermeBand id="terme-exp" height={24} />
 
-      <section className="mx-auto max-w-[1280px] px-5 py-12 sm:px-10">
+      <section className="mx-auto max-w-[1280px] px-5 py-8 sm:py-12 sm:px-10">
         <ul className="m-0 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2">
           {t.home.experiences.map((e, i) => (
             <RevealItem key={e.t} delay={i * 80} className="overflow-hidden border border-rule bg-paper">

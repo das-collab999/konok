@@ -34,7 +34,7 @@ export function Done({ place }: { place: Place }) {
   ];
 
   return (
-    <div className="mx-auto max-w-[840px] px-5 pb-16 pt-12 sm:px-10">
+    <div className="mx-auto max-w-[840px] px-5 pb-10 sm:pb-16 pt-12 sm:px-10">
       <div className="flex items-center gap-3">
         <Tunduk size={26} strokeWidth={1.2} className="text-accent" />
         <span className="eyebrow">{t.done.greeting}</span>

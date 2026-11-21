@@ -70,9 +70,9 @@ export function PlaceView({ place }: { place: Place }) {
   return (
     <div className="mx-auto max-w-[1280px] px-5 pb-10 pt-6 sm:px-10">
       <nav aria-label="breadcrumbs" className="flex items-center gap-2 text-[13px] text-fg-subtle">
-        <Link href="/" className="text-fg-muted no-underline hover:text-fg">{t.nav.home}</Link>
+        <Link href="/" className="inline-flex h-11 items-center text-fg-muted no-underline hover:text-fg">{t.nav.home}</Link>
         <span>·</span>
-        <Link href="/#stays" className="text-fg-muted no-underline hover:text-fg">{t.nav.stays}</Link>
+        <Link href="/stays/" className="inline-flex h-11 items-center text-fg-muted no-underline hover:text-fg">{t.nav.stays}</Link>
         <span>·</span>
         <span className="truncate">{pick(place.place, lang)}</span>
       </nav>
@@ -170,8 +170,8 @@ export function PlaceView({ place }: { place: Place }) {
             <p className="m-0 mt-3 max-w-[60ch] text-[15px] leading-relaxed text-fg-muted">{t.place.tableSub}</p>
             <ul className="m-0 mt-6 grid list-none grid-cols-1 gap-x-10 gap-y-0 p-0 sm:grid-cols-2">
               {table.map((m) => (
-                <li key={m.title.ru} className="flex gap-4 border-t border-rule py-5">
-                  <Art name={m.art} label={pick(m.title, lang)} width={168} className="h-auto w-[120px] flex-none sm:w-[168px]" />
+                <li key={m.title.ru} className="flex flex-col gap-3 border-t border-rule py-5 min-[420px]:flex-row min-[420px]:gap-4">
+                  <Art name={m.art} label={pick(m.title, lang)} width={168} className="h-auto w-[168px] max-w-full flex-none min-[420px]:w-[120px] sm:w-[168px]" />
                   <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-baseline justify-between gap-3">
                     <h3 className="serif m-0 text-[20px]">{pick(m.title, lang)}</h3>
@@ -249,7 +249,7 @@ export function PlaceView({ place }: { place: Place }) {
               <ul className="m-0 mt-5 flex list-none flex-wrap gap-x-10 gap-y-3 p-0">
                 {EMERGENCY.slice(0, 4).map((c) => (
                   <li key={c.phone} className="flex items-baseline gap-3">
-                    <a href={`tel:${c.phone}`} className="serif text-[24px] text-accent no-underline">{c.phone}</a>
+                    <a href={`tel:${c.phone}`} className="serif inline-flex h-11 items-center text-[24px] text-accent no-underline">{c.phone}</a>
                     <span className="text-[13px] text-fg-muted">{pick(c.title, lang)}</span>
                   </li>
                 ))}

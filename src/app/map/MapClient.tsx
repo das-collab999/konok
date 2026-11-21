@@ -24,7 +24,7 @@ export function MapClient({ places }: { places: Place[] }) {
       <TermeBand id="terme-map" height={24} />
 
       <section className="mx-auto max-w-[1280px] px-5 py-10 sm:px-10">
-        <KyrgyzMap places={places} />
+        <div className="-mx-5 sm:mx-0"><KyrgyzMap places={places} /></div>
         <div className="mt-10 flex flex-wrap gap-3">
           <Link href="/stays/" className="pill pill-solid">{t.common.allStays}</Link>
           <Link href="/stories/" className="pill pill-ghost">{t.common.allStories}</Link>

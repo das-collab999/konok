@@ -15,9 +15,9 @@ export function StoryView({ story }: { story: Story }) {
   return (
     <article className="mx-auto max-w-[1280px] px-5 pb-10 pt-6 sm:px-10">
       <nav aria-label="breadcrumbs" className="flex items-center gap-2 text-[13px] text-fg-subtle">
-        <Link href="/" className="text-fg-muted no-underline hover:text-fg">{t.nav.home}</Link>
+        <Link href="/" className="inline-flex h-11 items-center text-fg-muted no-underline hover:text-fg">{t.nav.home}</Link>
         <span>·</span>
-        <Link href="/stories/" className="text-fg-muted no-underline hover:text-fg">{t.common.stories}</Link>
+        <Link href="/stories/" className="inline-flex h-11 items-center text-fg-muted no-underline hover:text-fg">{t.common.stories}</Link>
         <span>·</span>
         <span className="truncate">{pick(story.title, lang)}</span>
       </nav>
@@ -60,7 +60,7 @@ export function StoryView({ story }: { story: Story }) {
             {story.kind === "dish" ? (
               <Link href="/guide/#food" className="pill pill-ghost">{t.guide.sections.food}</Link>
             ) : (
-              <Link href="/#stays" className="pill pill-ghost">{t.nav.stays}</Link>
+              <Link href="/stays/" className="pill pill-ghost">{t.nav.stays}</Link>
             )}
             <Link href="/stories/" className="pill pill-ghost">{t.common.allStories}</Link>
           </div>

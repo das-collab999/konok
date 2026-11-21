@@ -63,7 +63,7 @@ export function BookingCard({ place }: { place: Place }) {
   };
 
   return (
-    <aside className="w-full lg:sticky lg:top-28 lg:w-[380px] lg:flex-none">
+    <aside id="book" className="w-full scroll-mt-20 lg:sticky lg:top-28 lg:w-[380px] lg:flex-none">
       <div className="bg-paper p-7">
         <div className="flex items-baseline gap-2 border-b border-rule pb-5">
           <span className="serif text-[34px]">${place.pricePerPersonUsd}</span>
@@ -117,6 +117,22 @@ export function BookingCard({ place }: { place: Place }) {
           {date ? `${t.place.arrival}: ${formatDate(date, lang)}. ` : ""}{t.place.bookNote}
         </p>
       </div>
+
+      {/* На телефоне кнопка брони всегда под рукой: страница длинная,
+          и искать карточку внизу неудобно. */}
+      <div className="fixed inset-x-0 bottom-16 z-40 flex items-center justify-between gap-4 border-t border-rule bg-cream/97 px-5 py-2.5 backdrop-blur lg:hidden">
+        <span className="min-w-0">
+          <span className="serif block text-[22px] leading-tight">${total}</span>
+          <span className="block text-[12px] text-fg-subtle">
+            {nights} {t.common.nights} · {guests} {t.common.guests}
+          </span>
+        </span>
+        <button type="button" onClick={book} className="pill pill-solid h-11 flex-none px-6">
+          {t.place.book}
+          <Icon name="arrow" size={15} strokeWidth={1.8} />
+        </button>
+      </div>
+      <div className="h-24 lg:hidden" aria-hidden="true" />
     </aside>
   );
 }

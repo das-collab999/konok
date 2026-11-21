@@ -130,7 +130,7 @@ export function StaysClient({ places }: { places: Place[] }) {
         </div>
 
         {stays.length === 0 ? (
-          <div className="mt-12 border border-dashed border-rule-strong px-8 py-20 text-center">
+          <div className="mt-12 border border-dashed border-rule-strong px-8 py-8 sm:py-12 sm:py-20 text-center">
             <Motif name="kyial" size={64} className="mx-auto text-rule-strong" />
             <p className="serif m-0 mt-5 text-[24px]">{onlyFav && fav.list.length === 0 ? t.common.favourites : t.home.emptyTitle}</p>
             <p className="m-0 mt-3 text-[15px] text-fg-muted">{onlyFav && fav.list.length === 0 ? t.common.noFavourites : t.home.emptySub}</p>

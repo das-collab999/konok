@@ -14,7 +14,7 @@ export function HistoryClient() {
     <>
       {/* ───────────────────────────── шапка */}
       <section className="border-b border-rule">
-        <div className="mx-auto grid max-w-[1280px] items-center gap-10 px-5 py-12 sm:px-10 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="mx-auto grid max-w-[1280px] items-center gap-10 px-5 py-8 sm:py-12 sm:px-10 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <span className="eyebrow flex items-center gap-2.5">
               <DrawIn duration={1200}><Motif name="tumar" size={30} className="text-accent" /></DrawIn>
@@ -36,7 +36,7 @@ export function HistoryClient() {
       </div>
 
       {/* ───────────────────────────── лента времени */}
-      <section className="mx-auto max-w-[1280px] px-5 py-14 sm:px-10">
+      <section className="mx-auto max-w-[1280px] px-5 py-9 sm:py-14 sm:px-10">
         <ol className="m-0 flex list-none flex-col p-0">
           {ERAS.map((e, i) => (
             <RevealItem key={e.id} delay={i * 60} className="grid grid-cols-1 gap-x-10 gap-y-3 border-t border-rule py-8 last:border-b sm:grid-cols-[180px_1fr]">
@@ -53,7 +53,7 @@ export function HistoryClient() {
                     {e.story && (
                       <>
                         {" · "}
-                        <Link href={`/stories/${e.story}/`} className="text-accent no-underline hover:underline">{t.common.readMore} →</Link>
+                        <Link href={`/stories/${e.story}/`} className="inline-flex h-11 items-center text-accent no-underline hover:underline">{t.common.readMore} →</Link>
                       </>
                     )}
                   </p>
@@ -67,7 +67,7 @@ export function HistoryClient() {
       {/* ───────────────────────────── живая культура */}
       <section id="culture" className="scroll-mt-24 border-y border-rule bg-cream-2">
         <TermeBand id="terme-culture" height={24} />
-        <div className="mx-auto max-w-[1280px] px-5 py-14 sm:px-10">
+        <div className="mx-auto max-w-[1280px] px-5 py-9 sm:py-14 sm:px-10">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-[30rem]">
               <span className="eyebrow">{t.common.culture}</span>
@@ -96,7 +96,7 @@ export function HistoryClient() {
       </section>
 
       <Reveal>
-        <section className="mx-auto max-w-[1280px] px-5 py-14 sm:px-10">
+        <section className="mx-auto max-w-[1280px] px-5 py-9 sm:py-14 sm:px-10">
           <div className="flex flex-wrap gap-3">
             <Link href="/stories/" className="pill pill-solid">{t.common.allStories}</Link>
             <Link href="/map/" className="pill pill-ghost">{t.common.mapPage}</Link>

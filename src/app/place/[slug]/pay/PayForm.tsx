@@ -49,7 +49,7 @@ export function PayForm({ place }: { place: Place }) {
   };
 
   return (
-    <div className="mx-auto max-w-[840px] px-5 pb-16 pt-8 sm:px-10">
+    <div className="mx-auto max-w-[840px] px-5 pb-10 sm:pb-16 pt-8 sm:px-10">
       <Link href={`/place/${place.slug}/`} className="inline-flex h-11 items-center gap-2 text-[13px] text-fg-muted no-underline hover:text-fg">
         <Icon name="back" size={15} strokeWidth={1.6} /> {t.pay.back}
       </Link>
