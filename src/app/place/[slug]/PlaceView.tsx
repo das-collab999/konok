@@ -78,7 +78,7 @@ export function PlaceView({ place }: { place: Place }) {
       </nav>
 
       <div className="mt-6 flex flex-wrap items-end justify-between gap-x-10 gap-y-5 border-b border-rule pb-8">
-        <h1 className="display m-0 max-w-[16ch] text-[clamp(28px,5.4vw,64px)]">{pick(place.title, lang)}</h1>
+        <h1 className="display m-0 max-w-[16ch] text-[clamp(27px,4.4vw,46px)]">{pick(place.title, lang)}</h1>
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[13px] text-fg-muted">
           <span className="inline-flex items-center gap-2"><Icon name="pin" size={15} strokeWidth={1.4} />{pick(place.place, lang)}</span>
           <span className="inline-flex items-center gap-2"><Icon name="mount" size={15} strokeWidth={1.4} />{place.altitudeM} {t.common.altitude}</span>

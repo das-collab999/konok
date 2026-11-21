@@ -32,7 +32,7 @@ export default function BookingsPage() {
   return (
     <div className="mx-auto max-w-[1100px] px-5 pb-10 pt-10 sm:px-10">
       <span className="eyebrow">{t.bookings.eyebrow}</span>
-      <h1 className="display m-0 mt-4 text-[clamp(30px,5.6vw,60px)]">{t.bookings.title}</h1>
+      <h1 className="display m-0 mt-4 text-[clamp(28px,4.4vw,46px)]">{t.bookings.title}</h1>
       <p className="m-0 mt-6 max-w-[58ch] text-[16px] leading-relaxed text-fg-muted">{t.bookings.text}</p>
 
       {list === null && <p className="mt-12 text-[15px] text-fg-subtle">{t.common.loading}</p>}
@@ -89,7 +89,7 @@ export default function BookingsPage() {
       {/* Избранное */}
       <section className="mt-20 border-t border-rule pt-10">
         <span className="eyebrow">{t.common.favourites}</span>
-        <h2 className="display m-0 mt-4 text-[clamp(24px,4vw,40px)]">{t.common.favourites}</h2>
+        <h2 className="display m-0 mt-4 text-[clamp(24px,3.2vw,34px)]">{t.common.favourites}</h2>
         {saved.length === 0 ? (
           <p className="m-0 mt-5 max-w-[52ch] text-[15px] text-fg-muted">{t.common.noFavourites}</p>
         ) : (

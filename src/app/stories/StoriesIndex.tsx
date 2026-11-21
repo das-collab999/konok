@@ -6,7 +6,7 @@ import { pick, useLang } from "@/lib/i18n";
 import { Art } from "@/components/art";
 import { Motif, TermeBand } from "@/components/ethno";
 import { DrawIn } from "@/components/motion";
-import { Photo, hasPhoto } from "@/components/Photo";
+import { PhotoSlot } from "@/components/PhotoSlot";
 import { STORY_PHOTO } from "@/data/photos";
 
 export function StoriesIndex() {
@@ -17,11 +17,7 @@ export function StoriesIndex() {
   const card = (slug: string, art: Parameters<typeof Art>[0]["name"], title: string, lead: string) => (
     <li key={slug} className="overflow-hidden border border-rule bg-paper">
       <Link href={`/stories/${slug}/`} className="block text-fg no-underline">
-        {hasPhoto(STORY_PHOTO[slug]) ? (
-          <Photo name={STORY_PHOTO[slug]} alt={title} sizes="(max-width: 640px) 90vw, 380px" className="block aspect-[3/2] w-full object-cover" />
-        ) : (
-          <Art name={art} label={title} width={600} className="block h-auto w-full" />
-        )}
+        <PhotoSlot name={STORY_PHOTO[slug]} alt={title} sizes="(max-width: 640px) 90vw, 380px" className="aspect-[3/2]" />
         <div className="p-5">
           <h3 className="serif m-0 text-[22px]">{title}</h3>
           <p className="m-0 mt-2.5 text-[15px] leading-relaxed text-fg-muted">{lead}</p>
@@ -41,7 +37,7 @@ export function StoriesIndex() {
             <DrawIn duration={1200}><Motif name="kyial" size={34} className="text-accent" /></DrawIn>
             {t.common.stories}
           </span>
-          <h1 className="display m-0 mt-5 max-w-[16ch] text-[clamp(32px,6vw,72px)]">{t.common.storiesTitle}</h1>
+          <h1 className="display m-0 mt-5 max-w-[16ch] text-[clamp(30px,5vw,52px)]">{t.common.storiesTitle}</h1>
           <p className="m-0 mt-6 max-w-[58ch] text-[17px] leading-relaxed text-fg-muted">{t.common.storiesSub}</p>
         </div>
       </section>
@@ -50,7 +46,7 @@ export function StoriesIndex() {
 
       <section className="mx-auto max-w-[1280px] px-5 py-10 sm:py-16 sm:px-10">
         <span className="eyebrow">{t.guide.sections.food}</span>
-        <h2 className="display m-0 mt-4 text-[clamp(26px,4vw,42px)]">{t.guide.foodTitle}</h2>
+        <h2 className="display m-0 mt-4 text-[clamp(25px,3.4vw,36px)]">{t.guide.foodTitle}</h2>
         <ul className="m-0 mt-8 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 lg:grid-cols-3">
           {dishes.map((s) => card(s.slug, s.art, pick(s.title, lang), pick(s.lead, lang)))}
         </ul>
@@ -59,7 +55,7 @@ export function StoriesIndex() {
       <section className="border-t border-rule bg-cream-2">
         <div className="mx-auto max-w-[1280px] px-5 py-10 sm:py-16 sm:px-10">
           <span className="eyebrow">{t.common.aboutPlace}</span>
-          <h2 className="display m-0 mt-4 text-[clamp(26px,4vw,42px)]">{t.common.mapTitle}</h2>
+          <h2 className="display m-0 mt-4 text-[clamp(25px,3.4vw,36px)]">{t.common.mapTitle}</h2>
           <ul className="m-0 mt-8 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 lg:grid-cols-3">
             {places.map((s) => card(s.slug, s.art, pick(s.title, lang), pick(s.lead, lang)))}
           </ul>

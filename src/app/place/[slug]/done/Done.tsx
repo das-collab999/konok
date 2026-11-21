@@ -40,7 +40,7 @@ export function Done({ place }: { place: Place }) {
         <span className="eyebrow">{t.done.greeting}</span>
       </div>
 
-      <h1 className="display m-0 mt-6 max-w-[16ch] text-[clamp(30px,5.6vw,64px)]">
+      <h1 className="display m-0 mt-6 max-w-[16ch] text-[clamp(28px,4.6vw,48px)]">
         {name ? `${name}, ${t.done.titleWith}` : t.done.title}
       </h1>
 

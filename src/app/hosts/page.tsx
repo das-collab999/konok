@@ -25,7 +25,7 @@ export default function HostsPage() {
               <span className="eyebrow">{t.hosts.eyebrow}</span>
             </div>
 
-            <h1 className="display m-0 mt-6 max-w-[14ch] text-[clamp(30px,5.6vw,64px)]">{t.hosts.title}</h1>
+            <h1 className="display m-0 mt-6 max-w-[14ch] text-[clamp(28px,4.6vw,48px)]">{t.hosts.title}</h1>
             <p className="m-0 mt-6 max-w-[52ch] text-[17px] leading-relaxed text-fg-muted">{t.hosts.text}</p>
 
             <ol className="m-0 mt-12 flex list-none flex-col p-0">
@@ -120,7 +120,7 @@ export default function HostsPage() {
 
       <section id="join" className="mx-auto max-w-[840px] scroll-mt-24 px-5 py-10 sm:py-16 sm:px-10">
         <span className="eyebrow">{t.hosts.joinEyebrow}</span>
-        <h2 className="display m-0 mt-4 max-w-[16ch] text-[clamp(26px,4.6vw,48px)]">{t.hosts.joinTitle}</h2>
+        <h2 className="display m-0 mt-4 max-w-[16ch] text-[clamp(25px,3.8vw,40px)]">{t.hosts.joinTitle}</h2>
         <p className="m-0 mt-6 max-w-[54ch] text-[16px] leading-relaxed text-fg-muted">{t.hosts.joinText}</p>
 
         {sent ? (

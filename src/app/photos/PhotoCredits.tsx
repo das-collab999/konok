@@ -18,7 +18,7 @@ export function PhotoCredits() {
             <Motif name="gul" size={30} className="text-accent" />
             {t.common.photos}
           </span>
-          <h1 className="display m-0 mt-4 max-w-[18ch] text-[clamp(28px,5vw,56px)]">{t.common.photosTitle}</h1>
+          <h1 className="display m-0 mt-4 max-w-[18ch] text-[clamp(27px,4.2vw,44px)]">{t.common.photosTitle}</h1>
           <p className="m-0 mt-5 max-w-[60ch] text-[16px] leading-relaxed text-fg-muted">{t.common.photosSub}</p>
         </div>
       </section>

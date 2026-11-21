@@ -1,6 +1,7 @@
 import type { Place } from "@/data/places";
 import { PLACE_PHOTO } from "@/data/photos";
 import { Photo, hasPhoto } from "./Photo";
+import { Medallion } from "./ethno";
 
 /* ------------------------------------------------------------------ *
  * Icons — one monoline set, 24×24, drawn in currentColor.
@@ -219,7 +220,7 @@ export function Cover({ place, wide = false, className = "", priority = false }:
         alt={place.title.ru}
         className={className}
         priority={priority}
-        sizes={wide ? "(max-width: 640px) 100vw, 1200px" : "(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 400px"}
+        sizes={wide ? "(max-width: 640px) 100vw, 1200px" : "(max-width: 640px) 78vw, (max-width: 1024px) 45vw, 400px"}
       />
     );
   }
@@ -227,7 +228,13 @@ export function Cover({ place, wide = false, className = "", priority = false }:
     // eslint-disable-next-line @next/next/no-img-element
     return <img src={place.photo} alt={place.title.ru} className={className} loading="lazy" decoding="async" />;
   }
-  return <PlaceArt place={place} wide={wide} className={className} />;
+  // Фотографии пока нет: спокойная войлочная плашка с узором вместо
+  // рисунка — так честнее и не выглядит дешёвой картинкой.
+  return (
+    <span className={`felt flex items-center justify-center bg-cream-2 ${className.replace("object-cover", "")}`} aria-hidden="true">
+      <Medallion id={`cover-${place.slug}${wide ? "-w" : ""}`} size={wide ? 260 : 180} color="#8E2420" className="opacity-[0.14]" />
+    </span>
+  );
 }
 
 /** Есть ли у места фотография (нужно, чтобы убрать плашку «фото скоро»). */

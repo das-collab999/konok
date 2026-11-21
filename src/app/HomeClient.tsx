@@ -10,6 +10,7 @@ import { MOTIFS, Medallion, Motif, OrnamentBand, Shyrdak, TermeBand, ZigzagBand,
 import { DrawIn, Intro, Parallax, Reveal, RevealItem } from "@/components/motion";
 import { Art } from "@/components/art";
 import { KyrgyzMap } from "@/components/Map";
+import { PhotoSlot } from "@/components/PhotoSlot";
 import { Photo, hasPhoto } from "@/components/Photo";
 import { STORIES } from "@/data/stories";
 import { STORY_PHOTO } from "@/data/photos";
@@ -51,7 +52,7 @@ export function HomeClient({ places }: { places: Place[] }) {
 
   const query = new URLSearchParams({ g: String(guests), d: date }).toString();
   const staysHref = `/stays/?${new URLSearchParams({ r: region, d: date, g: String(guests) }).toString()}`;
-  const field = "h-11 w-full border-0 border-b border-rule-strong bg-transparent px-0 text-[16px] text-fg outline-none focus:border-ink";
+  const field = "h-10 w-full border-0 bg-transparent px-0 text-[16px] font-medium text-fg outline-none";
 
   return (
     <>
@@ -77,23 +78,23 @@ export function HomeClient({ places }: { places: Place[] }) {
               <DrawIn duration={1200}><Motif name="kochkor" size={34} className="text-accent" /></DrawIn>
               {t.home.eyebrow}
             </span>
-            <h1 className="display m-0 mt-5 max-w-[13ch] text-[clamp(38px,8vw,92px)]">{t.home.heroTitle}</h1>
+            <h1 className="display m-0 mt-5 max-w-[13ch] text-[clamp(34px,6.4vw,64px)]">{t.home.heroTitle}</h1>
             <p className="m-0 mt-6 max-w-[46ch] text-[17px] leading-relaxed text-fg-muted">{t.home.heroSub}</p>
 
-            <div className="mt-10 border-t border-rule pt-7">
-              <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-3 sm:gap-6">
-                <div className="col-span-2 flex flex-col gap-2 sm:col-span-1">
-                  <label htmlFor="f-region" className="eyebrow">{t.home.where}</label>
+            <div className="panel mt-9 p-4 sm:p-5">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-[1.3fr_1fr_0.7fr] sm:gap-0">
+                <div className="col-span-2 flex flex-col gap-1 sm:col-span-1 sm:border-r sm:border-rule sm:pr-4">
+                  <label htmlFor="f-region" className="text-[12px] font-semibold text-fg-muted">{t.home.where}</label>
                   <select id="f-region" value={region} onChange={(e) => setRegion(e.target.value as Region | "all")} className={`${field} cursor-pointer`}>
                     {REGIONS.map((r) => <option key={r.key} value={r.key}>{pick(r.label, lang)}</option>)}
                   </select>
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="f-date" className="eyebrow">{t.home.when}</label>
+                <div className="flex flex-col gap-1 sm:border-r sm:border-rule sm:px-4">
+                  <label htmlFor="f-date" className="text-[12px] font-semibold text-fg-muted">{t.home.when}</label>
                   <input id="f-date" type="date" min={today} value={date} onChange={(e) => setDate(e.target.value)} className={field} />
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="f-guests" className="eyebrow">{t.home.guests}</label>
+                <div className="flex flex-col gap-1 sm:pl-4">
+                  <label htmlFor="f-guests" className="text-[12px] font-semibold text-fg-muted">{t.home.guests}</label>
                   <input
                     id="f-guests" type="number" min={1} max={12} value={guests}
                     onChange={(e) => setGuests(Math.min(12, Math.max(1, Number(e.target.value) || 1)))}
@@ -101,7 +102,7 @@ export function HomeClient({ places }: { places: Place[] }) {
                   />
                 </div>
               </div>
-              <Link href={staysHref} className="pill pill-solid mt-7 w-full justify-center sm:w-auto">
+              <Link href={staysHref} className="pill pill-solid mt-4 w-full justify-center">
                 <Icon name="search" size={15} strokeWidth={1.8} />
                 {t.home.find}
               </Link>
@@ -143,7 +144,7 @@ export function HomeClient({ places }: { places: Place[] }) {
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-[30rem]">
             <span className="eyebrow">{t.common.sections}</span>
-            <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,48px)]">{t.home.hubTitle}</h2>
+            <h2 className="display m-0 mt-4 text-[clamp(26px,3.8vw,40px)]">{t.home.hubTitle}</h2>
           </div>
           <p className="m-0 max-w-[42ch] text-[15px] leading-relaxed text-fg-muted">{t.home.hubSub}</p>
         </div>
@@ -177,7 +178,7 @@ export function HomeClient({ places }: { places: Place[] }) {
         <div className="mx-auto max-w-[1280px] px-5 py-10 sm:py-16 sm:px-10">
           <div className="max-w-[30rem]">
             <span className="eyebrow">01 — 02 — 03</span>
-            <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,44px)]">{t.home.howTitle}</h2>
+            <h2 className="display m-0 mt-4 text-[clamp(26px,3.6vw,38px)]">{t.home.howTitle}</h2>
             <p className="m-0 mt-4 text-[16px] leading-relaxed text-fg-muted">{t.home.howSub}</p>
           </div>
 
@@ -205,14 +206,14 @@ export function HomeClient({ places }: { places: Place[] }) {
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-[30rem]">
             <span className="eyebrow">{t.nav.stays}</span>
-            <h2 className="display m-0 mt-4 text-[clamp(30px,5vw,56px)]">{t.home.staysTitle}</h2>
+            <h2 className="display m-0 mt-4 text-[clamp(28px,4.2vw,44px)]">{t.home.staysTitle}</h2>
           </div>
           <p className="m-0 max-w-[44ch] text-[15px] leading-relaxed text-fg-muted">{t.home.staysSub}</p>
         </div>
 
         <div className="-mx-5 mt-8 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-2 [scrollbar-width:none] sm:mx-0 sm:mt-12 sm:grid sm:grid-cols-2 sm:gap-x-8 sm:gap-y-14 sm:overflow-visible sm:px-0 lg:grid-cols-3">
           {places.slice(0, 3).map((p, i) => (
-            <Reveal key={p.slug} delay={(i % 3) * 110} className="w-[78vw] flex-none snap-start sm:w-auto">
+            <Reveal key={p.slug} delay={(i % 3) * 110} className="h-full w-[78vw] flex-none snap-start sm:w-auto">
               <PlaceCard place={p} query={query} />
             </Reveal>
           ))}
@@ -229,7 +230,7 @@ export function HomeClient({ places }: { places: Place[] }) {
         <div className="flex flex-wrap items-end justify-between gap-6 border-t border-rule pt-10">
           <div className="max-w-[30rem]">
             <span className="eyebrow">{t.common.mapPage}</span>
-            <h2 className="display m-0 mt-4 text-[clamp(26px,4vw,42px)]">{t.common.mapTitle}</h2>
+            <h2 className="display m-0 mt-4 text-[clamp(25px,3.4vw,36px)]">{t.common.mapTitle}</h2>
           </div>
           <p className="m-0 max-w-[42ch] text-[15px] leading-relaxed text-fg-muted">{t.common.mapSub}</p>
         </div>
@@ -246,7 +247,7 @@ export function HomeClient({ places }: { places: Place[] }) {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-[30rem]">
               <span className="eyebrow">{t.nav.guide}</span>
-              <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,48px)]">{t.home.guideTitle}</h2>
+              <h2 className="display m-0 mt-4 text-[clamp(26px,3.8vw,40px)]">{t.home.guideTitle}</h2>
             </div>
             <p className="m-0 max-w-[42ch] text-[15px] leading-relaxed text-fg-muted">{t.home.guideSub}</p>
           </div>
@@ -274,7 +275,7 @@ export function HomeClient({ places }: { places: Place[] }) {
         <div className="grid items-center gap-10 border-t border-rule pt-10 lg:grid-cols-[1fr_0.8fr]">
           <div>
             <span className="eyebrow">{t.common.history}</span>
-            <h2 className="display m-0 mt-4 max-w-[18ch] text-[clamp(26px,4vw,44px)]">{t.common.historyTitle}</h2>
+            <h2 className="display m-0 mt-4 max-w-[18ch] text-[clamp(25px,3.6vw,38px)]">{t.common.historyTitle}</h2>
             <p className="m-0 mt-5 max-w-[56ch] text-[16px] leading-relaxed text-fg-muted">{t.common.historySub}</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/history/" className="pill pill-solid">{t.common.history}</Link>
@@ -292,7 +293,7 @@ export function HomeClient({ places }: { places: Place[] }) {
         <div className="flex flex-wrap items-end justify-between gap-6 border-t border-rule pt-10">
           <div className="max-w-[30rem]">
             <span className="eyebrow">{t.common.stories}</span>
-            <h2 className="display m-0 mt-4 text-[clamp(26px,4vw,42px)]">{t.common.storiesTitle}</h2>
+            <h2 className="display m-0 mt-4 text-[clamp(25px,3.4vw,36px)]">{t.common.storiesTitle}</h2>
           </div>
           <p className="m-0 max-w-[42ch] text-[15px] leading-relaxed text-fg-muted">{t.common.storiesSub}</p>
         </div>
@@ -301,11 +302,7 @@ export function HomeClient({ places }: { places: Place[] }) {
           {STORIES.slice(0, 4).map((st, i) => (
             <RevealItem key={st.slug} delay={i * 80} className="w-[76vw] flex-none snap-start overflow-hidden border border-rule bg-paper sm:w-auto">
               <Link href={`/stories/${st.slug}/`} className="block text-fg no-underline">
-                {hasPhoto(STORY_PHOTO[st.slug]) ? (
-                  <Photo name={STORY_PHOTO[st.slug]} alt={pick(st.title, lang)} sizes="(max-width: 640px) 76vw, 300px" className="block aspect-[3/2] w-full object-cover" />
-                ) : (
-                  <Art name={st.art} label={pick(st.title, lang)} width={520} className="block h-auto w-full" />
-                )}
+                <PhotoSlot name={STORY_PHOTO[st.slug]} alt={pick(st.title, lang)} sizes="(max-width: 640px) 76vw, 300px" className="aspect-[3/2]" />
                 <div className="p-5">
                   <h3 className="serif m-0 text-[20px]">{pick(st.title, lang)}</h3>
                   <p className="m-0 mt-2 line-clamp-3 text-[14px] leading-relaxed text-fg-muted">{pick(st.lead, lang)}</p>
@@ -330,7 +327,7 @@ export function HomeClient({ places }: { places: Place[] }) {
           </DrawIn>
           <Reveal className="max-w-[34rem]">
             <span className="eyebrow text-gold">{t.home.sayingEyebrow}</span>
-            <p className="display m-0 mt-5 text-[clamp(28px,4.4vw,52px)] leading-[1.05] text-cream">{t.home.saying}</p>
+            <p className="display m-0 mt-5 text-[clamp(25px,3.4vw,36px)] leading-[1.05] text-cream">{t.home.saying}</p>
             <p className="m-0 mt-6 text-[17px] leading-relaxed text-on-dark-muted">{t.home.sayingText}</p>
           </Reveal>
         </div>
@@ -342,7 +339,7 @@ export function HomeClient({ places }: { places: Place[] }) {
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-[26rem]">
             <span className="eyebrow">{t.nav.experiences}</span>
-            <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,48px)]">{t.home.expTitle}</h2>
+            <h2 className="display m-0 mt-4 text-[clamp(26px,3.8vw,40px)]">{t.home.expTitle}</h2>
           </div>
           <p className="m-0 max-w-[40ch] text-[15px] leading-relaxed text-fg-muted">{t.home.expSub}</p>
         </div>
@@ -371,7 +368,7 @@ export function HomeClient({ places }: { places: Place[] }) {
         <div className="flex flex-wrap items-end justify-between gap-6 border-t border-rule pt-10">
           <div className="max-w-[32rem]">
             <span className="eyebrow">{t.home.motifsEyebrow}</span>
-            <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,48px)]">{t.home.motifsTitle}</h2>
+            <h2 className="display m-0 mt-4 text-[clamp(26px,3.8vw,40px)]">{t.home.motifsTitle}</h2>
           </div>
           <p className="m-0 max-w-[44ch] text-[15px] leading-relaxed text-fg-muted">{t.home.motifsSub}</p>
         </div>
@@ -407,7 +404,7 @@ export function HomeClient({ places }: { places: Place[] }) {
       <section className="mx-auto max-w-[1280px] px-5 py-10 sm:py-16 sm:px-10">
         <div className="max-w-[30rem]">
           <span className="eyebrow">FAQ</span>
-          <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,44px)]">{t.home.faqTitle}</h2>
+          <h2 className="display m-0 mt-4 text-[clamp(26px,3.6vw,38px)]">{t.home.faqTitle}</h2>
         </div>
         <div className="mt-8">
           {t.home.faq.map((f) => (
@@ -428,7 +425,7 @@ export function HomeClient({ places }: { places: Place[] }) {
         <div className="mx-auto flex max-w-[1280px] flex-wrap gap-14 px-5 py-8 sm:py-12 sm:py-20 sm:px-10">
           <div className="flex-1 basis-[380px]">
             <span className="eyebrow text-gold">{t.home.hostsEyebrow}</span>
-            <h2 className="display m-0 mt-4 max-w-[14ch] text-[clamp(28px,4.4vw,52px)] text-cream">{t.home.hostsTitle}</h2>
+            <h2 className="display m-0 mt-4 max-w-[14ch] text-[clamp(25px,3.4vw,36px)] text-cream">{t.home.hostsTitle}</h2>
             <p className="m-0 mt-6 max-w-[50ch] text-[16px] leading-relaxed text-on-dark-muted">{t.home.hostsText}</p>
             <div className="mt-9 flex flex-wrap gap-3">
               <Link href="/hosts/" className="pill pill-light">{t.home.hostsBtn1}</Link>

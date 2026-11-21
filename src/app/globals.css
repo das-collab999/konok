@@ -7,21 +7,21 @@
    --------------------------------------------------------------- */
 @theme {
   /* Surfaces */
-  --color-cream: #f2ede3;      /* page */
-  --color-cream-2: #eae3d5;    /* quiet band */
-  --color-paper: #fbf8f2;      /* cards, inputs */
+  --color-cream: #efe9dd;      /* page */
+  --color-cream-2: #e7dfd0;    /* quiet band */
+  --color-paper: #fffdf8;      /* cards, inputs */
   --color-ink: #16130f;        /* dark band, buttons, text */
   --color-ink-2: #241f19;
 
   /* Lines */
-  --color-rule: #ddd4c4;
-  --color-rule-strong: #c6baa5;
+  --color-rule: #d4c9b4;
+  --color-rule-strong: #bdaf96;
   --color-rule-dark: #3a332a;
 
   /* Text */
   --color-fg: #16130f;
-  --color-fg-muted: #6b6253;
-  --color-fg-subtle: #938977;
+  --color-fg-muted: #5b5346;
+  --color-fg-subtle: #837a68;
   --color-on-dark: #f0ebe1;
   --color-on-dark-muted: #a79d8c;
 
@@ -45,7 +45,7 @@ body {
   color: var(--color-fg);
   font-family: var(--font-sans);
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -53,8 +53,8 @@ body {
 .display {
   font-family: var(--font-display);
   font-weight: 500;
-  line-height: 0.95;
-  letter-spacing: -0.015em;
+  line-height: 0.96;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
 }
 
@@ -68,10 +68,48 @@ body {
 /* Small label above a heading or in a nav */
 .eyebrow {
   font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.22em;
+  font-weight: 600;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
-  color: var(--color-fg-subtle);
+  color: var(--color-fg-muted);
+}
+
+/* ── поверхности ────────────────────────────────────────────── *
+ * Карточка — это предмет на столе: светлее страницы, с краем и
+ * мягкой тенью. Без этого страница читается как незаполненный макет.
+ */
+.surface {
+  background: var(--color-paper);
+  border: 1px solid var(--color-rule);
+  box-shadow: 0 1px 2px rgba(22, 19, 15, .04), 0 8px 24px -16px rgba(22, 19, 15, .3);
+}
+.surface-hover { transition: box-shadow .3s ease, transform .3s ease, border-color .3s ease; }
+@media (hover: hover) {
+  .surface-hover:hover {
+    border-color: var(--color-rule-strong);
+    box-shadow: 0 2px 4px rgba(22, 19, 15, .05), 0 18px 36px -20px rgba(22, 19, 15, .45);
+    transform: translateY(-3px);
+  }
+}
+
+/* Панель поиска и другие «рабочие» блоки */
+.panel {
+  background: var(--color-paper);
+  border: 1px solid var(--color-rule);
+  border-radius: 18px;
+  box-shadow: 0 2px 4px rgba(22, 19, 15, .05), 0 22px 44px -28px rgba(22, 19, 15, .5);
+}
+
+/* Подпись-ярлык: цена, высота, «проверено» */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 5px 11px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
 }
 
 /* Pill buttons — black by default, outline as the quiet twin */
@@ -81,17 +119,18 @@ body {
   justify-content: center;
   gap: 8px;
   height: 48px;
-  padding: 0 26px;
+  padding: 0 24px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-transform: none;
   text-decoration: none;
   cursor: pointer;
   transition: background-color .25s ease, color .25s ease, border-color .25s ease;
 }
 .pill-solid { background: var(--color-ink); color: var(--color-cream); border: 1px solid var(--color-ink); }
+.pill-solid { box-shadow: 0 10px 22px -14px rgba(22, 19, 15, .8); }
 .pill-solid:hover { background: var(--color-accent); border-color: var(--color-accent); }
 .pill-ghost { background: transparent; color: var(--color-ink); border: 1px solid var(--color-rule-strong); }
 .pill-ghost:hover { border-color: var(--color-ink); }

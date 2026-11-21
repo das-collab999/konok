@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { CUSTOMS, ERAS } from "@/data/history";
 import { pick, useLang } from "@/lib/i18n";
-import { Art } from "@/components/art";
+import { PhotoSlot } from "@/components/PhotoSlot";
 import { Photo, hasPhoto } from "@/components/Photo";
 import { CUSTOM_PHOTO, ERA_PHOTO } from "@/data/photos";
 import { Medallion, Motif, OrnamentBand, TermeBand, ZigzagBand } from "@/components/ethno";
@@ -22,7 +22,7 @@ export function HistoryClient() {
               <DrawIn duration={1200}><Motif name="tumar" size={30} className="text-accent" /></DrawIn>
               {t.common.history}
             </span>
-            <h1 className="display m-0 mt-5 max-w-[15ch] text-[clamp(32px,6vw,72px)]">{t.common.historyTitle}</h1>
+            <h1 className="display m-0 mt-5 max-w-[15ch] text-[clamp(30px,5vw,52px)]">{t.common.historyTitle}</h1>
             <p className="m-0 mt-6 max-w-[56ch] text-[17px] leading-relaxed text-fg-muted">{t.common.historySub}</p>
           </div>
           <DrawIn duration={2000} className="hidden justify-self-center lg:block">
@@ -80,7 +80,7 @@ export function HistoryClient() {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-[30rem]">
               <span className="eyebrow">{t.common.culture}</span>
-              <h2 className="display m-0 mt-4 text-[clamp(26px,4vw,44px)]">{t.common.culture}</h2>
+              <h2 className="display m-0 mt-4 text-[clamp(25px,3.6vw,38px)]">{t.common.culture}</h2>
             </div>
             <p className="m-0 max-w-[42ch] text-[15px] leading-relaxed text-fg-muted">{t.common.cultureSub}</p>
           </div>
@@ -88,11 +88,7 @@ export function HistoryClient() {
           <ul className="m-0 mt-10 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 lg:grid-cols-3">
             {CUSTOMS.map((c, i) => (
               <RevealItem key={c.id} delay={i * 70} className="overflow-hidden border border-rule bg-paper">
-                {hasPhoto(CUSTOM_PHOTO[c.id]) ? (
-                  <Photo name={CUSTOM_PHOTO[c.id]} alt={pick(c.title, lang)} sizes="(max-width: 640px) 90vw, 380px" className="block aspect-[3/2] w-full object-cover" />
-                ) : (
-                  <Art name={c.art} label={pick(c.title, lang)} width={560} className="block h-auto w-full" />
-                )}
+                <PhotoSlot name={CUSTOM_PHOTO[c.id]} alt={pick(c.title, lang)} sizes="(max-width: 640px) 90vw, 380px" className="aspect-[3/2]" />
                 <div className="p-5">
                   <h3 className="serif m-0 text-[21px]">{pick(c.title, lang)}</h3>
                   <p className="m-0 mt-2.5 text-[15px] leading-relaxed text-fg-muted">{pick(c.text, lang)}</p>

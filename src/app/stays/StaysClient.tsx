@@ -58,7 +58,7 @@ export function StaysClient({ places }: { places: Place[] }) {
   const toggle = (k: Feature) => setFeats((cur) => (cur.includes(k) ? cur.filter((x) => x !== k) : [...cur, k]));
 
   const chip = (on: boolean) =>
-    `inline-flex h-11 cursor-pointer items-center gap-2 rounded-full border px-4 text-[13px] transition-colors ${
+    `inline-flex h-11 flex-none cursor-pointer items-center gap-2 whitespace-nowrap rounded-full border px-4 text-[13px] transition-colors ${
       on ? "border-ink bg-ink text-cream" : "border-rule-strong text-fg-muted hover:border-ink hover:text-fg"
     }`;
   const field = "h-11 w-full border-0 border-b border-rule-strong bg-transparent px-0 text-[16px] text-fg outline-none focus:border-ink";
@@ -71,7 +71,7 @@ export function StaysClient({ places }: { places: Place[] }) {
             <Motif name="kochkor" size={30} className="text-accent" />
             {t.nav.stays}
           </span>
-          <h1 className="display m-0 mt-4 max-w-[16ch] text-[clamp(30px,5.4vw,60px)]">{t.home.staysTitle}</h1>
+          <h1 className="display m-0 mt-4 max-w-[16ch] text-[clamp(28px,4.4vw,46px)]">{t.home.staysTitle}</h1>
           <p className="m-0 mt-5 max-w-[56ch] text-[16px] leading-relaxed text-fg-muted">{t.home.staysSub}</p>
 
           <div className="mt-8 grid gap-6 border-t border-rule pt-7 sm:grid-cols-3">
@@ -98,15 +98,15 @@ export function StaysClient({ places }: { places: Place[] }) {
 
       <section className="mx-auto max-w-[1280px] px-5 py-10 sm:px-10">
         <div className="flex flex-col gap-3">
-          <div role="group" aria-label={t.home.where} className="flex flex-wrap gap-2">
+          <div role="group" aria-label={t.home.where} className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0">
             {REGIONS.map((r) => (
               <button key={r.key} type="button" aria-pressed={region === r.key} onClick={() => setRegion(r.key)} className={chip(region === r.key)}>
                 {pick(r.label, lang)}
               </button>
             ))}
           </div>
-          <div role="group" aria-label={t.home.importantForMe} className="flex flex-wrap items-center gap-2">
-            <span className="mr-1 text-[13px] text-fg-subtle">{t.home.importantForMe}:</span>
+          <div role="group" aria-label={t.home.importantForMe} className="-mx-5 flex items-center gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0">
+            <span className="mr-1 flex-none whitespace-nowrap text-[13px] text-fg-subtle">{t.home.importantForMe}:</span>
             {FEATURES.map((f) => (
               <button key={f.key} type="button" aria-pressed={feats.includes(f.key)} onClick={() => toggle(f.key)} className={chip(feats.includes(f.key))}>
                 <Icon name={f.icon} size={15} strokeWidth={1.5} />
@@ -136,9 +136,9 @@ export function StaysClient({ places }: { places: Place[] }) {
             <p className="m-0 mt-3 text-[15px] text-fg-muted">{onlyFav && fav.list.length === 0 ? t.common.noFavourites : t.home.emptySub}</p>
           </div>
         ) : (
-          <div className="mt-10 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid grid-cols-1 items-stretch gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
             {stays.map((p, i) => (
-              <Reveal key={p.slug} delay={(i % 3) * 100}>
+              <Reveal key={p.slug} delay={(i % 3) * 100} className="h-full">
                 <PlaceCard place={p} query={query} />
               </Reveal>
             ))}

@@ -29,15 +29,15 @@ export function PlaceCard({ place, query = "" }: { place: Place; query?: string 
   const href = `/place/${place.slug}/${query ? `?${query}` : ""}`;
 
   return (
-    <article className="card group relative flex flex-col">
-      <Link href={href} className="relative block aspect-[4/5] overflow-hidden bg-cream-2 no-underline">
+    <article className="card surface surface-hover group relative flex h-full flex-col overflow-hidden rounded-2xl">
+      <Link href={href} className="relative block aspect-[4/3] overflow-hidden bg-cream-2 no-underline">
         <Cover place={place} className="zoom block h-full w-full object-cover" />
-        <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-cream/90 px-3 py-1.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-ink">
-          <Icon name="check" size={12} strokeWidth={2.6} />
+        <span className="tag absolute left-3 top-3 bg-paper/95 text-ink">
+          <Icon name="check" size={12} strokeWidth={2.6} className="text-success" />
           {t.common.verified}
         </span>
-        <span className="absolute bottom-4 right-4 rounded-full bg-ink/80 px-3 py-1.5 text-[12px] font-medium tracking-[0.1em] text-cream">
-          {place.altitudeM} м
+        <span className="tag absolute bottom-3 left-3 bg-ink/85 text-cream">
+          {place.altitudeM} {t.common.altitude}
         </span>
       </Link>
 
@@ -47,7 +47,7 @@ export function PlaceCard({ place, query = "" }: { place: Place; query?: string 
         aria-pressed={fav.has(place.slug)}
         aria-label={t.common.favourite}
         title={t.common.favourite}
-        className="absolute right-3 top-3 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-cream/90 transition-transform hover:scale-105"
+        className="absolute right-3 top-3 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-paper/95 shadow-[0_2px_8px_rgba(22,19,15,.18)] transition-transform hover:scale-105"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"
           fill={fav.has(place.slug) ? "#8E2420" : "none"} stroke="#8E2420" strokeWidth="1.8">
@@ -55,40 +55,37 @@ export function PlaceCard({ place, query = "" }: { place: Place; query?: string 
         </svg>
       </button>
 
-      <div className="flex flex-1 flex-col pt-5">
-        <span className="eyebrow">{pick(place.place, lang)}</span>
+      <div className="flex flex-1 flex-col p-5">
+        <span className="text-[13px] text-fg-subtle">{pick(place.place, lang)}</span>
 
-        <h3 className="serif m-0 mt-3 text-[24px]">
-          <Link href={href} className="text-fg no-underline decoration-rule-strong underline-offset-4 hover:underline">
+        <h3 className="m-0 mt-1.5 text-[19px] font-semibold leading-snug tracking-[-0.01em]">
+          <Link href={href} className="text-fg no-underline hover:text-accent">
             {pick(place.title, lang)}
           </Link>
         </h3>
 
-        <p className="m-0 mt-3 text-[15px] leading-relaxed text-fg-muted">{pick(place.short, lang)}</p>
+        <p className="m-0 mt-2 line-clamp-2 text-[14px] leading-relaxed text-fg-muted">{pick(place.short, lang)}</p>
 
-        <ul className="m-0 mt-4 flex list-none flex-wrap gap-x-4 gap-y-2 p-0 text-[12px] text-fg-subtle">
+        <ul className="m-0 mt-3.5 flex list-none flex-wrap gap-1.5 p-0">
           {placeChips(place).map((c) => (
-            <li key={c.key} className="flex items-center gap-1.5">
-              <Icon name={c.icon} size={15} strokeWidth={1.5} />
+            <li key={c.key} className="flex items-center gap-1.5 rounded-full border border-rule px-2.5 py-1 text-[12px] text-fg-muted">
+              <Icon name={c.icon} size={13} strokeWidth={1.6} />
               {pick(c.label, lang)}
             </li>
           ))}
-          <li className="flex items-center gap-1.5">
-            <Icon name="car" size={15} strokeWidth={1.5} />
-            {t.common.fromBishkek} {place.hoursFromBishkek} {t.common.hours}
+          <li className="flex items-center gap-1.5 rounded-full border border-rule px-2.5 py-1 text-[12px] text-fg-muted">
+            <Icon name="car" size={13} strokeWidth={1.6} />
+            {place.hoursFromBishkek} {t.common.hours}
           </li>
         </ul>
 
-        <div className="mt-5 flex items-end justify-between gap-4 border-t border-rule pt-4">
+        <div className="mt-5 flex items-end justify-between gap-4 border-t border-rule pt-4" style={{ marginTop: "auto", paddingTop: "1rem" }}>
           <div className="leading-none">
-            <span className="serif text-[26px]">${place.pricePerPersonUsd}</span>
-            <span className="ml-2 text-[12px] text-fg-subtle">{t.common.perNight}</span>
+            <span className="text-[22px] font-semibold tracking-[-0.02em]">${place.pricePerPersonUsd}</span>
+            <span className="ml-1.5 text-[13px] text-fg-subtle">{t.common.perNight}</span>
             <span className="mt-1.5 block text-[12px] text-fg-subtle">≈ {toSom(place.pricePerPersonUsd)} {t.common.som}</span>
           </div>
-          <Link
-            href={href}
-            className="inline-flex h-11 items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.16em] text-fg no-underline transition-colors hover:text-accent"
-          >
+          <Link href={href} className="pill pill-solid h-10 px-5 text-[12px]">
             {t.common.view}
             <Icon name="arrow" size={14} strokeWidth={1.8} />
           </Link>

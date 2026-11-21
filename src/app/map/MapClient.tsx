@@ -16,7 +16,7 @@ export function MapClient({ places }: { places: Place[] }) {
             <Motif name="bugu" size={30} className="text-accent" />
             {t.common.mapPage}
           </span>
-          <h1 className="display m-0 mt-4 max-w-[16ch] text-[clamp(30px,5.4vw,60px)]">{t.common.mapTitle}</h1>
+          <h1 className="display m-0 mt-4 max-w-[16ch] text-[clamp(28px,4.4vw,46px)]">{t.common.mapTitle}</h1>
           <p className="m-0 mt-5 max-w-[58ch] text-[16px] leading-relaxed text-fg-muted">{t.common.mapSub}</p>
         </div>
       </section>

@@ -6,7 +6,7 @@ import { pick, useLang } from "@/lib/i18n";
 import { Icon } from "@/components/ui";
 import Link from "next/link";
 import { Art } from "@/components/art";
-import { Photo, hasPhoto } from "@/components/Photo";
+import { PhotoSlot } from "@/components/PhotoSlot";
 import { MEAL_PHOTO } from "@/data/photos";
 import { storyForMeal } from "@/data/stories";
 import { Medallion, Motif, OrnamentBand, Shyrdak, TermeBand, ZigzagBand } from "@/components/ethno";
@@ -36,7 +36,7 @@ export function GuideClient() {
               <DrawIn duration={1200}><Motif name="bugu" size={34} className="text-accent" /></DrawIn>
               {t.guide.eyebrow}
             </span>
-            <h1 className="display m-0 mt-5 max-w-[16ch] text-[clamp(32px,6vw,72px)]">{t.guide.title}</h1>
+            <h1 className="display m-0 mt-5 max-w-[16ch] text-[clamp(30px,5vw,52px)]">{t.guide.title}</h1>
             <p className="m-0 mt-6 max-w-[58ch] text-[17px] leading-relaxed text-fg-muted">{t.guide.sub}</p>
 
           </div>
@@ -75,7 +75,7 @@ export function GuideClient() {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-[30rem]">
               <span className="eyebrow">{t.guide.sections.food}</span>
-              <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,48px)]">{t.guide.foodTitle}</h2>
+              <h2 className="display m-0 mt-4 text-[clamp(26px,3.8vw,40px)]">{t.guide.foodTitle}</h2>
             </div>
             <p className="m-0 max-w-[44ch] text-[15px] leading-relaxed text-fg-muted">{t.guide.foodSub}</p>
           </div>
@@ -89,11 +89,7 @@ export function GuideClient() {
                 <ul className="m-0 mt-5 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 lg:grid-cols-3">
                   {items.map((m) => (
                     <li key={m.title.ru} className="overflow-hidden border border-rule bg-paper">
-                      {hasPhoto(MEAL_PHOTO[m.title.ru]) ? (
-                        <Photo name={MEAL_PHOTO[m.title.ru]} alt={pick(m.title, lang)} sizes="(max-width: 640px) 76vw, 380px" className="block aspect-[3/2] w-full object-cover" />
-                      ) : (
-                        <Art name={m.art} label={pick(m.title, lang)} width={600} className="block h-auto w-full" />
-                      )}
+                      <PhotoSlot name={MEAL_PHOTO[m.title.ru]} alt={pick(m.title, lang)} sizes="(max-width: 640px) 76vw, 380px" className="aspect-[3/2]" />
                       <div className="p-5">
                         <div className="flex flex-wrap items-baseline justify-between gap-3">
                           <h4 className="serif m-0 text-[22px]">{pick(m.title, lang)}</h4>
@@ -130,7 +126,7 @@ export function GuideClient() {
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div className="max-w-[30rem]">
                 <span className="eyebrow">{t.guide.sections.road}</span>
-                <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,48px)]">{t.guide.roadTitle}</h2>
+                <h2 className="display m-0 mt-4 text-[clamp(26px,3.8vw,40px)]">{t.guide.roadTitle}</h2>
               </div>
               <p className="m-0 max-w-[44ch] text-[15px] leading-relaxed text-fg-muted">{t.guide.roadSub}</p>
             </div>
@@ -161,7 +157,7 @@ export function GuideClient() {
         <section id="conditions" className="mx-auto max-w-[1280px] scroll-mt-24 px-5 py-10 sm:py-16 sm:px-10">
           <div className="max-w-[32rem]">
             <span className="eyebrow">{t.guide.sections.conditions}</span>
-            <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,48px)]">{t.guide.conditionsTitle}</h2>
+            <h2 className="display m-0 mt-4 text-[clamp(26px,3.8vw,40px)]">{t.guide.conditionsTitle}</h2>
           </div>
           <ul className="m-0 mt-10 grid list-none grid-cols-1 gap-x-10 gap-y-0 p-0 sm:grid-cols-2">
             {CONDITIONS.map((c) => (
@@ -183,7 +179,7 @@ export function GuideClient() {
           <div className="mx-auto flex max-w-[1280px] flex-wrap gap-12 px-5 py-10 sm:py-16 sm:px-10">
             <div className="flex-1 basis-[300px]">
               <span className="eyebrow">{t.guide.sections.packing}</span>
-              <h2 className="display m-0 mt-4 max-w-[12ch] text-[clamp(26px,4vw,44px)]">{t.guide.packingTitle}</h2>
+              <h2 className="display m-0 mt-4 max-w-[12ch] text-[clamp(25px,3.6vw,38px)]">{t.guide.packingTitle}</h2>
               <p className="m-0 mt-5 max-w-[42ch] text-[15px] leading-relaxed text-fg-muted">{t.guide.packingSub}</p>
             </div>
             <ul className="m-0 flex flex-1 basis-[380px] list-none flex-col p-0">
@@ -204,7 +200,7 @@ export function GuideClient() {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-[30rem]">
               <span className="eyebrow">{t.guide.sections.manners}</span>
-              <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,48px)]">{t.guide.mannersTitle}</h2>
+              <h2 className="display m-0 mt-4 text-[clamp(26px,3.8vw,40px)]">{t.guide.mannersTitle}</h2>
             </div>
             <p className="m-0 max-w-[42ch] text-[15px] leading-relaxed text-fg-muted">{t.guide.mannersSub}</p>
           </div>
@@ -226,7 +222,7 @@ export function GuideClient() {
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div className="max-w-[30rem]">
                 <span className="eyebrow">{t.guide.sections.words}</span>
-                <h2 className="display m-0 mt-4 text-[clamp(28px,4.4vw,48px)]">{t.guide.wordsTitle}</h2>
+                <h2 className="display m-0 mt-4 text-[clamp(26px,3.8vw,40px)]">{t.guide.wordsTitle}</h2>
               </div>
               <p className="m-0 max-w-[42ch] text-[15px] leading-relaxed text-fg-muted">{t.guide.wordsSub}</p>
             </div>
@@ -249,7 +245,7 @@ export function GuideClient() {
           <div className="mx-auto flex max-w-[1280px] flex-wrap gap-14 px-5 py-10 sm:py-16 sm:px-10">
             <div className="flex-1 basis-[320px]">
               <span className="eyebrow text-gold">{t.guide.sections.help}</span>
-              <h2 className="display m-0 mt-4 max-w-[14ch] text-[clamp(26px,4vw,44px)] text-cream">{t.guide.helpTitle}</h2>
+              <h2 className="display m-0 mt-4 max-w-[14ch] text-[clamp(25px,3.6vw,38px)] text-cream">{t.guide.helpTitle}</h2>
               <p className="m-0 mt-6 max-w-[48ch] text-[15px] leading-relaxed text-on-dark-muted">{t.guide.helpText}</p>
               <p className="m-0 mt-5 max-w-[48ch] text-[15px] leading-relaxed text-on-dark-muted">{t.guide.helpText2}</p>
               <Link href="/bookings/" className="pill pill-light mt-8">{t.nav.bookings}</Link>

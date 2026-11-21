@@ -55,7 +55,7 @@ export function PayForm({ place }: { place: Place }) {
       </Link>
 
       <Motif name="kochkor" size={44} className="mt-6 text-ochre" />
-      <h1 className="display m-0 mt-4 text-[clamp(28px,5vw,56px)]">{t.pay.title}</h1>
+      <h1 className="display m-0 mt-4 text-[clamp(27px,4.2vw,44px)]">{t.pay.title}</h1>
 
       <div className="mt-8 flex flex-wrap items-end justify-between gap-4 border-y border-rule py-6">
         <div className="min-w-0">
