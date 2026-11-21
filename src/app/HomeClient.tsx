@@ -10,6 +10,7 @@ import { MOTIFS, Medallion, Motif, OrnamentBand, Shyrdak, TermeBand, ZigzagBand,
 import { DrawIn, Intro, Parallax, Reveal, RevealItem } from "@/components/motion";
 import { Art, type ArtName } from "@/components/art";
 import { KyrgyzMap } from "@/components/Map";
+import { STORIES } from "@/data/stories";
 import { useFavourites } from "@/lib/favourites";
 
 type Feature = "stove" | "bath" | "signal" | "car";
@@ -285,6 +286,36 @@ export function HomeClient({ places }: { places: Place[] }) {
           </ul>
         </div>
         <TermeBand id="terme-guide-b" height={26} />
+      </section>
+
+      {/* --------------------------------------------------------- Рассказы */}
+      <section className="mx-auto max-w-[1280px] px-5 py-16 sm:px-10">
+        <div className="flex flex-wrap items-end justify-between gap-6 border-t border-rule pt-10">
+          <div className="max-w-[30rem]">
+            <span className="eyebrow">{t.common.stories}</span>
+            <h2 className="display m-0 mt-4 text-[clamp(26px,4vw,42px)]">{t.common.storiesTitle}</h2>
+          </div>
+          <p className="m-0 max-w-[42ch] text-[15px] leading-relaxed text-fg-muted">{t.common.storiesSub}</p>
+        </div>
+
+        <ul className="m-0 mt-8 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 lg:grid-cols-4">
+          {STORIES.slice(0, 4).map((st, i) => (
+            <RevealItem key={st.slug} delay={i * 80} className="overflow-hidden border border-rule bg-paper">
+              <Link href={`/stories/${st.slug}/`} className="block text-fg no-underline">
+                <Art name={st.art} label={pick(st.title, lang)} width={520} className="block h-auto w-full" />
+                <div className="p-5">
+                  <h3 className="serif m-0 text-[20px]">{pick(st.title, lang)}</h3>
+                  <p className="m-0 mt-2 line-clamp-3 text-[14px] leading-relaxed text-fg-muted">{pick(st.lead, lang)}</p>
+                  <span className="mt-3 inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.14em] text-accent">
+                    {t.common.readMore} →
+                  </span>
+                </div>
+              </Link>
+            </RevealItem>
+          ))}
+        </ul>
+
+        <Link href="/stories/" className="pill pill-ghost mt-8">{t.common.allStories}</Link>
       </section>
 
       {/* ----------------------------------------------------- Орнаменты */}
