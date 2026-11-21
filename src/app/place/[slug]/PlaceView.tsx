@@ -9,6 +9,7 @@ import { pick, useLang } from "@/lib/i18n";
 import { Cover, Icon, type IconName } from "@/components/ui";
 import { Motif, OrnamentBand, ZigzagBand } from "@/components/ethno";
 import { Art } from "@/components/art";
+import { getStory } from "@/data/stories";
 import { DrawIn, Reveal } from "@/components/motion";
 import { BookingCard } from "./BookingCard";
 
@@ -47,6 +48,18 @@ export function PlaceView({ place }: { place: Place }) {
     MEALS.find((m) => m.title.ru === "Боорсок"),
     MEALS.find((m) => m.title.ru === (place.altitudeM > 2500 ? "Кумыс" : "Чай с горными травами")),
   ].filter(Boolean) as (typeof MEALS)[number][];
+
+  // рассказ о месте, если он есть
+  const STORY_BY_PLACE: Record<string, string> = {
+    "sonkul-aseke": "son-kul",
+    "tash-rabat": "tash-rabat",
+    "jety-oguz": "jety-oguz",
+    "arslanbob": "arslanbob",
+    "tamga": "issyk-kul",
+    "karakol-archa": "issyk-kul",
+    "chon-kemin": "ala-archa",
+  };
+  const story = getStory(STORY_BY_PLACE[place.slug] ?? "");
 
   const ways = TRANSPORT.filter((w) =>
     place.carAccess === "4x4"
@@ -209,6 +222,22 @@ export function PlaceView({ place }: { place: Place }) {
               ))}
             </ul>
           </section>
+
+          {story && (
+            <Reveal>
+              <Link href={`/stories/${story.slug}/`} className="flex flex-wrap items-center gap-6 border border-rule bg-paper p-5 text-fg no-underline transition-colors hover:bg-cream-2">
+                <Art name={story.art} label={pick(story.title, lang)} width={200} className="h-auto w-[140px] flex-none sm:w-[200px]" />
+                <span className="min-w-0 flex-1 basis-[240px]">
+                  <span className="eyebrow block">{t.common.aboutPlace}</span>
+                  <span className="serif mt-2 block text-[24px]">{pick(story.title, lang)}</span>
+                  <span className="mt-2 block max-w-[52ch] text-[15px] leading-relaxed text-fg-muted">{pick(story.lead, lang)}</span>
+                  <span className="mt-3 inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.14em] text-accent">
+                    {t.common.readMore} →
+                  </span>
+                </span>
+              </Link>
+            </Reveal>
+          )}
 
           <Reveal>
             <section className="felt border border-rule bg-paper p-7">

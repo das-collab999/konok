@@ -22,6 +22,7 @@ export function Header() {
         <nav aria-label={t.nav.home} className="hidden items-center gap-7 lg:flex">
           <Link href="/#stays" className={nav}>{t.nav.stays}</Link>
           <Link href="/guide/" className={nav}>{t.nav.guide}</Link>
+          <Link href="/stories/" className={nav}>{t.common.stories}</Link>
           <Link href="/#exp" className={nav}>{t.nav.experiences}</Link>
           <Link href="/bookings/" className={nav}>{t.nav.bookings}</Link>
           <Link href="/hosts/" className={nav}>{t.nav.hosts}</Link>
@@ -107,6 +108,7 @@ export function Footer() {
               <span className="eyebrow text-on-dark-muted">{t.common.forGuests}</span>
               <Link href="/#stays" className={link}>{t.nav.stays}</Link>
               <Link href="/guide/" className={link}>{t.nav.guide}</Link>
+              <Link href="/stories/" className={link}>{t.common.stories}</Link>
               <Link href="/#exp" className={link}>{t.nav.experiences}</Link>
               <Link href="/bookings/" className={link}>{t.nav.bookings}</Link>
             </div>

@@ -1,10 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { CONDITIONS, EMERGENCY, ETIQUETTE, MEALS, PACKING, PHRASES, TRANSPORT, type MealKind } from "@/data/guide";
 import { pick, useLang } from "@/lib/i18n";
 import { Icon } from "@/components/ui";
+import Link from "next/link";
 import { Art } from "@/components/art";
+import { storyForMeal } from "@/data/stories";
 import { Medallion, Motif, OrnamentBand, Shyrdak, TermeBand, ZigzagBand } from "@/components/ethno";
 import { DrawIn, RevealItem } from "@/components/motion";
 
@@ -75,6 +76,14 @@ export function GuideClient() {
                         )}
                       </div>
                       <p className="m-0 mt-2.5 text-[15px] leading-relaxed text-fg-muted">{pick(m.text, lang)}</p>
+                      {storyForMeal(m.title.ru) && (
+                        <Link
+                          href={`/stories/${storyForMeal(m.title.ru)!.slug}/`}
+                          className="mt-4 inline-flex h-11 items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.14em] text-accent no-underline"
+                        >
+                          {t.common.readMore} →
+                        </Link>
+                      )}
                     </div>
                   </li>
                 ))}
